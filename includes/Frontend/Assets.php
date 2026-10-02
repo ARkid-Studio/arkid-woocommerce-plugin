@@ -36,7 +36,7 @@ class Assets {
 			return;
 		}
 
-		/** @var array{dependencies: array<int, string>, version: string} $asset */
+		/** @var array{dependencies: array<int, non-empty-string>, version: string} $asset */
 		$asset = require $asset_path;
 
 		wp_enqueue_style(

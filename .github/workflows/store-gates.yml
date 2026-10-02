@@ -1,0 +1,131 @@
+name: Store gates
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly, so a WordPress.org or Woo policy change surfaces before a release.
+    #
+    # Wednesday, not Monday. Plugin Check installs @wordpress/env unpinned, which
+    # pulls the WordPress Playground packages, and that monorepo publishes its
+    # weekly release train on Monday between roughly 09:45 and 10:00 UTC. The
+    # packages cross-pin each other exactly, so until the last one lands the tree
+    # cannot resolve. GitHub defers scheduled runs under load — ours started
+    # 5-6.5 hours late every week — which placed this gate inside that window
+    # rather than at the 04:17 it asked for.
+    - cron: '17 4 * * 3'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: store-gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plugin-check:
+    name: Plugin Check (WordPress.org)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.1'
+          coverage: none
+          tools: composer:v2
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      # The payload directory has to be named for the plugin slug, the way
+      # bin/build-plugin-zip.sh stages it and the way WordPress.org installs it.
+      # Plugin Check derives the expected slug — and therefore the expected text
+      # domain — from this basename, so staging into a bare `build-plugin/`
+      # measured every __() call against the wrong domain and reported 77
+      # errors that do not exist in the shipped artifact.
+      - name: Stage the release payload
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          composer install --no-dev --optimize-autoloader --no-progress
+          payload=build-plugin/arkid-catalogue-link
+          mkdir -p "$payload"
+          cp arkid-catalogue-link.php uninstall.php readme.txt license.txt composer.json "$payload/"
+          cp -r assets build includes languages vendor "$payload/"
+
+      # Checks the artifact merchants receive, not the repo — otherwise it
+      # flags tests/, src/ and dev configs that never ship.
+      #
+      # No `categories:` on purpose. Empty runs every category Plugin Check
+      # has — general, plugin_repo, security, performance, accessibility, and
+      # any it adds later — which is what the WordPress.org review looks at.
+      # Pinning it to `plugin_repo` alone left the security and performance
+      # checks unrun.
+      - name: Plugin Check
+        uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+        with:
+          build-dir: './build-plugin/arkid-catalogue-link'
+          wp-version: latest
+
+  qit:
+    name: QIT (Woo Marketplace)
+    runs-on: ubuntu-latest
+    # QIT runs on WooCommerce's infrastructure, needs partner credentials and is
+    # rate-limited, so it must not run on every push. Fork PRs are excluded so
+    # the secrets stay unreachable.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    timeout-minutes: 120
+    env:
+      QIT_DISABLE_ONBOARDING: 'yes'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.1'
+          coverage: none
+          # wp-cli, as in release.yml: bin/build-plugin-zip.sh compiles the .mo
+          # and .json translations with `wp i18n` and refuses to start without
+          # it. Without this the job never got as far as the zip.
+          tools: composer:v2, wp-cli
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Build the release zip
+        run: |
+          npm ci --ignore-scripts
+          composer install --no-progress
+          npm run plugin-zip
+
+      - name: Authenticate QIT
+        if: env.QIT_PARTNER_USER != ''
+        env:
+          QIT_PARTNER_USER: ${{ secrets.QIT_PARTNER_USER }}
+          QIT_PARTNER_PASSWORD: ${{ secrets.QIT_PARTNER_PASSWORD }}
+        run: vendor/bin/qit partner:add --user="$QIT_PARTNER_USER" --application_password="$QIT_PARTNER_PASSWORD"
+
+      - name: Managed tests
+        if: env.QIT_PARTNER_USER != ''
+        env:
+          QIT_PARTNER_USER: ${{ secrets.QIT_PARTNER_USER }}
+        run: |
+          set -euo pipefail
+          for suite in activation security phpcompatibility api e2e malware validation; do
+            echo "::group::qit run:$suite"
+            vendor/bin/qit "run:$suite" arkid-catalogue-link \
+              --zip=arkid-catalogue-link.zip --wait
+            echo "::endgroup::"
+          done

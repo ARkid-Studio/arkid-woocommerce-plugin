@@ -1,0 +1,43 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arkid-catalogue-link/embed",
+	"version": "1.0.0",
+	"title": "ARkid Catalogue Link",
+	"category": "media",
+	"description": "Embed an ARkid 3D / AR viewer from your catalogue.",
+	"keywords": [
+		"arkid",
+		"3d",
+		"ar",
+		"viewer",
+		"catalogue"
+	],
+	"supports": {
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"anchor": true
+	},
+	"textdomain": "arkid-catalogue-link",
+	"attributes": {
+		"embedId": {
+			"type": "string",
+			"default": ""
+		},
+		"embedUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"productName": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style.css",
+	"viewScript": "file:./view.js"
+}

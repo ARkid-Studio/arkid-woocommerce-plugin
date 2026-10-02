@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<ruleset name="ARkid Catalogue Link">
+    <description>WordPress / WooCommerce coding standards for ARkid Catalogue Link.</description>
+
+    <file>arkid-catalogue-link.php</file>
+    <file>includes/</file>
+    <file>uninstall.php</file>
+    <file>tests/phpunit/</file>
+
+    <exclude-pattern>*/build/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+
+    <config name="minimum_supported_wp_version" value="6.9"/>
+    <config name="testVersion" value="8.1-"/>
+
+    <rule ref="WordPress">
+        <!-- File-naming rules don't make sense for our PSR-4 layout. -->
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+
+        <!--
+            Doc-comment style enforcement (Squiz.Commenting.*, Generic.Commenting.*)
+            is redundant with strict typing + PHPStan level 9. Native types document
+            the contract; PHPDoc adds no correctness value over what the parser
+            already verifies. We keep all SECURITY / ESCAPING / I18N rules from
+            WordPress + WordPress-Extra, which is what "strict linting" means in a
+            strict-typed codebase.
+        -->
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
+        <exclude name="Squiz.Commenting.FileComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
+        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ParamNameNoMatch"/>
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNotCapital"/>
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
+        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+        <!-- Cosmetic alignment warnings — too noisy for the value they add. -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning"/>
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"/>
+        <exclude name="WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound"/>
+    </rule>
+    <rule ref="WordPress-Extra">
+        <!-- Same exclusions for the extra ruleset's overlap. -->
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
+        <exclude name="Squiz.Commenting.FileComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
+        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+    </rule>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="arkid-catalogue-link"/>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.WP.Capabilities">
+        <properties>
+            <property name="custom_capabilities" type="array">
+                <element value="manage_woocommerce"/>
+                <element value="edit_post"/>
+                <element value="edit_posts"/>
+                <element value="edit_products"/>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="PHPCompatibilityWP"/>
+</ruleset>

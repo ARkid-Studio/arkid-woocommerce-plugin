@@ -1,0 +1,78 @@
+## Self-contained WordPress + WooCommerce dev stack for the ARkid CatalogueLink
+## devcontainer. The devcontainer IS the `wordpress` service (you exec in to build,
+## lint and test); WordPress core + uploads live in the `wpdata` named volume
+## (populated by the official image entrypoint + provision.sh). The plugin repo is
+## bind-mounted live into wp-content/plugins/arkid-catalogue-link.
+##
+## Engine-NEUTRAL: runs on plain docker AND rootless podman. Podman/SELinux-only
+## bits live in compose.podman.yaml (the second -f file). Long (struct) form for
+## ports/volumes is required by Zed's strict compose parser.
+
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: arkid-wc-dev:php8.4
+    depends_on:
+      - db
+    ports:
+      # Apache listens on 8080 inside (unprivileged, so it runs as www-data under
+      # podman keep-id — see Dockerfile); published to the host as 8888.
+      - target: 8080
+        published: "8888"
+        protocol: tcp
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: "1"
+      # Appended verbatim to wp-config.php by the official image (replaces the old
+      # .wp-env.json `config` block).
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_DEBUG_LOG', true );
+        define( 'WP_DEBUG_DISPLAY', false );
+        define( 'SCRIPT_DEBUG', true );
+        define( 'WP_ENVIRONMENT_TYPE', 'local' );
+    # SELinux access to the bind-mounted repo is handled by `label=disable` in
+    # compose.podman.yaml (it relabels nothing — unlike `:z`, which would recursively
+    # relabel the whole repo incl. node_modules on every `up`). So no `:z` here.
+    volumes:
+      # WordPress core + uploads (survives rebuilds).
+      - wpdata:/var/www/html
+      # The plugin, delivered by DIRECT bind mount (most reliable for WP __FILE__).
+      - ..:/var/www/html/wp-content/plugins/arkid-catalogue-link
+      # The repo at the workspace path so composer/npm/git run against the tree.
+      - ..:/workspaces/arkid-woocommerce-plugin
+      # Keep container-built (Debian/glibc) deps out of the host bind — and the
+      # host's Fedora-built ones out of the container. build/ is NOT volumed, so
+      # `npm run build` output lands in the shared repo and is live in the site.
+      #
+      # These MUST be mounted at BOTH paths. The repo is bind-mounted twice (the
+      # workspace path and the plugins path); a named volume mounted at only one
+      # of them leaves the other showing the host dir, which has no vendor/ at
+      # all. WordPress would then load the plugin from the plugins path, find no
+      # autoloader, and bail to the "missing Composer autoloader" admin notice.
+      - node-modules:/workspaces/arkid-woocommerce-plugin/node_modules
+      - vendor:/workspaces/arkid-woocommerce-plugin/vendor
+      - node-modules:/var/www/html/wp-content/plugins/arkid-catalogue-link/node_modules
+      - vendor:/var/www/html/wp-content/plugins/arkid-catalogue-link/vendor
+
+  db:
+    image: docker.io/library/mariadb:11.4
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: wordpress
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /var/lib/mysql
+
+volumes:
+  wpdata:
+  dbdata:
+  node-modules:
+  vendor:

@@ -1,0 +1,31 @@
+{
+  "embed_id": "0af0878e-61df-11f0-f6a5-59a3f4f8cd3e",
+  "row_number": 1,
+  "product_name": "Product Demo",
+  "brand_name": "ARkid Studio",
+  "image": "https://cloud.arkid.app/covers/aDemo_c.webp",
+  "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento\" title=\"ARkid 3D model\"></iframe>",
+  "embed_url": "https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento",
+  "embedder_url": "",
+  "created": "2025-07-16 02:51:43",
+  "modified": "2025-07-16 02:52:36",
+  "edit_url": "https://catalogue.arkid.app/configure/edit/CvCHjmHfEfD2pVmj9PjNPg",
+  "analytics_url": "https://catalogue.arkid.app/analytics/CvCHjmHfEfD2pVmj9PjNPg",
+  "internal_note": "",
+  "buybutton_url": "",
+  "cta_url": "",
+  "views": 22,
+  "author_name": "E-Commerce Test User",
+  "type": "pdp",
+  "colors": [
+    {
+      "name": "Demo",
+      "rgb": "#000000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Online"
+    }
+  ]
+}

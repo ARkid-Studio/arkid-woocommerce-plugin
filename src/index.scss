@@ -1,0 +1,36 @@
+// Admin styles.
+
+.arkid-catalogue-link__metabox {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+
+	.arkid-catalogue-link__embed-preview {
+		margin: 0;
+	}
+
+	.arkid-catalogue-link__remove-viewer {
+		display: inline-block;
+		margin-block-start: 0.25em;
+		font-size: 0.85em;
+	}
+}
+
+.arkid-catalogue-link__viewers {
+
+	.arkid-catalogue-link__type-badge {
+		display: inline-block;
+		padding: 0.125em 0.5em;
+		border-radius: 999px;
+		background: #f0f0f1;
+		color: #1d2327;
+		font-size: 0.75em;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+}
+
+.arkid-catalogue-link__reveal {
+	margin-inline-start: 0.5em;
+}

@@ -1,0 +1,21 @@
+## Rootless podman override (second -f file). Two podman-only directives on the
+## bind-carrying `wordpress` service:
+##
+##  - userns_mode keep-id:uid=33,gid=33 maps your HOST user to container www-data
+##    (uid 33), so the bind-mounted repo, wp-cli writes and apache all line up as one
+##    uid — the repo stays writable/committable from inside.
+##  - label=disable lets the containers read the home-labeled repo bind under SELinux
+##    enforcing WITHOUT relabeling it. (The `:z` alternative recursively relabels the
+##    entire repo — incl. node_modules — on every `up`, is slow, and fails on any file
+##    the rootless user can't relabel. SELinux stays enforcing on the host; only these
+##    containers run unconfined for the bind. To use :z instead, append `:z` to the two
+##    bind mounts in compose.yaml and drop the security_opt below.)
+##
+## On a PLAIN DOCKER host, don't use this file (these are podman-only): bring the stack
+## up with just compose.yaml. `bin/dc.sh` handles this autodetection.
+
+services:
+  wordpress:
+    userns_mode: keep-id:uid=33,gid=33
+    security_opt:
+      - label=disable

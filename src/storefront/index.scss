@@ -1,0 +1,233 @@
+/*
+ * ARkid Catalogue Link — storefront styles. RTL-aware (inset-inline-*).
+ *
+ * Theming: every viewer iframe carries the `arkid-catalogue-link__viewer`
+ * class. Override that one class in your theme to change the size:
+ *
+ *     .arkid-catalogue-link__viewer {
+ *         min-height: 700px;            // taller floor
+ *         aspect-ratio: 4 / 3;          // different shape
+ *     }
+ *
+ * The viewer always fills the available container width; min-height keeps it
+ * usable on narrow viewports where 16/9 would collapse below 550px.
+ */
+.arkid-catalogue-link__viewer {
+	display: block;
+	width: 100%;
+	border: 0;
+	aspect-ratio: 16 / 9;
+	min-height: 550px;
+}
+
+.arkid-catalogue-link__embed {
+	margin-block: 1em;
+	width: 100%;
+}
+
+.arkid-catalogue-link__embed--above {
+	margin-block-end: 1.5em;
+}
+
+.arkid-catalogue-link__embed--below {
+	margin-block-start: 1.5em;
+}
+
+// Gallery slide (classic + new block share these classes via
+// arkid-catalogue-link__slide).
+.arkid-catalogue-link__slide {
+	display: block;
+	position: relative;
+}
+
+.arkid-catalogue-link__trigger {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	// No custom focus styling — the browser/theme default `:focus-visible`
+	// is intentional. We don't set a colour anywhere here, so overriding
+	// would just inherit `currentcolor` from the surrounding text (e.g.
+	// Storefront's accent purple), which the merchant didn't ask for.
+}
+
+.arkid-catalogue-link__trigger--standalone {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	width: auto;
+	padding: 0.625em 1em;
+	border: 1px solid currentcolor;
+	border-radius: 4px;
+	font: inherit;
+	line-height: 1.2;
+	margin-block-start: 0.75em;
+	color: inherit;
+}
+
+.arkid-catalogue-link__trigger-label {
+	white-space: nowrap;
+}
+
+.arkid-catalogue-link__brand-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.4em;
+	height: 1.4em;
+	flex-shrink: 0;
+	color: inherit;
+
+	svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		fill: currentcolor;
+	}
+}
+
+.arkid-catalogue-link__play-icon {
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	transform: translate(-50%, -50%);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	font-size: 1.25em;
+	pointer-events: none;
+}
+
+
+// Modal dialog.
+.arkid-catalogue-link__dialog {
+	max-width: min(96vw, 1280px);
+	width: 100%;
+	max-height: 92vh;
+	padding: 0;
+	border: 0;
+	background: #000;
+	color: #fff;
+	border-radius: 8px;
+
+	&::backdrop {
+		background: rgba(0, 0, 0, 0.75);
+	}
+}
+
+.arkid-catalogue-link__dialog-frame {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-height: 60vh;
+}
+
+.arkid-catalogue-link__dialog-close {
+	position: absolute;
+	inset-block-start: 0.5rem;
+	inset-inline-end: 0.5rem;
+	// Explicit reset against theme button rules that often add padding,
+	// min-width, line-height, etc. — without these, Storefront/etc. stretch
+	// the circle into a wide pill.
+	box-sizing: border-box;
+	width: 2.5rem;
+	min-width: 2.5rem;
+	height: 2.5rem;
+	min-height: 2.5rem;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.55);
+	color: #fff;
+	font-size: 1.5rem;
+	line-height: 1;
+	text-align: center;
+	cursor: pointer;
+	z-index: 1;
+
+	// Explicit white outline against the dark dialog backdrop — the only
+	// place we deliberately override focus colour, because the browser
+	// default would be hard to see on rgba(0,0,0,0.75).
+	&:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+}
+
+.arkid-catalogue-link__dialog-iframe-host {
+	flex: 1 1 auto;
+	display: flex;
+
+	// Inside the dialog, the viewer fills the dialog frame instead of
+	// using its own aspect ratio — overrides `.arkid-catalogue-link__viewer`.
+	.arkid-catalogue-link__viewer {
+		flex: 1 1 auto;
+		aspect-ratio: auto;
+		min-height: 60vh;
+	}
+}
+
+.arkid-catalogue-link__type-badge {
+	display: inline-block;
+	padding: 0.125em 0.5em;
+	border-radius: 999px;
+	background: #f0f0f1;
+	color: #1d2327;
+	font-size: 0.75em;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+// Block-thumbnails injected by BlockGalleryInjector.
+.arkid-catalogue-link__block-thumbnail {
+	position: relative;
+	border: 0;
+	background: transparent;
+	padding: 0;
+	cursor: pointer;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.arkid-catalogue-link__type-badge {
+		position: absolute;
+		inset-block-start: 4px;
+		inset-inline-start: 4px;
+		background: rgba(0, 0, 0, 0.7);
+		color: #fff;
+	}
+}
+
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}

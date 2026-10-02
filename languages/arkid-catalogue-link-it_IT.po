@@ -1,0 +1,373 @@
+# Translation of ARkid Catalogue Link in Italian.
+# Copyright (C) 2026 ARkid
+# This file is distributed under the GPL-3.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: ARkid Catalogue Link 0.2.0\n"
+"Report-Msgid-Bugs-To: support@arkid.app\n"
+"PO-Revision-Date: 2026-05-02 12:00+0000\n"
+"Last-Translator: ARkid <support@arkid.app>\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: ARkid bin/translate.py\n"
+"X-Domain: arkid-catalogue-link\n"
+
+
+#. Plugin Name of the plugin
+#: arkid-catalogue-link.php
+#: includes/Admin/MetaBox.php:35
+#: includes/Admin/Notices.php:42
+#: includes/Settings/IntegrationSettings.php:25
+#: build/blocks/embed/index.js:1
+msgid "ARkid Catalogue Link"
+msgstr "ARkid Catalogue Link"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: arkid-catalogue-link.php
+msgid "https://catalogue.arkid.app"
+msgstr "https://catalogue.arkid.app"
+
+#. Description of the plugin
+#: arkid-catalogue-link.php
+msgid "Link products in your WooCommerce store with the ARkid catalogue. Embed 3D / AR viewers on the product display page."
+msgstr "Collega i prodotti del tuo negozio WooCommerce al catalogo ARkid. Incorpora visualizzatori 3D/AR nella pagina prodotto."
+
+#. Author of the plugin
+#: arkid-catalogue-link.php
+msgid "ARkid"
+msgstr "ARkid"
+
+#. translators: 1: required PHP version, 2: current PHP version
+#: arkid-catalogue-link.php:55
+msgid "ARkid Catalogue Link requires PHP %1$s or later. You are running PHP %2$s."
+msgstr "ARkid Catalogue Link richiede PHP %1$s o successivo. Stai eseguendo PHP %2$s."
+
+#: arkid-catalogue-link.php:103
+msgid "ARkid Catalogue Link is missing its Composer autoloader. Run `composer install` inside the plugin directory."
+msgstr "ARkid Catalogue Link manca dell'autoloader Composer. Esegui `composer install` nella cartella del plugin."
+
+#. translators: %s: WooCommerce link
+#: arkid-catalogue-link.php:120
+msgid "ARkid Catalogue Link requires %s to be installed and active."
+msgstr "ARkid Catalogue Link richiede che %s sia installato e attivo."
+
+#: includes/Admin/Assets.php:73
+#: includes/Admin/MetaBox.php:68
+msgid "Search viewers…"
+msgstr "Cerca visualizzatori…"
+
+#: includes/Admin/Assets.php:74
+#: includes/Settings/IntegrationSettings.php:131
+msgid "Reveal"
+msgstr "Mostra"
+
+#: includes/Admin/Assets.php:75
+msgid "Hide"
+msgstr "Nascondi"
+
+#: includes/Admin/Assets.php:76
+msgid "No viewers found."
+msgstr "Nessun visualizzatore trovato."
+
+#: includes/Admin/Assets.php:77
+msgid "Searching…"
+msgstr "Ricerca in corso…"
+
+#: includes/Admin/Assets.php:78
+#: build/blocks/embed/index.js:1
+msgid "Could not load viewers."
+msgstr "Impossibile caricare i visualizzatori."
+
+#: includes/Admin/MetaBox.php:62
+#: build/blocks/embed/index.js:1
+msgid "Viewer"
+msgstr "Visualizzatore"
+
+#: includes/Admin/MetaBox.php:73
+msgid "— No viewer —"
+msgstr "— Nessun visualizzatore —"
+
+#: includes/Admin/MetaBox.php:86
+msgid "Remove viewer"
+msgstr "Rimuovi visualizzatore"
+
+#: includes/Admin/MetaBox.php:100
+msgid "Position override"
+msgstr "Sovrascrivi posizione"
+
+#. translators: %s: site default position label
+#: includes/Admin/MetaBox.php:114
+msgid "Site default: %s"
+msgstr "Predefinito del sito: %s"
+
+#: includes/Admin/MetaBox.php:128
+msgid "Use site default"
+msgstr "Usa predefinito del sito"
+
+#: includes/Admin/MetaBox.php:129
+msgid "First image (gallery)"
+msgstr "Prima immagine (galleria)"
+
+#: includes/Admin/MetaBox.php:130
+msgid "Last image (gallery, modal)"
+msgstr "Ultima immagine (galleria, modale)"
+
+#: includes/Admin/MetaBox.php:131
+#: includes/Settings/IntegrationSettings.php:51
+msgid "Above product"
+msgstr "Sopra il prodotto"
+
+#: includes/Admin/MetaBox.php:132
+#: includes/Settings/IntegrationSettings.php:52
+msgid "Below product"
+msgstr "Sotto il prodotto"
+
+#: includes/Admin/MetaBox.php:133
+msgid "Button only"
+msgstr "Solo pulsante"
+
+#. translators: %s: settings page link
+#: includes/Admin/Notices.php:46
+msgid "is enabled but no API key is set. %s"
+msgstr "è attivo ma nessuna chiave API è impostata. %s"
+
+#: includes/Admin/Notices.php:48
+msgid "Enter your API key"
+msgstr "Inserisci la tua chiave API"
+
+#: includes/Admin/Setup.php:48
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: includes/Admin/Setup.php:53
+msgid "Viewers"
+msgstr "Visualizzatori"
+
+#: includes/Admin/ViewersListTable.php:46
+msgid "Preview"
+msgstr "Anteprima"
+
+#: includes/Admin/ViewersListTable.php:47
+msgid "#"
+msgstr "#"
+
+#: includes/Admin/ViewersListTable.php:48
+msgid "Product"
+msgstr "Prodotto"
+
+#: includes/Admin/ViewersListTable.php:49
+msgid "Brand"
+msgstr "Marca"
+
+#: includes/Admin/ViewersListTable.php:50
+msgid "Type"
+msgstr "Tipo"
+
+#: includes/Admin/ViewersListTable.php:51
+msgid "Internal note"
+msgstr "Nota interna"
+
+#: includes/Admin/ViewersListTable.php:52
+msgid "Created"
+msgstr "Creato"
+
+#: includes/Admin/ViewersListTable.php:53
+msgid "Actions"
+msgstr "Azioni"
+
+#: includes/Admin/ViewersListTable.php:146
+msgid "Edit"
+msgstr "Modifica"
+
+#: includes/Admin/ViewersListTable.php:153
+msgid "Analytics"
+msgstr "Analisi"
+
+#: includes/Admin/ViewersListTable.php:160
+msgid "No viewers found. Add a viewer in the ARkid Catalogue or check your API key."
+msgstr "Nessun visualizzatore trovato. Aggiungi un visualizzatore nel Catalogo ARkid o controlla la tua chiave API."
+
+#: includes/Admin/ViewersPage.php:33
+#: includes/Admin/ViewersPage.php:34
+#: includes/Admin/ViewersPage.php:69
+msgid "ARkid Viewers"
+msgstr "Visualizzatori ARkid"
+
+#: includes/Admin/ViewersPage.php:57
+msgid "API key was rejected (HTTP 403). Update it in the integration settings."
+msgstr "Chiave API rifiutata (HTTP 403). Aggiornala nelle impostazioni di integrazione."
+
+#. translators: %s: error message
+#: includes/Admin/ViewersPage.php:61
+msgid "Could not reach the ARkid API: %s"
+msgstr "Impossibile raggiungere l'API ARkid: %s"
+
+#: includes/Admin/ViewersPage.php:72
+msgid "Refresh"
+msgstr "Aggiorna"
+
+#. translators: %s: settings page link
+#: includes/Admin/ViewersPage.php:82
+msgid "No API key configured. %s to load your viewers."
+msgstr "Nessuna chiave API configurata. %s per caricare i tuoi visualizzatori."
+
+#: includes/Admin/ViewersPage.php:83
+msgid "Open settings"
+msgstr "Apri impostazioni"
+
+#: includes/Frontend/Assets.php:66
+#: includes/Frontend/Modal.php:31
+msgid "Close 3D viewer"
+msgstr "Chiudi visualizzatore 3D"
+
+#. translators: %s: product name
+#: includes/Frontend/BlockGalleryInjector.php:184
+msgid "Show 3D viewer for %s"
+msgstr "Mostra il visualizzatore 3D di %s"
+
+#. translators: %s: product name
+#: includes/Frontend/ClassicGalleryInjector.php:82
+#: includes/Frontend/ClassicGalleryInjector.php:99
+#: includes/Frontend/IframeFactory.php:45
+msgid "%s 3D viewer"
+msgstr "Visualizzatore 3D di %s"
+
+#. translators: %s: product name
+#: includes/Frontend/IframeFactory.php:70
+msgid "Open 3D viewer for %s"
+msgstr "Apri il visualizzatore 3D di %s"
+
+#. translators: %s: product name
+#: includes/Frontend/IframeFactory.php:151
+msgid "Open the 3D viewer for %s in a new window"
+msgstr "Apri il visualizzatore 3D di %s in una nuova finestra"
+
+#: includes/Rest/Controller.php:73
+msgid "You do not have permission to access the ARkid Catalogue Link API."
+msgstr "Non hai il permesso di accedere all'API ARkid Catalogue Link."
+
+#: includes/Rest/Controller.php:162
+msgid "No ARkid API key configured. Set one under WooCommerce → Settings → Integration → ARkid Catalogue Link."
+msgstr "Nessuna chiave API ARkid configurata. Impostane una in WooCommerce → Impostazioni → Integrazione → ARkid Catalogue Link."
+
+#: includes/Settings/IntegrationSettings.php:26
+msgid "Connect this store to your ARkid catalogue. The 3D / AR viewer you pick on each product is rendered on the product display page."
+msgstr "Collega questo negozio al tuo catalogo ARkid. Il visualizzatore 3D/AR che scegli per ogni prodotto viene mostrato sulla pagina prodotto."
+
+#: includes/Settings/IntegrationSettings.php:49
+msgid "First image (image gallery)"
+msgstr "Prima immagine (galleria immagini)"
+
+#: includes/Settings/IntegrationSettings.php:50
+msgid "Last image (image gallery, opens in modal)"
+msgstr "Ultima immagine (galleria immagini, apre in modale)"
+
+#: includes/Settings/IntegrationSettings.php:53
+msgid "Button only (View in 3D)"
+msgstr "Solo pulsante (Visualizza in 3D)"
+
+#: includes/Settings/IntegrationSettings.php:58
+msgid "API key"
+msgstr "Chiave API"
+
+#: includes/Settings/IntegrationSettings.php:60
+msgid "API key from your ARkid catalogue account. Used as the HTTP Basic auth password (the username is always <code>woocommerce</code>)."
+msgstr "Chiave API del tuo account ARkid Catalogue. Usata come password HTTP Basic auth (lo username è sempre <code>woocommerce</code>)."
+
+#: includes/Settings/IntegrationSettings.php:65
+msgid "Default viewer position"
+msgstr "Posizione predefinita del visualizzatore"
+
+#: includes/Settings/IntegrationSettings.php:69
+msgid "Where the viewer is rendered on the product display page when no per-product override is set."
+msgstr "Dove viene mostrato il visualizzatore sulla pagina prodotto quando non c'è una sovrascrittura per prodotto."
+
+#: includes/Settings/IntegrationSettings.php:73
+msgid "Button text"
+msgstr "Testo del pulsante"
+
+#: includes/Settings/IntegrationSettings.php:77
+msgid "Label for the standalone \"Button only\" trigger and for the modal-opening button on the last-image position. Leave empty to use the localized default for each visitor."
+msgstr "Etichetta per il pulsante autonomo «Solo pulsante» e per il pulsante di apertura del modale nella posizione ultima immagine. Lascia vuoto per usare l'etichetta predefinita localizzata per ogni visitatore."
+
+#: includes/Settings/IntegrationSettings.php:81
+msgid "Require visitor consent"
+msgstr "Richiedi il consenso del visitatore"
+
+#: includes/Settings/IntegrationSettings.php:83
+msgid "Only load the viewer when the visitor has granted marketing consent (requires the WP Consent API plugin)."
+msgstr "Carica il visualizzatore solo quando il visitatore ha dato il consenso al marketing (richiede il plugin WP Consent API)."
+
+#: includes/Settings/IntegrationSettings.php:85
+msgid "When enabled and consent is missing, the viewer area is left empty."
+msgstr "Quando attivo e il consenso manca, l'area del visualizzatore resta vuota."
+
+#: includes/Settings/IntegrationSettings.php:165
+msgid "ARkid Catalogue Link: connected successfully."
+msgstr "ARkid Catalogue Link: connesso con successo."
+
+#: includes/Settings/IntegrationSettings.php:169
+msgid "ARkid Catalogue Link: API key was rejected (HTTP 403). Double-check the key."
+msgstr "ARkid Catalogue Link: chiave API rifiutata (HTTP 403). Ricontrolla la chiave."
+
+#. translators: %s: error message
+#: includes/Settings/IntegrationSettings.php:176
+msgid "ARkid Catalogue Link: could not reach the API (%s). The key was saved anyway."
+msgstr "ARkid Catalogue Link: impossibile raggiungere l'API (%s). La chiave è stata comunque salvata."
+
+#: includes/Settings/Options.php:35
+msgid "See in 3D & AR"
+msgstr "Vedi in 3D e AR"
+
+#: build/blocks/embed/index.js:1
+msgid "— Select a viewer —"
+msgstr "— Seleziona un visualizzatore —"
+
+#: build/blocks/embed/index.js:1
+msgid "Reload viewers"
+msgstr "Ricarica visualizzatori"
+
+#: build/blocks/embed/index.js:1
+msgid "Viewer not found."
+msgstr "Visualizzatore non trovato."
+
+#: build/blocks/embed/index.js:1
+msgid "Pick a viewer from your catalogue."
+msgstr "Scegli un visualizzatore dal tuo catalogo."
+
+#: build/blocks/embed/index.js:1
+msgid "No viewers available. Check your API key."
+msgstr "Nessun visualizzatore disponibile. Controlla la tua chiave API."
+
+#: build/blocks/embed/block.json
+msgid "ARkid Catalogue Link"
+msgstr "ARkid Catalogue Link"
+
+#: build/blocks/embed/block.json
+msgid "Embed an ARkid 3D / AR viewer from your catalogue."
+msgstr "Incorpora un visualizzatore 3D/AR ARkid dal tuo catalogo."
+
+#: build/blocks/embed/block.json
+msgid "arkid"
+msgstr "arkid"
+
+#: build/blocks/embed/block.json
+msgid "3d"
+msgstr "3d"
+
+#: build/blocks/embed/block.json
+msgid "ar"
+msgstr "ar"
+
+#: build/blocks/embed/block.json
+msgid "viewer"
+msgstr "viewer"
+
+#: build/blocks/embed/block.json
+msgid "catalogue"
+msgstr "catalogue"

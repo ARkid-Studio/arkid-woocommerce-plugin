@@ -1,0 +1,49 @@
+version: 2
+
+# Weekly, grouped, and a week behind the registries: a freshly published
+# release has to survive seven days in the wild before it is proposed here,
+# which is when compromised packages tend to be caught and pulled.
+updates:
+  # Workflow actions are pinned to commit SHAs. This keeps those pins, and the
+  # version comments beside them, current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns: ['*']
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Deliberately held on the 30.x line: the dependency-extraction plugin
+      # it ships decides which wp-* script handles the build declares, and a
+      # newer major targets handles WordPress 6.9 (our `Requires at least`)
+      # does not register. See CONTRIBUTING.md, "Deliberate pins".
+      - dependency-name: '@wordpress/scripts'
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      composer-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # WordPress core's test suite supports PHPUnit 9 only, and Brain Monkey
+      # and the polyfills cap there. See CONTRIBUTING.md, "Deliberate pins".
+      - dependency-name: phpunit/phpunit
+        update-types: [version-update:semver-major]

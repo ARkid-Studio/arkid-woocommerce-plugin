@@ -1,0 +1,257 @@
+{
+  "data": [
+    {
+      "embed_id": "0af0878e-61df-11f0-f6a5-59a3f4f8cd3e",
+      "row_number": 6,
+      "product_name": "Product Demo",
+      "brand_name": "ARkid Studio",
+      "image": "https://cloud.arkid.app/covers/aDemo_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento",
+      "embedder_url": "",
+      "created": "2025-07-16 02:51:43",
+      "modified": "2025-07-16 02:52:36",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/CvCHjmHfEfD2pVmj9PjNPg",
+      "analytics_url": "https://catalogue.arkid.app/analytics/CvCHjmHfEfD2pVmj9PjNPg",
+      "internal_note": "",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 22,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "Demo",
+          "rgb": "#000000"
+        }
+      ],
+      "tags": [
+        {
+          "name": "Online"
+        }
+      ]
+    },
+    {
+      "embed_id": "3d722a3b-7db1-11ef-46db-3f52296df50d",
+      "row_number": 5,
+      "product_name": "Felix Learning Tower",
+      "brand_name": "tiSsi",
+      "image": "https://cloud.arkid.app/covers/FELIX_Static_NATURE_Regular_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/PXIqO32xEe9G2z9SKW31DQ?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/PXIqO32xEe9G2z9SKW31DQ?source=magento",
+      "embedder_url": "",
+      "created": "2024-09-28 17:49:26",
+      "modified": "2024-10-18 22:15:56",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/PXIqO32xEe9G2z9SKW31DQ",
+      "analytics_url": "https://catalogue.arkid.app/analytics/PXIqO32xEe9G2z9SKW31DQ",
+      "internal_note": "Oak only?",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 137,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "Eiche",
+          "rgb": "#ab681f"
+        }
+      ],
+      "tags": [
+        {
+          "name": "Online"
+        },
+        {
+          "name": "POS"
+        }
+      ]
+    },
+    {
+      "embed_id": "d637eb1e-8d7d-11ef-0daa-6f5654bdddee",
+      "row_number": 4,
+      "product_name": "Ride-on Bike 4 Wheels",
+      "brand_name": "Moover Toys",
+      "image": "https://cloud.arkid.app/covers/RIDEONBIKE_Static_Red_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/1jfrHo19Ee8Nqm9WVL3d7g?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/1jfrHo19Ee8Nqm9WVL3d7g?source=magento",
+      "embedder_url": "",
+      "created": "2024-10-18 20:21:47",
+      "modified": "2024-10-18 20:21:47",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/1jfrHo19Ee8Nqm9WVL3d7g",
+      "analytics_url": "https://catalogue.arkid.app/analytics/1jfrHo19Ee8Nqm9WVL3d7g",
+      "internal_note": "",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 336,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "Mint",
+          "rgb": "#bbc4bd"
+        },
+        {
+          "name": "Pink",
+          "rgb": "#d7aaae"
+        },
+        {
+          "name": "Red",
+          "rgb": "#a23332"
+        }
+      ],
+      "tags": [
+        {
+          "name": "Online"
+        }
+      ]
+    },
+    {
+      "embed_id": "ad21f15e-7164-11ef-fd5b-87131cfe84d0",
+      "row_number": 3,
+      "product_name": "Felix Learning Tower",
+      "brand_name": "tiSsi",
+      "image": "https://cloud.arkid.app/covers/FELIX_Static_NATURE_Regular_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/rSHxXnFkEe_9W4cTHP6E0A?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/rSHxXnFkEe_9W4cTHP6E0A?source=magento",
+      "embedder_url": "",
+      "created": "2024-09-13 02:11:08",
+      "modified": "2024-09-13 02:11:13",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/rSHxXnFkEe_9W4cTHP6E0A",
+      "analytics_url": "https://catalogue.arkid.app/analytics/rSHxXnFkEe_9W4cTHP6E0A",
+      "internal_note": "A really long internal note. A really long note",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 225,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "Black",
+          "rgb": "#404040"
+        },
+        {
+          "name": "Blau",
+          "rgb": "#184070"
+        },
+        {
+          "name": "Eiche",
+          "rgb": "#ab681f"
+        },
+        {
+          "name": "Gelb",
+          "rgb": "#ffc600"
+        },
+        {
+          "name": "Grau",
+          "rgb": "#666666"
+        },
+        {
+          "name": "Hazy Gray",
+          "rgb": "#4b4b4b"
+        },
+        {
+          "name": "Mint",
+          "rgb": "#8db0b8"
+        },
+        {
+          "name": "Natur",
+          "rgb": "#d0aa91"
+        },
+        {
+          "name": "Rose",
+          "rgb": "#d1b3cd"
+        },
+        {
+          "name": "Stormy Gray",
+          "rgb": "#808080"
+        },
+        {
+          "name": "Weiss",
+          "rgb": "#dadada"
+        }
+      ],
+      "tags": [
+        {
+          "name": "Ads"
+        },
+        {
+          "name": "Event"
+        },
+        {
+          "name": "Online"
+        }
+      ]
+    },
+    {
+      "embed_id": "9713bef3-7164-11ef-6ba4-18fb0def4528",
+      "row_number": 2,
+      "product_name": "HAJO",
+      "brand_name": "tiSsi",
+      "image": "https://cloud.arkid.app/covers/HAJO_Static_RegularBed_White_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/lxO-83FkEe9rpBj7De9FKA?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/lxO-83FkEe9rpBj7De9FKA?source=magento",
+      "embedder_url": "",
+      "created": "2024-09-13 02:10:31",
+      "modified": "2024-09-13 02:10:33",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/lxO-83FkEe9rpBj7De9FKA",
+      "analytics_url": "https://catalogue.arkid.app/analytics/lxO-83FkEe9rpBj7De9FKA",
+      "internal_note": "Single color",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 115,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "White",
+          "rgb": "#ffffff"
+        }
+      ],
+      "tags": [
+        {
+          "name": "Online"
+        }
+      ]
+    },
+    {
+      "embed_id": "7533c169-7164-11ef-f88e-bce2419c180f",
+      "row_number": 1,
+      "product_name": "HAJO",
+      "brand_name": "tiSsi",
+      "image": "https://cloud.arkid.app/covers/HAJO_Static_RegularBed_White_c.webp",
+      "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/dTPBaXFkEe_4jrziQZwYDw?source=magento\" title=\"ARkid 3D model\"></iframe>",
+      "embed_url": "https://catalogue.arkid.app/embed/dTPBaXFkEe_4jrziQZwYDw?source=magento",
+      "embedder_url": "",
+      "created": "2024-09-13 02:09:35",
+      "modified": "2024-09-13 02:09:37",
+      "edit_url": "https://catalogue.arkid.app/configure/edit/dTPBaXFkEe_4jrziQZwYDw",
+      "analytics_url": "https://catalogue.arkid.app/analytics/dTPBaXFkEe_4jrziQZwYDw",
+      "internal_note": "",
+      "buybutton_url": "",
+      "cta_url": "",
+      "views": 197,
+      "author_name": "E-Commerce Test User",
+      "type": "pdp",
+      "colors": [
+        {
+          "name": "Nature",
+          "rgb": "#d0a876"
+        },
+        {
+          "name": "White",
+          "rgb": "#ffffff"
+        }
+      ],
+      "tags": [
+        {
+          "name": "In-store"
+        },
+        {
+          "name": "Online"
+        },
+        {
+          "name": "Social"
+        }
+      ]
+    }
+  ]
+}

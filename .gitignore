@@ -1,0 +1,64 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Node
+node_modules/
+npm-debug.log*
+.pnpm-debug.log*
+
+# Composer
+vendor/
+
+# Build output
+build/
+build-module/
+dist/
+
+# Tests
+tests/_output/
+tests/coverage/
+.phpunit.result.cache
+
+# Logs
+logs/
+*.log
+
+# Archives. The release zip is NOT committed: it drifts from source, adds a
+# fresh ~140 KB binary to history on every dependency bump, and bypasses the
+# CI gates. It is built from a tag by .github/workflows/release.yml and
+# published to GitHub Releases.
+*.zip
+*.zip.sha256
+
+# tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Generated translations (compiled at release time by bin/build-plugin-zip.sh).
+# Source-of-truth: languages/*.pot + languages/*.po (committed).
+languages/*.mo
+languages/*.json
+
+# Test output
+tests/e2e/.auth/
+tests/_output/
+playwright-report/
+test-results/
+.phpunit-integration.result.cache
+build-plugin/
+
+# dotenvx — .env is PUBLIC-KEY ENCRYPTED and safe to commit; the private keys
+# that decrypt it are not. Never commit .env.keys.
+.env.keys
+.env.local
+.env.*.local
+
+# Claude Code — per-user settings. Shared project settings (.claude/settings.json)
+# stay committable.
+.claude/settings.local.json

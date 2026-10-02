@@ -1,0 +1,7 @@
+ARkid Catalogue Link is licensed under the GNU General Public License,
+version 3 (or, at your option, any later version).
+
+A copy of the GNU GPL v3 license is available at:
+https://www.gnu.org/licenses/gpl-3.0.html
+
+The full license text can be retrieved from that URL.

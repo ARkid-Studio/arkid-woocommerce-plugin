@@ -1,0 +1,40 @@
+{
+	// Sibling-compose devcontainer: the whole WordPress + WooCommerce stack runs on
+	// the HOST engine (docker or rootless podman). The devcontainer IS the
+	// `wordpress` service; you exec in to build/lint/test. No nesting, no socket,
+	// no devcontainer Features. See README.md.
+	"name": "ARkid Catalogue Link — WordPress + WooCommerce",
+
+	// compose.podman.yaml adds rootless-podman/SELinux bits (keep-id + label=disable).
+	// On a PLAIN DOCKER host, remove it from this list (keep-id is podman-only).
+	"dockerComposeFile": ["compose.yaml", "compose.podman.yaml"],
+	"service": "wordpress",
+	"workspaceFolder": "/workspaces/arkid-woocommerce-plugin",
+	"shutdownAction": "stopCompose",
+
+	// Keep the image's apache CMD running (so the site serves); we just exec in.
+	"overrideCommand": false,
+	"remoteUser": "www-data",
+	// keep-id already aligns host<->container uid; don't let the CLI re-chown.
+	"updateRemoteUserUID": false,
+
+	// Host access comes from the compose `ports:` mapping (8888->8080). Do NOT add
+	// forwardPorts here: under podman, Zed/the CLI publishes it as an ADDITIONAL
+	// 8888->8888 mapping that collides with the compose publish on host port 8888
+	// ("rootlessport conflict with ID 1", container stuck in Created).
+
+	// Provision WordPress (idempotent), then install dev deps (retried once — the
+	// install is large and the first attempt occasionally trips on a network hiccup).
+	"postCreateCommand": "bash /workspaces/arkid-woocommerce-plugin/.devcontainer/provision.sh && (npm install || npm install) && npm run e2e:install",
+
+	// Ignored by Zed; convenience for VS Code users.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode"
+			]
+		}
+	}
+}

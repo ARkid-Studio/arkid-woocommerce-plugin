@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+# Nothing by default; the one job that publishes asks for exactly what it needs.
+permissions: {}
+
+# One release per tag at a time, and never cancel one half-published.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish the plugin zip
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # create the GitHub Release and upload its assets
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.1'
+          coverage: none
+          tools: composer:v2, wp-cli
+
+      # No dependency cache in the job that publishes: a restored cache is
+      # written by other, less-trusted runs, and this one ships what it builds.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Install
+        run: |
+          npm ci --ignore-scripts
+          composer install --no-progress
+
+      - name: Gates
+        run: |
+          composer lint
+          composer phpstan
+          composer test
+          npm run lint:js
+          npm run test:js -- --ci
+
+      - name: Tag matches the plugin version
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          header=$(grep -m1 '^ \* Version:' arkid-catalogue-link.php | awk '{print $3}')
+          [ "$tag" = "$header" ] || {
+            echo "::error::tag $tag does not match plugin version $header"; exit 1;
+          }
+
+      - name: Build the zip
+        run: npm run plugin-zip
+
+      - name: Checksum
+        run: sha256sum arkid-catalogue-link.zip > arkid-catalogue-link.zip.sha256
+
+      # Published here rather than committed to the repo: a checked-in zip drifts
+      # from source, bloats history with a fresh binary per dependency bump, and
+      # bypasses every gate above.
+      #
+      # The runner's own `gh`, not a third-party release action: this is the
+      # one job holding a write token, so it pulls in no more outside code
+      # than it has to.
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --generate-notes \
+            arkid-catalogue-link.zip \
+            arkid-catalogue-link.zip.sha256

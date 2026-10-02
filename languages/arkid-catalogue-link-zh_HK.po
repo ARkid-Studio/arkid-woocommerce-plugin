@@ -1,0 +1,373 @@
+# Translation of ARkid Catalogue Link in Chinese (Traditional, HK).
+# Copyright (C) 2026 ARkid
+# This file is distributed under the GPL-3.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: ARkid Catalogue Link 0.2.0\n"
+"Report-Msgid-Bugs-To: support@arkid.app\n"
+"PO-Revision-Date: 2026-05-02 12:00+0000\n"
+"Last-Translator: ARkid <support@arkid.app>\n"
+"Language-Team: Chinese (Traditional, HK)\n"
+"Language: zh_HK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: ARkid bin/translate.py\n"
+"X-Domain: arkid-catalogue-link\n"
+
+
+#. Plugin Name of the plugin
+#: arkid-catalogue-link.php
+#: includes/Admin/MetaBox.php:35
+#: includes/Admin/Notices.php:42
+#: includes/Settings/IntegrationSettings.php:25
+#: build/blocks/embed/index.js:1
+msgid "ARkid Catalogue Link"
+msgstr "ARkid Catalogue Link"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: arkid-catalogue-link.php
+msgid "https://catalogue.arkid.app"
+msgstr "https://catalogue.arkid.app"
+
+#. Description of the plugin
+#: arkid-catalogue-link.php
+msgid "Link products in your WooCommerce store with the ARkid catalogue. Embed 3D / AR viewers on the product display page."
+msgstr "將您 WooCommerce 商店中的產品與 ARkid 目錄關聯。於產品展示頁面嵌入 3D/AR 檢視器。"
+
+#. Author of the plugin
+#: arkid-catalogue-link.php
+msgid "ARkid"
+msgstr "ARkid"
+
+#. translators: 1: required PHP version, 2: current PHP version
+#: arkid-catalogue-link.php:55
+msgid "ARkid Catalogue Link requires PHP %1$s or later. You are running PHP %2$s."
+msgstr "ARkid Catalogue Link 需要 PHP %1$s 或更新版本。您正在執行 PHP %2$s。"
+
+#: arkid-catalogue-link.php:103
+msgid "ARkid Catalogue Link is missing its Composer autoloader. Run `composer install` inside the plugin directory."
+msgstr "ARkid Catalogue Link 缺少 Composer 自動載入器。請於外掛目錄中執行 `composer install`。"
+
+#. translators: %s: WooCommerce link
+#: arkid-catalogue-link.php:120
+msgid "ARkid Catalogue Link requires %s to be installed and active."
+msgstr "ARkid Catalogue Link 需要已安裝並啟用 %s。"
+
+#: includes/Admin/Assets.php:73
+#: includes/Admin/MetaBox.php:68
+msgid "Search viewers…"
+msgstr "搜尋檢視器…"
+
+#: includes/Admin/Assets.php:74
+#: includes/Settings/IntegrationSettings.php:131
+msgid "Reveal"
+msgstr "顯示"
+
+#: includes/Admin/Assets.php:75
+msgid "Hide"
+msgstr "隱藏"
+
+#: includes/Admin/Assets.php:76
+msgid "No viewers found."
+msgstr "找不到檢視器。"
+
+#: includes/Admin/Assets.php:77
+msgid "Searching…"
+msgstr "搜尋中…"
+
+#: includes/Admin/Assets.php:78
+#: build/blocks/embed/index.js:1
+msgid "Could not load viewers."
+msgstr "無法載入檢視器。"
+
+#: includes/Admin/MetaBox.php:62
+#: build/blocks/embed/index.js:1
+msgid "Viewer"
+msgstr "檢視器"
+
+#: includes/Admin/MetaBox.php:73
+msgid "— No viewer —"
+msgstr "— 無檢視器 —"
+
+#: includes/Admin/MetaBox.php:86
+msgid "Remove viewer"
+msgstr "移除檢視器"
+
+#: includes/Admin/MetaBox.php:100
+msgid "Position override"
+msgstr "位置覆蓋"
+
+#. translators: %s: site default position label
+#: includes/Admin/MetaBox.php:114
+msgid "Site default: %s"
+msgstr "網站預設:%s"
+
+#: includes/Admin/MetaBox.php:128
+msgid "Use site default"
+msgstr "使用網站預設"
+
+#: includes/Admin/MetaBox.php:129
+msgid "First image (gallery)"
+msgstr "第一張圖片(圖庫)"
+
+#: includes/Admin/MetaBox.php:130
+msgid "Last image (gallery, modal)"
+msgstr "最後一張圖片(圖庫,對話框)"
+
+#: includes/Admin/MetaBox.php:131
+#: includes/Settings/IntegrationSettings.php:51
+msgid "Above product"
+msgstr "產品上方"
+
+#: includes/Admin/MetaBox.php:132
+#: includes/Settings/IntegrationSettings.php:52
+msgid "Below product"
+msgstr "產品下方"
+
+#: includes/Admin/MetaBox.php:133
+msgid "Button only"
+msgstr "僅按鈕"
+
+#. translators: %s: settings page link
+#: includes/Admin/Notices.php:46
+msgid "is enabled but no API key is set. %s"
+msgstr "已啟用但尚未設定 API 金鑰。%s"
+
+#: includes/Admin/Notices.php:48
+msgid "Enter your API key"
+msgstr "輸入 API 金鑰"
+
+#: includes/Admin/Setup.php:48
+msgid "Settings"
+msgstr "設定"
+
+#: includes/Admin/Setup.php:53
+msgid "Viewers"
+msgstr "檢視器"
+
+#: includes/Admin/ViewersListTable.php:46
+msgid "Preview"
+msgstr "預覽"
+
+#: includes/Admin/ViewersListTable.php:47
+msgid "#"
+msgstr "#"
+
+#: includes/Admin/ViewersListTable.php:48
+msgid "Product"
+msgstr "產品"
+
+#: includes/Admin/ViewersListTable.php:49
+msgid "Brand"
+msgstr "品牌"
+
+#: includes/Admin/ViewersListTable.php:50
+msgid "Type"
+msgstr "類型"
+
+#: includes/Admin/ViewersListTable.php:51
+msgid "Internal note"
+msgstr "內部備註"
+
+#: includes/Admin/ViewersListTable.php:52
+msgid "Created"
+msgstr "建立時間"
+
+#: includes/Admin/ViewersListTable.php:53
+msgid "Actions"
+msgstr "操作"
+
+#: includes/Admin/ViewersListTable.php:146
+msgid "Edit"
+msgstr "編輯"
+
+#: includes/Admin/ViewersListTable.php:153
+msgid "Analytics"
+msgstr "分析"
+
+#: includes/Admin/ViewersListTable.php:160
+msgid "No viewers found. Add a viewer in the ARkid Catalogue or check your API key."
+msgstr "找不到檢視器。請在 ARkid 目錄中加入檢視器,或檢查 API 金鑰。"
+
+#: includes/Admin/ViewersPage.php:33
+#: includes/Admin/ViewersPage.php:34
+#: includes/Admin/ViewersPage.php:69
+msgid "ARkid Viewers"
+msgstr "ARkid 檢視器"
+
+#: includes/Admin/ViewersPage.php:57
+msgid "API key was rejected (HTTP 403). Update it in the integration settings."
+msgstr "API 金鑰被拒絕(HTTP 403)。請於整合設定中更新。"
+
+#. translators: %s: error message
+#: includes/Admin/ViewersPage.php:61
+msgid "Could not reach the ARkid API: %s"
+msgstr "無法連線到 ARkid API:%s"
+
+#: includes/Admin/ViewersPage.php:72
+msgid "Refresh"
+msgstr "重新整理"
+
+#. translators: %s: settings page link
+#: includes/Admin/ViewersPage.php:82
+msgid "No API key configured. %s to load your viewers."
+msgstr "未設定 API 金鑰。請%s以載入您的檢視器。"
+
+#: includes/Admin/ViewersPage.php:83
+msgid "Open settings"
+msgstr "開啟設定"
+
+#: includes/Frontend/Assets.php:66
+#: includes/Frontend/Modal.php:31
+msgid "Close 3D viewer"
+msgstr "關閉 3D 檢視器"
+
+#. translators: %s: product name
+#: includes/Frontend/BlockGalleryInjector.php:184
+msgid "Show 3D viewer for %s"
+msgstr "顯示 %s 的 3D 檢視器"
+
+#. translators: %s: product name
+#: includes/Frontend/ClassicGalleryInjector.php:82
+#: includes/Frontend/ClassicGalleryInjector.php:99
+#: includes/Frontend/IframeFactory.php:45
+msgid "%s 3D viewer"
+msgstr "%s 3D 檢視器"
+
+#. translators: %s: product name
+#: includes/Frontend/IframeFactory.php:70
+msgid "Open 3D viewer for %s"
+msgstr "開啟 %s 的 3D 檢視器"
+
+#. translators: %s: product name
+#: includes/Frontend/IframeFactory.php:151
+msgid "Open the 3D viewer for %s in a new window"
+msgstr "於新視窗開啟 %s 的 3D 檢視器"
+
+#: includes/Rest/Controller.php:73
+msgid "You do not have permission to access the ARkid Catalogue Link API."
+msgstr "您無權存取 ARkid Catalogue Link API。"
+
+#: includes/Rest/Controller.php:162
+msgid "No ARkid API key configured. Set one under WooCommerce → Settings → Integration → ARkid Catalogue Link."
+msgstr "未設定 ARkid API 金鑰。請在 WooCommerce → 設定 → 整合 → ARkid Catalogue Link 中設定。"
+
+#: includes/Settings/IntegrationSettings.php:26
+msgid "Connect this store to your ARkid catalogue. The 3D / AR viewer you pick on each product is rendered on the product display page."
+msgstr "將此商店連結到您的 ARkid 目錄。您為每件產品選擇的 3D/AR 檢視器將顯示在產品頁面上。"
+
+#: includes/Settings/IntegrationSettings.php:49
+msgid "First image (image gallery)"
+msgstr "第一張圖片(圖片庫)"
+
+#: includes/Settings/IntegrationSettings.php:50
+msgid "Last image (image gallery, opens in modal)"
+msgstr "最後一張圖片(圖片庫,於對話框中開啟)"
+
+#: includes/Settings/IntegrationSettings.php:53
+msgid "Button only (View in 3D)"
+msgstr "僅按鈕(以 3D 檢視)"
+
+#: includes/Settings/IntegrationSettings.php:58
+msgid "API key"
+msgstr "API 金鑰"
+
+#: includes/Settings/IntegrationSettings.php:60
+msgid "API key from your ARkid catalogue account. Used as the HTTP Basic auth password (the username is always <code>woocommerce</code>)."
+msgstr "您 ARkid 目錄帳戶的 API 金鑰。用作 HTTP Basic 驗證密碼(使用者名稱始終為 <code>woocommerce</code>)。"
+
+#: includes/Settings/IntegrationSettings.php:65
+msgid "Default viewer position"
+msgstr "檢視器預設位置"
+
+#: includes/Settings/IntegrationSettings.php:69
+msgid "Where the viewer is rendered on the product display page when no per-product override is set."
+msgstr "未設定單產品覆蓋時,於產品展示頁面顯示檢視器的位置。"
+
+#: includes/Settings/IntegrationSettings.php:73
+msgid "Button text"
+msgstr "按鈕文字"
+
+#: includes/Settings/IntegrationSettings.php:77
+msgid "Label for the standalone \"Button only\" trigger and for the modal-opening button on the last-image position. Leave empty to use the localized default for each visitor."
+msgstr "獨立的「僅按鈕」觸發器以及最後一張圖片位置上開啟對話框按鈕的標籤。留空則按訪客顯示本地化預設值。"
+
+#: includes/Settings/IntegrationSettings.php:81
+msgid "Require visitor consent"
+msgstr "需要訪客同意"
+
+#: includes/Settings/IntegrationSettings.php:83
+msgid "Only load the viewer when the visitor has granted marketing consent (requires the WP Consent API plugin)."
+msgstr "僅在訪客同意行銷追蹤後載入檢視器(需要 WP Consent API 外掛)。"
+
+#: includes/Settings/IntegrationSettings.php:85
+msgid "When enabled and consent is missing, the viewer area is left empty."
+msgstr "啟用後,若未取得同意,檢視器區域將保持為空。"
+
+#: includes/Settings/IntegrationSettings.php:165
+msgid "ARkid Catalogue Link: connected successfully."
+msgstr "ARkid Catalogue Link:連線成功。"
+
+#: includes/Settings/IntegrationSettings.php:169
+msgid "ARkid Catalogue Link: API key was rejected (HTTP 403). Double-check the key."
+msgstr "ARkid Catalogue Link:API 金鑰被拒絕(HTTP 403)。請仔細檢查金鑰。"
+
+#. translators: %s: error message
+#: includes/Settings/IntegrationSettings.php:176
+msgid "ARkid Catalogue Link: could not reach the API (%s). The key was saved anyway."
+msgstr "ARkid Catalogue Link:無法連線到 API(%s)。金鑰已儲存。"
+
+#: includes/Settings/Options.php:35
+msgid "See in 3D & AR"
+msgstr "於 3D 與 AR 中檢視"
+
+#: build/blocks/embed/index.js:1
+msgid "— Select a viewer —"
+msgstr "— 選擇檢視器 —"
+
+#: build/blocks/embed/index.js:1
+msgid "Reload viewers"
+msgstr "重新載入檢視器"
+
+#: build/blocks/embed/index.js:1
+msgid "Viewer not found."
+msgstr "找不到檢視器。"
+
+#: build/blocks/embed/index.js:1
+msgid "Pick a viewer from your catalogue."
+msgstr "從目錄中選擇一個檢視器。"
+
+#: build/blocks/embed/index.js:1
+msgid "No viewers available. Check your API key."
+msgstr "沒有可用的檢視器。請檢查 API 金鑰。"
+
+#: build/blocks/embed/block.json
+msgid "ARkid Catalogue Link"
+msgstr "ARkid Catalogue Link"
+
+#: build/blocks/embed/block.json
+msgid "Embed an ARkid 3D / AR viewer from your catalogue."
+msgstr "從您的目錄嵌入 ARkid 3D/AR 檢視器。"
+
+#: build/blocks/embed/block.json
+msgid "arkid"
+msgstr "arkid"
+
+#: build/blocks/embed/block.json
+msgid "3d"
+msgstr "3d"
+
+#: build/blocks/embed/block.json
+msgid "ar"
+msgstr "ar"
+
+#: build/blocks/embed/block.json
+msgid "viewer"
+msgstr "viewer"
+
+#: build/blocks/embed/block.json
+msgid "catalogue"
+msgstr "catalogue"

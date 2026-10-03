@@ -144,6 +144,7 @@ function EmbedEdit({ attributes, setAttributes }) {
 					initialOpen
 				>
 					<SelectControl
+						__next40pxDefaultSize
 						label={__('Viewer', 'arkid-catalogue-link')}
 						value={embedId || ''}
 						options={options}
@@ -223,6 +224,7 @@ function EmbedEdit({ attributes, setAttributes }) {
 						)}
 					>
 						<SelectControl
+							__next40pxDefaultSize
 							value={embedId || ''}
 							options={options}
 							onChange={(value) =>

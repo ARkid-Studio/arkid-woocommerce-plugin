@@ -111,6 +111,18 @@ test.describe('embed block', () => {
 		expect(new URL(src).hostname).toBe('catalogue.arkid.app');
 		expect(new URL(src).searchParams.get('source')).toBe('woocommerce');
 
+		// block.json's `style` must name a file the build emits. If it does not,
+		// WordPress still registers the handle, but with no src, so nothing is
+		// printed at all. Small block styles are inlined, so it can arrive as
+		// either a <link> or an inline <style>.
+		await expect(
+			page
+				.locator(
+					'#arkid-catalogue-link-embed-style-css, #arkid-catalogue-link-embed-style-inline-css'
+				)
+				.first()
+		).toBeAttached();
+
 		wp(['post', 'delete', String(id), '--force']);
 	});
 

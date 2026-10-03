@@ -260,6 +260,20 @@ jobs:
       - name: Playwright
         run: npm run test:e2e
 
+      # A worker that dies takes its request with it as net::ERR_EMPTY_RESPONSE,
+      # and nothing in the Playwright output says why. Put the server log in the
+      # job log itself rather than only in the artifact, plus the kernel log:
+      # a segfault or an OOM kill is recorded there and nowhere PHP can write.
+      - name: Server diagnostics
+        if: failure()
+        run: |
+          echo '::group::wp-server.log (last 200 lines)'
+          tail -n 200 tests/_output/wp-server.log || true
+          echo '::endgroup::'
+          echo '::group::kernel log (last 50 lines)'
+          sudo dmesg | tail -n 50 || true
+          echo '::endgroup::'
+
       # always(), not failure(): a spec that fails and then passes on retry
       # leaves the job green and takes its trace, video and the server log with
       # it. Those are exactly the runs worth being able to look at.

@@ -1,7 +1,7 @@
 === ARkid Catalogue Link ===
 Contributors: arkid
 Tags: 3d, ar, augmented-reality, woocommerce, product-viewer
-Requires at least: 6.9
+Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 8.0
@@ -130,7 +130,7 @@ positions are unaffected.
   own stored link and make no API calls; admin screens always read live.
 * Viewer URLs are now checked against an allow-list before being embedded.
 * Uninstall is multisite-aware and removes scheduled jobs.
-* Requires WordPress 6.9+ and is tested against WordPress 7.0 and WooCommerce 11.0.
+* Requires WordPress 7.0+ and is tested against WordPress 7.1 and WooCommerce 11.0.
 
 = 0.2.0 =
 * Initial release: settings, product picker, PDP rendering at five positions,

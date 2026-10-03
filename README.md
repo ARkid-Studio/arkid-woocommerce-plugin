@@ -34,7 +34,7 @@ on the product display page.
 
 | | Minimum |
 | --- | --- |
-| WordPress | 6.9 |
+| WordPress | 7.0 |
 | WooCommerce | 8.0 |
 | PHP | 8.1 |
 

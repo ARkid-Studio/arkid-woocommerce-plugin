@@ -10,7 +10,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       arkid-catalogue-link
  * Domain Path:       /languages
- * Requires at least: 6.9
+ * Requires at least: 7.0
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
  * WC requires at least: 8.0
@@ -30,7 +30,7 @@ if ( defined( 'ARKID_CATALOGUE_LINK_VERSION' ) ) {
 const ARKID_CATALOGUE_LINK_VERSION  = '1.0.0';
 const ARKID_CATALOGUE_LINK_MIN_PHP  = '8.1';
 const ARKID_CATALOGUE_LINK_MIN_WC   = '8.0';
-const ARKID_CATALOGUE_LINK_MIN_WP   = '6.9';
+const ARKID_CATALOGUE_LINK_MIN_WP   = '7.0';
 const ARKID_CATALOGUE_LINK_TEXT_DOMAIN = 'arkid-catalogue-link';
 
 define( 'ARKID_CATALOGUE_LINK_FILE', __FILE__ );

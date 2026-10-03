@@ -81,9 +81,9 @@ jobs:
       fail-fast: false
       matrix:
         # The Woo Marketplace requires support for the latest TWO majors of
-        # both, so 7.1/7.0 and 11.0/10.9 are covered on the diagonal. The 6.9
-        # leg is ours, not theirs: it is the `Requires at least` the plugin
-        # declares, and nothing else here would exercise it.
+        # both, so 7.1/7.0 and 11.0/10.9 are covered as a full grid. 7.0 is
+        # also the `Requires at least` the plugin declares — WooCommerce's own
+        # L-1 window — and the 7.0/10.9 leg carries the PHP 8.1 minimum.
         #
         # Bump the 7.x legs whenever readme.txt's "Tested up to" moves —
         # WordPress.org's weekly Plugin Check gate forces that header forward
@@ -93,7 +93,7 @@ jobs:
           - { wp: '7.1', wc: '11.0', php: '8.4' }
           - { wp: '7.1', wc: '10.9', php: '8.3' }
           - { wp: '7.0', wc: '11.0', php: '8.2' }
-          - { wp: '6.9', wc: '10.9', php: '8.1' }
+          - { wp: '7.0', wc: '10.9', php: '8.1' }
           - { wp: 'nightly', wc: 'latest', php: '8.4', experimental: true }
     continue-on-error: ${{ matrix.experimental || false }}
     services:

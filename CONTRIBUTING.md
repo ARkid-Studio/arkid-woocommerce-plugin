@@ -162,13 +162,25 @@ One warning is expected: `load_plugin_textdomain` (see below).
 - **PHPUnit is pinned to 9.6.** WordPress core's test suite supports PHPUnit 9
   only, and Brain Monkey and the polyfills cap there. Upgrading breaks the
   integration suite. Dependabot ignores its major updates.
-- **`@wordpress/scripts` stays on the 30.x line** (the `wp-6.9` dist-tag
-  neighbourhood), matching `Requires at least: 6.9`. The version decides which
-  `wp-*` script handles the dependency-extraction plugin emits; a newer major
-  produces manifests naming handles older WordPress doesn't register — a green
-  build and a blank block editor on the merchant's site. Don't run
+- **`@wordpress/scripts` stays on the 31.x line** (the `wp-7.0` dist-tag
+  neighbourhood), matching `Requires at least: 7.0`. Its build config decides
+  which imports the bundles make, and the dependency-extraction plugin turns
+  those into the `wp-*` script handles each `*.asset.php` declares; a newer
+  major can produce manifests naming handles older WordPress doesn't register —
+  a green build and a blank block editor on the merchant's site. Don't run
   `npm run packages-update`, which jumps to `latest`. Dependabot ignores its
   major updates; move it deliberately, together with `Requires at least`.
+- **The dependency-extraction plugin underneath WooCommerce's is pinned too.**
+  `webpack.config.js` swaps `@wordpress/scripts`' extraction plugin for
+  `@woocommerce/dependency-extraction-webpack-plugin`, which extends
+  `@wordpress/dependency-extraction-webpack-plugin` — but depends on it through
+  the `next` dist-tag, a nightly prerelease. `overrides` in `package.json` pins
+  it to the release of the `wp-7.0` dist-tag instead; move it with
+  `@wordpress/scripts`.
+- **`@woocommerce/eslint-plugin` stays below 4.x** for as long as
+  `@wordpress/scripts` ships ESLint 8 (31.x does): 4.x is a flat config that
+  needs ESLint 9+. It moves when `@wordpress/scripts` reaches the line with
+  ESLint 10 (32.x, past the `wp-7.0` dist-tag).
 - **`composer.json` pins `config.platform.php` to 8.1**, the declared minimum.
   Without it the lock resolves packages that need a newer PHP, and the 8.1 CI
   leg can't install.

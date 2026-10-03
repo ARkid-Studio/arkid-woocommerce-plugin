@@ -32,6 +32,10 @@ updates:
       # 7.0 does not register. See CONTRIBUTING.md, "Deliberate pins".
       - dependency-name: '@wordpress/scripts'
         update-types: [version-update:semver-major]
+      # 4.x is a flat config that needs ESLint 9+, and @wordpress/scripts 31.x
+      # ships ESLint 8; 3.x still runs on it. Lift this with the scripts pin.
+      - dependency-name: '@woocommerce/eslint-plugin'
+        versions: ['>= 4.0.0']
 
   - package-ecosystem: composer
     directory: /

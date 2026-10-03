@@ -179,8 +179,9 @@ One warning is expected: `load_plugin_textdomain` (see below).
   `@wordpress/scripts`.
 - **`@woocommerce/eslint-plugin` stays below 4.x** for as long as
   `@wordpress/scripts` ships ESLint 8 (31.x does): 4.x is a flat config that
-  needs ESLint 9+. It moves when `@wordpress/scripts` reaches the line with
-  ESLint 10 (32.x, past the `wp-7.0` dist-tag).
+  needs ESLint 9+. Dependabot ignores 4.x and later; it moves when
+  `@wordpress/scripts` reaches the line with ESLint 10 (32.x, past the `wp-7.0`
+  dist-tag).
 - **`composer.json` pins `config.platform.php` to 8.1**, the declared minimum.
   Without it the lock resolves packages that need a newer PHP, and the 8.1 CI
   leg can't install.

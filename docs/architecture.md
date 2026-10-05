@@ -77,10 +77,12 @@ in, so this check is what keeps an arbitrary iframe off the product page.
   `GET /api/ecom/embed/{id}` returns a **bare object**, not a wrapper.
 - Auth is HTTP Basic. The username is always `woocommerce`; the API key is the
   password.
-- **`embed_url` already carries `?source=magento`.** `viewer_url()` uses
-  `add_query_arg()`, which *replaces* the parameter, so the result has exactly
-  one `source=woocommerce`. If that ever became an append, ARkid would credit
-  WooCommerce traffic to Magento. Pinned by a test.
+- Every request carries `?source=woocommerce`. The API writes that value into
+  `embed_url` and `embed_code`, so the viewer knows which shop system it runs
+  in. `viewer_url()` still sets it through `add_query_arg()`, which *replaces*
+  the parameter, so a stored URL from an older response ends up with exactly
+  one `source=woocommerce`. Pinned by a test against fixtures recorded with
+  `?source=magento`.
 - **The API also sends `embed_code`**, a ready-made `<iframe>`. It is ignored:
   ours carries a different sandbox and a `referrerpolicy`.
 

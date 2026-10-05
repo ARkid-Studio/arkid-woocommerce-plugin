@@ -70,7 +70,7 @@ final class ClientTest extends TestCase {
 		( new Client( 'k' ) )->list_embeds();
 
 		$this->assertSame( 'https://catalogue.arkid.app/api/ecom/embed?source=woocommerce', $seen[0] );
-		$this->assertSame( 'Basic ' . base64_encode( 'woocommerce:k' ), $seen[1]['headers']['Authorization'] );
+		$this->assertSame( 'Basic ' . base64_encode( 'woocommerce:k' ), $seen[1]['headers']['Authorization'] ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
 
 	public function test_get_embed_throws_not_found_on_404(): void {

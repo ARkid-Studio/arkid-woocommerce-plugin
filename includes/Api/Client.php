@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Client implements EmbedSource {
 
-	private const BASE_URL    = 'https://catalogue.arkid.app';
+	private const BASE_URL = 'https://catalogue.arkid.app';
 	/** Names the shop system, as the Basic auth user and as `?source=`. */
 	private const SOURCE      = 'woocommerce';
 	private const TIMEOUT     = 5;
@@ -88,8 +88,8 @@ final class Client implements EmbedSource {
 		}
 
 		// `?source=` tells the API which shop system asks; it writes the value
-		// into the viewer URLs of the response.
-		$url = add_query_arg( 'source', self::SOURCE, self::BASE_URL . $path );
+		// into the viewer URLs of the response. No path carries a query of its own.
+		$url = self::BASE_URL . $path . '?source=' . self::SOURCE;
 
 		$response = wp_remote_get(
 			$url,

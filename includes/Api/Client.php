@@ -14,7 +14,8 @@ defined( 'ABSPATH' ) || exit;
 final class Client implements EmbedSource {
 
 	private const BASE_URL    = 'https://catalogue.arkid.app';
-	private const AUTH_USER   = 'woocommerce';
+	/** Names the shop system, as the Basic auth user and as `?source=`. */
+	private const SOURCE      = 'woocommerce';
 	private const TIMEOUT     = 5;
 	private const USER_AGENT  = 'arkid-catalogue-link/' . ARKID_CATALOGUE_LINK_VERSION . ' (WordPress)';
 
@@ -86,7 +87,9 @@ final class Client implements EmbedSource {
 			throw new AuthException( 'Missing API key.' );
 		}
 
-		$url = self::BASE_URL . $path;
+		// `?source=` tells the API which shop system asks; it writes the value
+		// into the viewer URLs of the response.
+		$url = add_query_arg( 'source', self::SOURCE, self::BASE_URL . $path );
 
 		$response = wp_remote_get(
 			$url,
@@ -97,7 +100,7 @@ final class Client implements EmbedSource {
 				'headers'     => array(
 					'Accept'        => 'application/json',
 					// HTTP Basic auth header — encoding the credentials is not obfuscation.
-					'Authorization' => 'Basic ' . base64_encode( self::AUTH_USER . ':' . $this->api_key ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+					'Authorization' => 'Basic ' . base64_encode( self::SOURCE . ':' . $this->api_key ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 				),
 			)
 		);

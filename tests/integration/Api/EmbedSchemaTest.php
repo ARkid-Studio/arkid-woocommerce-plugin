@@ -195,9 +195,9 @@ final class EmbedSchemaTest extends TestCase {
 	}
 
 	/**
-	 * Every live embed_url already carries `?source=magento`. add_query_arg
-	 * replaces rather than appends, so our attribution wins — but if that ever
-	 * became an append, ARkid would credit WooCommerce traffic to Magento.
+	 * The API writes the `?source=` of the request into embed_url; the recorded
+	 * fixtures carry `?source=magento`. add_query_arg replaces rather than
+	 * appends, so a stray or stale value never leaves two source parameters.
 	 */
 	public function test_our_source_parameter_replaces_the_one_the_api_ships(): void {
 		$iframe = new IframeFactory( new Options() );

@@ -58,6 +58,21 @@ final class ClientTest extends TestCase {
 		$this->assertSame( 'https://catalogue.arkid.app/embed/x', $dto->embed_url );
 	}
 
+	public function test_requests_name_the_shop_system_and_send_the_key(): void {
+		$seen = null;
+		Functions\when( 'wp_remote_get' )->alias(
+			function ( string $url, array $args ) use ( &$seen ): array {
+				$seen = array( $url, $args );
+				return $this->ok_response( array( 'data' => array() ) );
+			}
+		);
+
+		( new Client( 'k' ) )->list_embeds();
+
+		$this->assertSame( 'https://catalogue.arkid.app/api/ecom/embed?source=woocommerce', $seen[0] );
+		$this->assertSame( 'Basic ' . base64_encode( 'woocommerce:k' ), $seen[1]['headers']['Authorization'] );
+	}
+
 	public function test_get_embed_throws_not_found_on_404(): void {
 		$this->stub_remote_get(
 			array(

@@ -136,8 +136,24 @@ final class EmbedSchemaTest extends TestCase {
 				$this->assertIsInt( $row[ $field ], "row {$index}: {$field} is not an int" );
 			}
 			$this->assertIsArray( $row['colors'] );
+			foreach ( $row['colors'] as $color ) {
+				$this->assertIsBool( $color['enabled'] ?? null, "row {$index}: a colour has no enabled flag" );
+			}
 			$this->assertIsArray( $row['tags'] );
 		}
+	}
+
+	/**
+	 * The API lists every colour of the product and flags the ones the viewer
+	 * shows. "Oak only?" shows one of its product's eleven.
+	 */
+	public function test_only_the_enabled_colors_of_the_real_payload_are_kept(): void {
+		$this->stub_http( '/api/ecom/embed', self::fixture( 'embed-list' ) );
+
+		$oak_only = $this->client()->list_embeds()[1];
+
+		$this->assertSame( 'Oak only?', $oak_only->internal_note );
+		$this->assertSame( array( array( 'name' => 'Eiche', 'rgb' => '#ab681f' ) ), $oak_only->colors );
 	}
 
 	/**

@@ -85,6 +85,8 @@ in, so this check is what keeps an arbitrary iframe off the product page.
   `?source=magento`.
 - **The API also sends `embed_code`**, a ready-made `<iframe>`. It is ignored:
   ours carries a different sandbox and a `referrerpolicy`.
+- `colors` lists every colour of the product, each with an `enabled` flag.
+  `EmbedDto` keeps only the enabled ones, the colours the viewer shows.
 
 How the contract is tested — the offline schema test against recorded fixtures,
 and the opt-in live check — is in [CONTRIBUTING.md](../CONTRIBUTING.md#the-arkid-api-contract).

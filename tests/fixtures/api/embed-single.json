@@ -1,10 +1,11 @@
 {
   "embed_id": "0af0878e-61df-11f0-f6a5-59a3f4f8cd3e",
   "row_number": 1,
+  "product_id": "acdff6e6-5e37-11f0-a2c2-350d5a7f4e75",
   "product_name": "Product Demo",
   "brand_name": "ARkid Studio",
   "image": "https://cloud.arkid.app/covers/aDemo_c.webp",
-  "embed_code": "<iframe style=\"width:100%;height:550px;border:none;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento\" title=\"ARkid 3D model\"></iframe>",
+  "embed_code": "<iframe style=\"width:100%;height:550px;border:none;background:transparent;\" id=\"arkid-embed\" loading=\"lazy\" allowfullscreen=\"yes\" allowvr=\"yes\" allow=\"xr-spatial-tracking\" sandbox=\"allow-same-origin allow-scripts allow-top-navigation allow-downloads\" src=\"https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento\" title=\"ARkid 3D model\"></iframe>",
   "embed_url": "https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento",
   "embedder_url": "",
   "created": "2025-07-16 02:51:43",
@@ -12,6 +13,10 @@
   "edit_url": "https://catalogue.arkid.app/configure/edit/CvCHjmHfEfD2pVmj9PjNPg",
   "analytics_url": "https://catalogue.arkid.app/analytics/CvCHjmHfEfD2pVmj9PjNPg",
   "internal_note": "",
+  "name": "",
+  "color_a": "#ffffff",
+  "color_b": "#e0e0e0",
+  "environment": "env1",
   "buybutton_url": "",
   "cta_url": "",
   "views": 22,
@@ -19,13 +24,19 @@
   "type": "pdp",
   "colors": [
     {
+      "variant_id": "acdff9b4-5e37-11f0-8d1e-3b6c2a9f0e11",
       "name": "Demo",
-      "rgb": "#000000"
+      "rgb": "#000000",
+      "enabled": true
     }
   ],
   "tags": [
     {
       "name": "Online"
     }
-  ]
+  ],
+  "variants": [
+    "acdff9b4-5e37-11f0-8d1e-3b6c2a9f0e11"
+  ],
+  "can_edit": true
 }

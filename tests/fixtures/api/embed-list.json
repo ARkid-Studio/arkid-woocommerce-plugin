@@ -40,7 +40,9 @@
       "variants": [
         "acdff9b4-5e37-11f0-8d1e-3b6c2a9f0e11"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     },
     {
       "embed_id": "3d722a3b-7db1-11ef-46db-3f52296df50d",
@@ -145,7 +147,9 @@
       "variants": [
         "3c9e2a10-7db1-11ef-b1c4-5f0a6e7d8c03"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     },
     {
       "embed_id": "d637eb1e-8d7d-11ef-0daa-6f5654bdddee",
@@ -201,7 +205,9 @@
         "d5a1d0f4-8d7d-11ef-a3c6-2b8e4f1a9d02",
         "d5a1d0f4-8d7d-11ef-a3c6-2b8e4f1a9d03"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     },
     {
       "embed_id": "ad21f15e-7164-11ef-fd5b-87131cfe84d0",
@@ -319,7 +325,9 @@
         "3c9e2a10-7db1-11ef-b1c4-5f0a6e7d8c0a",
         "3c9e2a10-7db1-11ef-b1c4-5f0a6e7d8c0b"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     },
     {
       "embed_id": "9713bef3-7164-11ef-6ba4-18fb0def4528",
@@ -367,7 +375,9 @@
       "variants": [
         "96f3c1d8-7164-11ef-9e2a-7c1b5d3f8a02"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     },
     {
       "embed_id": "7533c169-7164-11ef-f88e-bce2419c180f",
@@ -422,7 +432,9 @@
         "96f3c1d8-7164-11ef-9e2a-7c1b5d3f8a01",
         "96f3c1d8-7164-11ef-9e2a-7c1b5d3f8a02"
       ],
-      "can_edit": true
+      "can_edit": true,
+      "colors_editable": true,
+      "environment_editable": true
     }
   ]
 }

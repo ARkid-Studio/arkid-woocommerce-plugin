@@ -38,5 +38,7 @@
   "variants": [
     "acdff9b4-5e37-11f0-8d1e-3b6c2a9f0e11"
   ],
-  "can_edit": true
+  "can_edit": true,
+  "colors_editable": true,
+  "environment_editable": true
 }

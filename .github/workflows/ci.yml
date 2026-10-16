@@ -209,6 +209,12 @@ jobs:
           coverage: none
           extensions: mysqli
           tools: composer:v2, wp-cli
+          # setup-php turns on opcache and its JIT for PHP 8. The CLI ignores
+          # that (opcache.enable_cli is off), but the built-in server follows
+          # opcache.enable, and its workers segfault inside opcache.so on the
+          # block editor: net::ERR_EMPTY_RESPONSE, and a segfault in the
+          # kernel log. The suite gains nothing from opcache.
+          ini-values: opcache.enable=0
 
       - run: npm ci --ignore-scripts
       # --no-dev, and built before provisioning: bin/install-e2e-site.sh copies

@@ -67,6 +67,25 @@ final class EmbedDtoTest extends TestCase {
 		$this->assertArrayNotHasKey( 'rgb', $dto->colors[1] );
 	}
 
+	public function test_colors_keep_only_enabled_entries(): void {
+		$payload           = $this->sample_payload();
+		$payload['colors'] = array(
+			array( 'variant_id' => 'a', 'name' => 'Black', 'rgb' => '#404040', 'enabled' => true ),
+			array( 'variant_id' => 'b', 'name' => 'Blau', 'rgb' => '#184070', 'enabled' => false ), // disabled → drop.
+			array( 'name' => 'Eiche', 'rgb' => '#ab681f' ),                                          // no flag → keep.
+		);
+
+		$dto = EmbedDto::from_array( $payload );
+
+		$this->assertSame(
+			array(
+				array( 'name' => 'Black', 'rgb' => '#404040' ),
+				array( 'name' => 'Eiche', 'rgb' => '#ab681f' ),
+			),
+			$dto->colors
+		);
+	}
+
 	public function test_handles_missing_optional_fields(): void {
 		$dto = EmbedDto::from_array(
 			array(

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 final class EmbedDto {
 
 	/**
-	 * @param array<int, array{name: string, rgb?: string}> $colors
+	 * @param array<int, array{name: string, rgb?: string}> $colors The colours the viewer shows.
 	 * @param array<int, array{name: string}>               $tags
 	 */
 	public function __construct(
@@ -132,6 +132,10 @@ final class EmbedDto {
 	}
 
 	/**
+	 * Keeps the colours the viewer shows. The API lists every colour of the
+	 * product and flags the shown ones `enabled`; an entry without the flag,
+	 * as `to_array()` writes it, is shown.
+	 *
 	 * @param mixed $raw
 	 * @return array<int, array{name: string, rgb?: string}>
 	 */
@@ -142,6 +146,9 @@ final class EmbedDto {
 		$out = array();
 		foreach ( $raw as $color ) {
 			if ( ! is_array( $color ) || ! isset( $color['name'] ) || ! is_string( $color['name'] ) ) {
+				continue;
+			}
+			if ( false === ( $color['enabled'] ?? true ) ) {
 				continue;
 			}
 			$entry = array( 'name' => $color['name'] );

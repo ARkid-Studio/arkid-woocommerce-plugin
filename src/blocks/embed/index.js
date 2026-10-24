@@ -42,10 +42,10 @@ function EmbedEdit({ attributes, setAttributes }) {
 	const [loadError, setLoadError] = useState('');
 
 	// The catalogue row for the currently-picked viewer, once the list loads.
+	// Matched by embed_id alone: ARkid derives the viewer URL from the id and
+	// keeps URLs in its older id format working, so a saved embedUrl that
+	// differs from the catalogue's is still the same, working viewer.
 	const picked = embeds?.find((row) => row.value === embedId)?.embed;
-
-	// The viewer was re-pointed in ARkid after this block was saved.
-	const isStale = Boolean(picked && embedUrl && picked.embed_url !== embedUrl);
 
 	// Blocks saved before 1.0.0 carry only embedId. Repair them in place the
 	// first time they are opened in the editor. Declared here, above every early
@@ -172,26 +172,6 @@ function EmbedEdit({ attributes, setAttributes }) {
 				</ToolbarGroup>
 			</BlockControls>
 			<div {...blockProps}>
-				{isStale && (
-					<Notice
-						status="warning"
-						isDismissible={false}
-						actions={[
-							{
-								label: __(
-									'Update from ARkid',
-									'arkid-catalogue-link'
-								),
-								onClick: () => applyPick(embedId),
-							},
-						]}
-					>
-						{__(
-							'This viewer has been re-pointed in your ARkid catalogue. The saved link is out of date.',
-							'arkid-catalogue-link'
-						)}
-					</Notice>
-				)}
 				{isPicked ? (
 					<ServerSideRender
 						block={metadata.name}

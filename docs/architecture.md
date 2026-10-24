@@ -30,7 +30,10 @@ post meta snapshot  ────────────────────
   unreachable. Admin screens (the picker, the viewer list) always read live —
   there is no cache to go stale.
 - **The block does the same.** `arkid-catalogue-link/embed` persists `embedUrl`
-  in its attributes, so front-end rendering never needs the API either.
+  in its attributes, so front-end rendering never needs the API either. The
+  editor matches a block to its viewer by `embedId` alone, never by comparing
+  URLs: ARkid derives the URL from the ID and keeps URLs in its older ID format
+  working, so a saved `embedUrl` that differs from the API's is not out of date.
 - **If ARkid is unreachable while a merchant switches viewers**, the new ID is
   saved but the URL/image snapshot is dropped rather than left describing the
   previous viewer, and a retry is queued. A snapshot must never describe a

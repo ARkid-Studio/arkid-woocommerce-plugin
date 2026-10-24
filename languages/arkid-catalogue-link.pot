@@ -339,14 +339,6 @@ msgid "Reload viewers"
 msgstr ""
 
 #: build/blocks/embed/index.js:1
-msgid "Update from ARkid"
-msgstr ""
-
-#: build/blocks/embed/index.js:1
-msgid "This viewer has been re-pointed in your ARkid catalogue. The saved link is out of date."
-msgstr ""
-
-#: build/blocks/embed/index.js:1
 msgid "Viewer not found."
 msgstr ""
 

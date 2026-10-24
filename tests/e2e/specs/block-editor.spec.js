@@ -189,4 +189,39 @@ test.describe('embed block', () => {
 
 		wp(['post', 'delete', String(id), '--force']);
 	});
+
+	/**
+	 * The editor matches a block to its viewer by embedId, never by URL. ARkid
+	 * derives the URL from the id and keeps URLs in its older id format working,
+	 * so a saved link that differs from the catalogue's is not out of date.
+	 * Comparing URLs put a warning on every block when that format changed.
+	 */
+	test('does not flag a saved link that differs from the catalogue', async ({
+		page,
+	}) => {
+		const id = makePostWithBlock({
+			embedId: 'e2e-viewer',
+			// A link in ARkid's older id format. The stubbed catalogue returns a
+			// different URL for the same embedId.
+			embedUrl: 'https://catalogue.arkid.app/embed/AAAAAAAAAAAAAAAAAAAAAA',
+			productName: 'Block Chair',
+		});
+
+		try {
+			await page.goto(`/wp-admin/post.php?post=${id}&action=edit`);
+
+			const block = page
+				.frameLocator('[name="editor-canvas"]')
+				.locator('[data-type="arkid-catalogue-link/embed"]');
+
+			// The preview only renders once the viewer list has loaded and
+			// matched the block's embedId, so the count below is not vacuous.
+			await expect(
+				block.locator('iframe.arkid-catalogue-link__viewer')
+			).toBeVisible();
+			await expect(block.locator('.components-notice')).toHaveCount(0);
+		} finally {
+			wp(['post', 'delete', String(id), '--force']);
+		}
+	});
 });

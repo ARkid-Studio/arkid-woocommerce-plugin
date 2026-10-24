@@ -203,7 +203,8 @@ test.describe('embed block', () => {
 			embedId: 'e2e-viewer',
 			// A link in ARkid's older id format. The stubbed catalogue returns a
 			// different URL for the same embedId.
-			embedUrl: 'https://catalogue.arkid.app/embed/AAAAAAAAAAAAAAAAAAAAAA',
+			embedUrl:
+				'https://catalogue.arkid.app/embed/AAAAAAAAAAAAAAAAAAAAAA',
 			productName: 'Block Chair',
 		});
 

@@ -37,8 +37,8 @@
 		"env:decrypt": "dotenvx get"
 	},
 	"devDependencies": {
-		"@dotenvx/dotenvx": "2.34.1",
-		"@playwright/test": "^1.64.0",
+		"@dotenvx/dotenvx": "2.38.2",
+		"@playwright/test": "^1.64.1",
 		"@woocommerce/dependency-extraction-webpack-plugin": "^5.1.0",
 		"@woocommerce/eslint-plugin": "^3.0.0",
 		"@wordpress/prettier-config": "^4.57.0",

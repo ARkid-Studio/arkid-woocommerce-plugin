@@ -10,7 +10,9 @@ const { productId, hero } = JSON.parse(
 
 const SETTINGS_URL =
 	'/wp-admin/admin.php?page=wc-settings&tab=integration&section=arkid-catalogue-link';
-const VIEWERS_URL = '/wp-admin/admin.php?page=arkid-viewers';
+// Newest first, the order a merchant who just added viewers cares about.
+const VIEWERS_URL =
+	'/wp-admin/admin.php?page=arkid-viewers&orderby=row_number&order=desc';
 
 /**
  * Hides the admin furniture that is not about this plugin: update nags,
@@ -118,10 +120,11 @@ test.describe('admin', () => {
 		await expect(page.locator('.wp-list-table tbody tr')).toHaveCount(
 			config.loadViewers().length
 		);
-		// Four rows do not fill a screen; crop to the content instead of
-		// publishing a picture that is two thirds empty grey.
+		// A handful of rows does not fill a screen; crop to the table instead of
+		// publishing a picture that is mostly empty grey. Tall enough for every
+		// row, or the newest viewer — the one that leads — would be cut off.
 		await shoot(page, 5, {
-			clip: { x: 0, y: 0, width: 1280, height: 520 },
+			clip: { x: 0, y: 0, width: 1280, height: 700 },
 		});
 	});
 });

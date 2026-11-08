@@ -48,20 +48,27 @@ function iconHtml(size) {
  *
  * The covers are the same transparent renders the plugin's own viewer list
  * shows, loaded from ARkid's CDN: the banner sells the catalogue, so it should
- * show products from it. Which products is decided by tests/fixtures and
- * config.HERO_VIEWER, not here.
+ * show products from it. The hero comes from config.HERO_VIEWER. The two beside
+ * it are approved-brand products first (config.APPROVED_LOGO_BRANDS), then any
+ * other, since a cover carries no logo. ARkid's own demo model is left out: a
+ * navy wordmark next to real products reads as a logo, not a product.
  */
 function bannerProducts() {
 	const hero = config.heroViewer();
-	const others = config
+	const beside = config
 		.loadViewers()
 		.filter(
 			(viewer) =>
 				viewer.embed_id !== hero.embed_id &&
 				viewer.brand_name !== 'ARkid Studio'
 		)
+		.sort(
+			(a, b) =>
+				Number(config.isApprovedBrand(b)) -
+				Number(config.isApprovedBrand(a))
+		)
 		.slice(0, 2);
-	const [left, right] = others;
+	const [left, right] = beside;
 	return [left, hero, right].filter(Boolean).map((viewer) => viewer.image);
 }
 

@@ -46,8 +46,8 @@ Do not point it at a real store. `npm run assets:screenshots` and
 ## How it works
 
 - **Real viewer, stubbed API.** The ARkid API is answered by
-  `mu-plugins/arkid-assets-api-stub.php` from the recorded
-  `tests/fixtures/api/embed-list.json`, so no API key is needed. The 3D viewer
+  `mu-plugins/arkid-assets-api-stub.php` from a recorded catalogue, so no API
+  key is needed to *run* it (see "Recording the catalogue" below). The 3D viewer
   and the cover images are *not* stubbed: they load from `catalogue.arkid.app`
   and `cloud.arkid.app`, which is the point of the picture. That is why this
   is its own Playwright config (`playwright.assets.config.js`) and not part of
@@ -65,21 +65,37 @@ Do not point it at a real store. `npm run assets:screenshots` and
 Everything is in [`config.js`](./config.js).
 
 - `HERO_VIEWER` — which catalogue entry the demo product is built around (its
-  title, cover and the viewer). Must match a `product_name` in the fixture.
+  title, cover and the viewer). Must match a `product_name` in the catalogue.
 - `STORE_NAME`, `PRODUCT` — the demo shop's name and placeholder copy.
 - Wording and layout of the banner: `bannerHtml()` in `render-brand-assets.js`.
 - The logo: [`brand/`](./brand/README.md).
 
+### Recording the catalogue
+
+The viewers, names and covers in the screenshots come from
+`tests/store-assets/catalogue.json`: a verbatim response from the ARkid test
+account, written by
+
+```sh
+npm run assets:record      # dotenvx supplies ARKID_API_KEY; see CONTRIBUTING.md
+```
+
+Re-record when the account's catalogue changes, and read the file before you
+commit it — the repository is public. Without `catalogue.json` the pipeline
+falls back to the contract fixtures in `tests/fixtures/api/`, which the test
+suite owns and which should not change for marketing reasons.
+
 ### Brands and logos
 
-A viewer draws its brand's logo inside the 3D scene, and the recorded catalogue
-holds products from several brands. The rule for anything published on
-WordPress.org: **the only logos that may appear are ARkid's and Maxi-Cosi's.**
-Other brands' products may appear in lists and as banner artwork (the covers
-carry no logo), but never as the hero.
+A viewer draws its brand's logo inside the 3D scene, and the catalogue holds
+products from several brands. The rule for anything published on WordPress.org:
+**the only logos that may appear are ARkid's and Maxi-Cosi's.**
 
-So `HERO_VIEWER` must name an ARkid or Maxi-Cosi model. The pipeline does not
-enforce this: look at the screenshots before they go anywhere.
+`config.heroViewer()` enforces it: it refuses a `HERO_VIEWER` by any other brand
+(`APPROVED_LOGO_BRANDS`). Other brands' products may still appear as rows in the
+picker and the viewer list, and as banner artwork, because a cover image carries
+no logo. Look at every image before it goes anywhere; the check covers the hero,
+not what a cover happens to show.
 
 ## After WordPress.org approves the plugin
 

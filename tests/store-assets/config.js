@@ -36,7 +36,7 @@ module.exports = {
 	// ARkid's own and Maxi-Cosi's. A viewer draws its brand's logo inside the
 	// 3D scene, so the hero must be an ARkid or Maxi-Cosi model. Other brands'
 	// products may appear in lists and as banner artwork, never as the hero.
-	HERO_VIEWER: 'Product Demo',
+	HERO_VIEWER: 'Fame - New Generation',
 
 	// Placeholder content for the demo product. Deliberately generic, so it
 	// reads right whichever viewer HERO_VIEWER picks.
@@ -53,6 +53,12 @@ module.exports = {
 	// drawn, and the stubbed API never checks it.
 	DEMO_API_KEY: 'demo-api-key-not-a-real-credential',
 
+	// Brands whose logos may appear in published images. A viewer draws its
+	// brand's logo inside the 3D scene, so this is what decides which viewer can
+	// be the hero. Other brands' products may still appear as list rows and as
+	// banner artwork, because a cover image carries no logo.
+	APPROVED_LOGO_BRANDS: [/^arkid/i, /maxi[\s-]?cosi/i],
+
 	// Chrome flags that make WebGL work on a machine with no GPU, which is every
 	// CI runner and this sandbox: the 3D viewer renders on SwiftShader.
 	CHROMIUM_ARGS: [
@@ -61,20 +67,30 @@ module.exports = {
 		'--ignore-gpu-blocklist',
 	],
 
+	isApprovedBrand(viewer) {
+		return module.exports.APPROVED_LOGO_BRANDS.some((pattern) =>
+			pattern.test(viewer.brand_name || '')
+		);
+	},
+
 	/**
-	 * The recorded catalogue, one entry per product.
+	 * The catalogue the screenshots show, one entry per product.
 	 *
-	 * The fixture is a verbatim API response and lists some products more than
-	 * once (the same product in two colourways). A merchant's picker showing
-	 * "Felix Learning Tower" twice would look like a bug, so keep the first.
+	 * `catalogue.json` is what `npm run assets:record` wrote from the live test
+	 * account. Without it, fall back to the contract fixtures so the pipeline
+	 * still runs on a machine with no API key.
+	 *
+	 * Either source can list a product more than once (the same product in two
+	 * colourways). A merchant's picker showing "Felix Learning Tower" twice
+	 * would look like a bug, so keep the first.
 	 */
 	loadViewers() {
-		const raw = JSON.parse(
-			fs.readFileSync(
-				path.join(ROOT, 'tests/fixtures/api/embed-list.json'),
-				'utf8'
-			)
-		);
+		const recorded = path.join(__dirname, 'catalogue.json');
+		const source = fs.existsSync(recorded)
+			? recorded
+			: path.join(ROOT, 'tests/fixtures/api/embed-list.json');
+
+		const raw = JSON.parse(fs.readFileSync(source, 'utf8'));
 		const seen = new Set();
 		return raw.data.filter((embed) => {
 			const key = `${embed.brand_name}|${embed.product_name}`;
@@ -93,7 +109,16 @@ module.exports = {
 		);
 		if (!hero) {
 			throw new Error(
-				`HERO_VIEWER "${module.exports.HERO_VIEWER}" is not in tests/fixtures/api/embed-list.json.`
+				`HERO_VIEWER "${module.exports.HERO_VIEWER}" is not in the catalogue.`
+			);
+		}
+		// Not a suggestion: this is the one place a third-party logo could slip
+		// into a published image, so refuse rather than render it.
+		if (!module.exports.isApprovedBrand(hero)) {
+			throw new Error(
+				`HERO_VIEWER "${hero.product_name}" is by "${hero.brand_name}", and only ` +
+					'ARkid and Maxi-Cosi logos may appear in published images. ' +
+					'Pick one of their viewers.'
 			);
 		}
 		return hero;

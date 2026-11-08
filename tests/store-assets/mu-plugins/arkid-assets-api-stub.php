@@ -30,7 +30,7 @@ add_filter(
 			return $preempt;
 		}
 
-		$raw    = file_get_contents( __DIR__ . '/arkid-assets-api-stub.json' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file, test stub.
+		$raw    = file_get_contents( __DIR__ . '/arkid-assets-api-stub.json' );
 		$embeds = is_string( $raw ) ? json_decode( $raw, true ) : null;
 		if ( ! is_array( $embeds ) ) {
 			return $preempt;

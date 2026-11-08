@@ -81,7 +81,9 @@ test.describe('PDP embeds', () => {
 		setPosition(fixtures.withViewer, 'button_only');
 		await page.goto(permalink(fixtures.withViewer));
 
-		const trigger = page.locator('.arkid-catalogue-link__trigger--standalone');
+		const trigger = page.locator(
+			'.arkid-catalogue-link__trigger--standalone'
+		);
 		await expect(trigger).toBeVisible();
 		await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 
@@ -93,25 +95,70 @@ test.describe('PDP embeds', () => {
 		await expect(trigger).toHaveAttribute('aria-expanded', 'true');
 	});
 
+	/**
+	 * The modal trusts a trigger's `data-embed-url`, and WordPress lets a user
+	 * without `unfiltered_html` keep `class` and `data-*` on a button — so a
+	 * trigger can be planted in a product description. Before the script checked
+	 * the URL against the allow-list, a `javascript:` value became an iframe
+	 * `src` and ran in the page's own origin.
+	 */
+	test('refuses a planted trigger whose embed URL is not an ARkid host', async ({
+		page,
+	}) => {
+		// The standalone button position puts the dialog and the script on the page.
+		setPosition(fixtures.withViewer, 'button_only');
+		await page.goto(permalink(fixtures.withViewer));
+
+		await page.evaluate(() => {
+			window.__pwned = false;
+			const planted = document.createElement('button');
+			planted.id = 'planted-trigger';
+			planted.className = 'arkid-catalogue-link__trigger';
+			planted.setAttribute(
+				'data-embed-url',
+				'javascript:parent.__pwned = true'
+			);
+			document.body.appendChild(planted);
+		});
+
+		// A dispatched click, not a pointer click: the planted element has no size
+		// to aim at, and a script (or a visitor's own click on injected markup)
+		// needs no visible target either.
+		await page.locator('#planted-trigger').dispatchEvent('click');
+
+		const dialog = page.locator('#arkid-catalogue-link__dialog');
+		await expect(dialog).toBeHidden();
+		await expect(dialog.locator('iframe')).toHaveCount(0);
+		expect(await page.evaluate(() => window.__pwned)).toBe(false);
+	});
+
 	test('closes the modal on Escape and restores focus', async ({ page }) => {
 		setPosition(fixtures.withViewer, 'button_only');
 		await page.goto(permalink(fixtures.withViewer));
 
-		const trigger = page.locator('.arkid-catalogue-link__trigger--standalone');
+		const trigger = page.locator(
+			'.arkid-catalogue-link__trigger--standalone'
+		);
 		await trigger.click();
 		await page.keyboard.press('Escape');
 
-		await expect(page.locator('#arkid-catalogue-link__dialog')).toBeHidden();
+		await expect(
+			page.locator('#arkid-catalogue-link__dialog')
+		).toBeHidden();
 		await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 		// WCAG 2.2 AA.
 		await expect(trigger).toBeFocused();
 	});
 
-	test('opening and closing repeatedly leaves one iframe', async ({ page }) => {
+	test('opening and closing repeatedly leaves one iframe', async ({
+		page,
+	}) => {
 		setPosition(fixtures.withViewer, 'button_only');
 		await page.goto(permalink(fixtures.withViewer));
 
-		const trigger = page.locator('.arkid-catalogue-link__trigger--standalone');
+		const trigger = page.locator(
+			'.arkid-catalogue-link__trigger--standalone'
+		);
 		const dialog = page.locator('#arkid-catalogue-link__dialog');
 
 		for (let i = 0; i < 3; i++) {
@@ -144,7 +191,9 @@ test.describe('PDP embeds', () => {
 		setPosition(fixtures.withViewer, 'below_product');
 		await page.goto(permalink(fixtures.withViewer));
 
-		const noscript = page.locator('.arkid-catalogue-link__embed--below noscript');
+		const noscript = page.locator(
+			'.arkid-catalogue-link__embed--below noscript'
+		);
 		await expect(noscript).toHaveCount(1);
 	});
 

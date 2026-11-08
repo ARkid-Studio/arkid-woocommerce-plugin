@@ -14,6 +14,14 @@ use PHPUnit\Framework\TestCase;
 
 final class IframeFactoryTest extends TestCase {
 
+	/**
+	 * Values the stubbed `apply_filters()` returns instead of passing the default
+	 * through, keyed by hook name.
+	 *
+	 * @var array<string, mixed>
+	 */
+	private array $filtered = array();
+
 	protected function setUp(): void {
 		parent::setUp();
 		Monkey\setUp();
@@ -32,8 +40,11 @@ final class IframeFactoryTest extends TestCase {
 			)
 		);
 
+		$this->filtered = array();
 		Functions\when( 'apply_filters' )->alias(
-			static fn( string $hook, $value ) => $value
+			fn( string $hook, $value ) => array_key_exists( $hook, $this->filtered )
+				? $this->filtered[ $hook ]
+				: $value
 		);
 	}
 
@@ -197,5 +208,49 @@ final class IframeFactoryTest extends TestCase {
 		$this->assertSame( '', $factory->build_text_trigger( $bad, 'p' ) );
 		$this->assertSame( '', $factory->build_noscript_link( $bad, 'p' ) );
 		$this->assertSame( '', $factory->build_image_trigger( $bad, 'p', 'https://cdn.example/i.webp' ) );
+	}
+
+	public function test_allowed_hosts_defaults_to_the_catalogue_host(): void {
+		$factory = new IframeFactory( $this->options() );
+
+		$this->assertSame( array( 'catalogue.arkid.app' ), $factory->allowed_hosts() );
+	}
+
+	/**
+	 * The storefront script is handed this list, and it compares host names
+	 * exactly, so the list must be lower-cased, free of blanks and non-strings,
+	 * and free of duplicates.
+	 */
+	public function test_allowed_hosts_is_the_normalised_filter_result(): void {
+		$this->filtered['arkid_catalogue_link_allowed_embed_hosts'] = array(
+			'EU.Example.COM',
+			'',
+			null,
+			array( 'nested' ),
+			'a.example',
+			'A.EXAMPLE',
+		);
+		$factory = new IframeFactory( $this->options() );
+
+		$this->assertSame( array( 'eu.example.com', 'a.example' ), $factory->allowed_hosts() );
+	}
+
+	public function test_allowed_hosts_is_empty_when_the_filter_returns_a_non_array(): void {
+		$this->filtered['arkid_catalogue_link_allowed_embed_hosts'] = 'catalogue.arkid.app';
+		$factory = new IframeFactory( $this->options() );
+
+		$this->assertSame( array(), $factory->allowed_hosts() );
+	}
+
+	/**
+	 * One list drives both the server-side check and the script, so narrowing it
+	 * must narrow both.
+	 */
+	public function test_viewer_url_follows_the_filtered_allow_list(): void {
+		$this->filtered['arkid_catalogue_link_allowed_embed_hosts'] = array( 'viewer.example.com' );
+		$factory = new IframeFactory( $this->options() );
+
+		$this->assertNotSame( '', $factory->viewer_url( 'https://viewer.example.com/e/1' ) );
+		$this->assertSame( '', $factory->viewer_url( 'https://catalogue.arkid.app/e/1' ) );
 	}
 }

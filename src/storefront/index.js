@@ -18,9 +18,54 @@ export const TRIGGER_SELECTOR = '.arkid-catalogue-link__trigger';
 
 let lastTrigger = null;
 
+/**
+ * Whether `url` may be loaded as a viewer: an absolute https URL on a host the
+ * server allows. The list is the one PHP's IframeFactory uses, handed over in
+ * `arkidCatalogueLinkStorefront.allowedHosts`.
+ *
+ * The URL comes from a `data-embed-url` attribute, and attributes are page
+ * content, not a trusted channel: WordPress lets users without
+ * `unfiltered_html` keep `class` and `data-*` on a button, so a trigger can be
+ * planted in a product description. A `javascript:` URL set as an iframe's `src`
+ * would then run in the page's origin.
+ *
+ * Fails closed: with no list from the server, nothing is allowed.
+ *
+ * @param {*} url The value to check.
+ * @return {boolean} Whether it may be embedded.
+ */
+export function isAllowedEmbedUrl(url) {
+	const config = window.arkidCatalogueLinkStorefront;
+	const hosts =
+		config && Array.isArray(config.allowedHosts) ? config.allowedHosts : [];
+
+	// Mirror the server, which accepts only a literal `https://` URL.
+	if (
+		typeof url !== 'string' ||
+		!url.startsWith('https://') ||
+		!hosts.length
+	) {
+		return false;
+	}
+
+	let host;
+	try {
+		host = new URL(url).hostname.toLowerCase();
+	} catch {
+		return false;
+	}
+
+	return hosts.some(
+		(allowed) =>
+			typeof allowed === 'string' &&
+			allowed !== '' &&
+			(host === allowed || host.endsWith(`.${allowed}`))
+	);
+}
+
 /** Test seam: the module keeps focus-restore state between calls. */
 export function resetState() {
-lastTrigger = null;
+	lastTrigger = null;
 }
 
 export function init() {
@@ -72,17 +117,20 @@ export function init() {
 }
 
 export function openDialog(dialog, trigger) {
-	if (!dialog) {
-		// Defensive: someone hooked a trigger but the dialog was filtered
-		// out. Open the embed URL in a new window as a fallback.
-		const url = trigger.getAttribute('data-embed-url');
-		if (url) {
-			window.open(url, '_blank', 'noopener');
-		}
+	const url = trigger.getAttribute('data-embed-url') || '';
+
+	// Covers the new-window fallback below as well as the dialog.
+	if (!isAllowedEmbedUrl(url)) {
 		return;
 	}
 
-	const url = trigger.getAttribute('data-embed-url') || '';
+	if (!dialog) {
+		// Defensive: someone hooked a trigger but the dialog was filtered
+		// out. Open the embed URL in a new window as a fallback.
+		window.open(url, '_blank', 'noopener');
+		return;
+	}
+
 	const productName =
 		trigger.getAttribute('data-product-name') || document.title || '';
 
@@ -115,6 +163,11 @@ export function closeDialog(dialog) {
 }
 
 export function mountIframe(dialog, url, productName) {
+	// The sink checks as well as the caller: this is the line that would
+	// otherwise hand an attribute's value to the browser.
+	if (!isAllowedEmbedUrl(url)) {
+		return;
+	}
 	const host = dialog.querySelector(
 		'.arkid-catalogue-link__dialog-iframe-host'
 	);
@@ -135,10 +188,7 @@ export function mountIframe(dialog, url, productName) {
 		host.dataset.iframeSandbox ||
 			'allow-scripts allow-same-origin allow-popups allow-forms'
 	);
-	iframe.setAttribute(
-		'referrerpolicy',
-		'strict-origin-when-cross-origin'
-	);
+	iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
 	iframe.setAttribute('loading', 'lazy');
 	host.appendChild(iframe);
 }
@@ -153,9 +203,7 @@ export function emptyHost(dialog) {
 }
 
 export function setTitle(dialog, productName) {
-	const titleEl = dialog.querySelector(
-		'#arkid-catalogue-link__dialog-title'
-	);
+	const titleEl = dialog.querySelector('#arkid-catalogue-link__dialog-title');
 	if (titleEl) {
 		titleEl.textContent = productName
 			? `${productName} — 3D viewer`

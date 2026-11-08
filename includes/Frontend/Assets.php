@@ -17,7 +17,10 @@ class Assets {
 
 	private const HANDLE = 'arkid-catalogue-link-storefront';
 
-	public function __construct( private readonly Options $options ) {}
+	public function __construct(
+		private readonly Options $options,
+		private readonly IframeFactory $iframe
+	) {}
 
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
@@ -62,6 +65,10 @@ class Assets {
 			array(
 				'requireConsent' => $this->options->require_consent(),
 				'consentType'    => 'marketing',
+				// What the modal may load. The trigger's `data-embed-url` is page
+				// content, not a trusted channel, so the script checks it against
+				// this list before it becomes an iframe or a new window.
+				'allowedHosts'   => $this->iframe->allowed_hosts(),
 				'i18n'           => array(
 					'closeViewer' => __( 'Close 3D viewer', 'arkid-catalogue-link' ),
 				),

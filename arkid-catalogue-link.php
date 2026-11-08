@@ -66,9 +66,14 @@ register_deactivation_hook(
 	__FILE__,
 	static function (): void {
 		// Recurring actions otherwise survive deactivation and keep firing.
+		//
+		// By hook alone, on purpose. Passing `array()` args AND a group makes
+		// Action Scheduler cancel only actions whose args are exactly `array()`,
+		// which would leave every per-product task (`array( 'product_id' => N )`)
+		// pending. The hook names are this plugin's own, so nothing else is hit.
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-			as_unschedule_all_actions( 'arkid_catalogue_link_refresh_embeds', array(), 'arkid-catalogue-link' );
-			as_unschedule_all_actions( 'arkid_catalogue_link_refresh_product', array(), 'arkid-catalogue-link' );
+			as_unschedule_all_actions( 'arkid_catalogue_link_refresh_embeds' );
+			as_unschedule_all_actions( 'arkid_catalogue_link_refresh_product' );
 		}
 	}
 );

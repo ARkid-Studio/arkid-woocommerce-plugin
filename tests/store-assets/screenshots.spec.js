@@ -27,7 +27,9 @@ const CLEAN_ADMIN_CSS = `
 	#screen-meta-links,
 	#wpfooter,
 	#adminmenu .update-plugins,
-	#adminmenu .awaiting-mod { display: none !important; }
+	#adminmenu .awaiting-mod,
+	#adminmenu span[class*='badge'],
+	#adminmenu span[class*='count'] { display: none !important; }
 `;
 
 // Anything smaller than this is a viewer that never drew its model: a blank

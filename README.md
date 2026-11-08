@@ -98,23 +98,38 @@ docs/                      architecture notes
 readme.txt                 the WordPress.org plugin readme
 ```
 
-## Before submitting to WordPress.org
+## Publishing to WordPress.org
 
-Still open. Tick these off, then delete this section.
+### Before submitting
 
-- [ ] **Link to the source code from `readme.txt`.** The zip ships the minified
+- [x] **Source code is linked from `readme.txt`.** The zip ships the minified
       `build/` but not `src/`, and WordPress.org requires human-readable source
-      for any compiled code, or a link to it (plugin guideline 4). Add a section
-      pointing at this repository and `npm run build`.
-- [ ] **Make sure `Contributors: arkid` in `readme.txt` is a real WordPress.org
-      account** that we control. Every name there must be a WordPress.org
-      username.
-- [ ] **Add screenshots, a banner and an icon.** `readme.txt` already lists five
-      screenshots under `== Screenshots ==`, but none exist yet. They live in
-      the plugin's SVN `assets/` folder on WordPress.org, not in the zip:
-      `screenshot-1.png` … `screenshot-5.png` (numbered to match the list),
-      `banner-772x250.png` and `banner-1544x500.png`, and `icon-128x128.png` and
-      `icon-256x256.png`.
+      for compiled code, or a link to it (plugin guideline 4). The "Source code"
+      section in `readme.txt` points at this repository and the build command.
+- [x] **`Contributors: arkid` is a real WordPress.org account** we control.
+- [x] **The legal links in `readme.txt` resolve.** "External services" links the
+      terms and privacy pages on arkid.app; the old `catalogue.arkid.app/terms`
+      and `/privacy` were 404s.
+- [x] **Screenshots, banner and icon are generated**, not drawn: run the **Store
+      assets** workflow and download the artifact. See
+      [tests/store-assets/README.md](./tests/store-assets/README.md). The
+      `== Screenshots ==` captions in `readme.txt` match the five images.
+- [ ] **Store gates is green** on the commit you submit (Plugin Check, every
+      category, against the release payload).
+
+### Submitting
+
+1. Build the zip: `npm run plugin-zip`, or take `arkid-catalogue-link.zip` from
+   the GitHub Release for the tag.
+2. While logged in as `arkid`, upload it at
+   <https://wordpress.org/plugins/developers/add/>. The plugin team replies by
+   email to that account.
+
+### After approval
+
+The images are not in the zip. WordPress.org serves them from an `assets/`
+folder at the top level of the plugin's SVN repository, next to `trunk/` and
+`tags/` — see [tests/store-assets/README.md](./tests/store-assets/README.md).
 
 ## License
 

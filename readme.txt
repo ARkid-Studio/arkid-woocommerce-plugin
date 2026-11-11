@@ -30,7 +30,7 @@ ARkid Catalogue Link puts interactive 3D and augmented-reality (AR) viewers from
 * **Five positions**: first image, last image (opens in a modal), above the product, below the product, or a standalone button (labelled "See in 3D & AR" unless you change it). Set a site default and override it per product.
 * **Both product galleries**: the classic FlexSlider gallery and WooCommerce's new block-based product gallery, on classic and block themes alike.
 * **A block** for embedding any viewer on any page or post.
-* **A viewer list** under WooCommerce → ARkid Viewers, with type badges and links to edit each viewer or see its analytics in ARkid.
+* **A viewer list** under WooCommerce → ARkid Viewers, with links to edit each viewer or see its analytics in ARkid.
 * **Product pages make no API calls.** Each product stores its own viewer link, so your shop keeps working even if ARkid is unreachable. A daily background job keeps those links in step with your catalogue.
 * **Your API key is never sent to your visitors.** It is stored on your server and shown only to store managers on the settings screen, and viewers are browsed in wp-admin through the plugin's own REST endpoints, restricted to store managers.
 * **Optional WP Consent API support**: with "Require visitor consent" on, the viewer is left out of the page for visitors who have not granted marketing consent. Consent is checked when the page is built, so see the FAQ if your site uses page caching.
@@ -59,6 +59,10 @@ Sent: your API key (as the password of an HTTP Basic login whose user name is `w
 
 The viewer is an iframe loaded from catalogue.arkid.app on your product pages, in the modal, and in the block (in the block editor it is loaded inside wp-admin, so editors' browsers contact ARkid too). When it loads, the visitor's browser contacts ARkid directly, and the viewer downloads its 3D model files and textures from cloud.arkid.app. According to [ARkid's viewer privacy notice](https://arkid.app/viewer-privacy/), ARkid receives at least the visitor's IP address, browser and operating system, display resolution, the viewer requested, the website it was requested from, and the time of the request. The viewer also reports usage events to ARkid (for example that it loaded or was viewed, how long loading took, whether and for how long AR was used, and errors), together with the browser language and whether the device has touch or AR support. ARkid uses this data to deliver the viewer and to give you aggregate view statistics. ARkid states that the viewer sets no cookies and stores no identifiers on the visitor's device. The viewer shows a small "3D by ARkid" credit that links to https://arkid.app/.
 
+Under ARkid's viewer privacy notice, you as the site operator are the controller for this usage measurement and ARkid acts as your processor under a data processing agreement (Art. 28 GDPR). ARkid keeps raw request logs for at most 14 months, for billing verification and security.
+
+When a visitor starts AR on a phone or tablet, the viewer hands the model to the browser's WebXR support or to the device's own AR viewer (Google Scene Viewer on Android, Apple Quick Look on iOS), which uses the camera and is provided by Google or Apple. The viewer can also show a QR code that opens it on a phone.
+
 If you need a visitor's consent before this happens, turn on "Require visitor consent" in the plugin settings (it needs the WP Consent API plugin). The plugin then leaves the viewer, its preview images and its modal out of the page for visitors who have not granted marketing consent. Consent is checked when the page is built, so if a caching plugin serves your product pages, make it vary on the consent cookie (`wp_consent_marketing`) or exclude those pages; otherwise one visitor's consent state can be served to others.
 
 **3. Preview images (cloud.arkid.app)**
@@ -83,7 +87,7 @@ You need an ARkid Catalogue account first; the Description tab explains how to g
 
 1. Install the plugin from Plugins → Add New (search for "ARkid Catalogue Link"), or upload the zip via Plugins → Add New → Upload Plugin, or extract it into `/wp-content/plugins/arkid-catalogue-link/`.
 2. Activate the plugin via the WordPress Plugins screen. WooCommerce must be active.
-3. Enter your API key under WooCommerce → Settings → Integration → ARkid Catalogue Link.
+3. Enter your API key, from your [ARkid developer settings](https://catalogue.arkid.app/settings/developer), under WooCommerce → Settings → Integration → ARkid Catalogue Link.
 4. Edit any product and pick a viewer from the "ARkid Catalogue Link" meta box.
 
 == Frequently Asked Questions ==
@@ -98,13 +102,13 @@ The plugin is free. ARkid Catalogue has a free plan (currently up to 10,000 view
 
 = Where do I find my API key? =
 
-In your ARkid Catalogue account at [catalogue.arkid.app](https://catalogue.arkid.app). If you cannot find it, write to support@arkid.app.
+Sign in to ARkid Catalogue and open your developer settings at [catalogue.arkid.app/settings/developer](https://catalogue.arkid.app/settings/developer). If you cannot find it there, write to support@arkid.app.
 
-= My viewer doesn't show up on the product page =
+= Why doesn't my viewer show up on the product page? =
 
-Check that WooCommerce's "Coming Soon" mode is OFF (WC → Settings → Site visibility → Live). When Coming Soon is on, every storefront URL is replaced with a placeholder.
+Check that WooCommerce's "Coming soon" mode is off: WooCommerce → Settings → Site visibility must be set to Live. While "Coming soon" is on, every storefront URL is replaced with a placeholder.
 
-If the product edit screen shows "This viewer has not been synced from ARkid yet", the plugin has a viewer selected but has not been able to fetch its details — usually a wrong API key or a temporary connection problem. It retries in the background and appears once the connection succeeds.
+If the product edit screen shows "This viewer has not been synced from ARkid yet", the plugin has a viewer selected but has not been able to fetch its details — usually a wrong API key or a temporary connection problem. The plugin retries in the background, and the viewer appears once the connection succeeds.
 
 = Can I use this on a block theme? =
 
@@ -127,7 +131,7 @@ Product pages make no API calls: each product stores its own viewer link. The vi
 
 = Does the viewer set cookies, and what about consent? =
 
-ARkid states that the viewer sets no cookies and stores no identifiers on the visitor's device. It does load from ARkid's servers, so the visitor's IP address reaches ARkid; the "External services" section lists what is sent. If you need consent first, enable "Require visitor consent" in the settings (needs the WP Consent API plugin). Consent is checked when the page is built, so if a caching plugin serves your product pages, make it vary on the consent cookie (`wp_consent_marketing`) or exclude those pages.
+ARkid states that the viewer sets no cookies and stores no identifiers on the visitor's device. It does load from ARkid's servers, so the visitor's IP address reaches ARkid; the "External services" part of the Description tab lists what is sent. If you need consent first, enable "Require visitor consent" in the settings (needs the WP Consent API plugin). Consent is checked when the page is built, so if a caching plugin serves your product pages, make it vary on the consent cookie (`wp_consent_marketing`) or exclude those pages.
 
 = Does the viewer show ARkid branding? =
 
@@ -162,42 +166,4 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 == Changelog ==
 
 = 1.0.0 =
-* First stable release.
-* Security: the modal viewer now checks the embed URL in the page against the same
-  host allow-list the server uses, so markup planted in a product description can
-  no longer make it load an arbitrary URL.
-* Fixed: deactivating or uninstalling left the per-product refresh tasks queued.
-* Fixed: the "Remove viewer" button showed on products that had no viewer.
-* Fixed: database migrations never ran, because the migrator registered on a
-  hook priority that had already passed.
-* Fixed: changing the API key was never detected, so a store switching ARkid
-  accounts kept serving the previous account's viewers.
-* Fixed: the daily refresh loaded every linked product and made one blocking
-  request each in a single scheduled task, which could time out and leave the
-  refresh permanently half-finished. It now dispatches one task per product.
-* Fixed: a product name containing `$1` corrupted the block gallery markup.
-* Fixed: on a product with no featured image, the classic gallery replaced
-  every image with the viewer instead of only the first.
-* Fixed: if ARkid was unreachable while you switched viewers, the product kept
-  the previous viewer's link under the new viewer's ID and rendered the wrong
-  model.
-* Fixed: an HTTP 401 from the API was reported as a connection problem rather
-  than a rejected key.
-* Removed the 12-hour viewer cache. Product pages render from each product's
-  own stored link and make no API calls; admin screens always read live.
-* Viewer URLs are now checked against an allow-list before being embedded.
-* Uninstall is multisite-aware and removes scheduled jobs.
-* Requires WordPress 7.0+ and is tested against WordPress 7.1 and WooCommerce 11.0.
-
-= 0.2.0 =
-* Initial release: settings, product picker, PDP rendering at five positions,
-  viewer list, general embed Gutenberg block, Action Scheduler refresh job,
-  WP Consent API integration.
-
-= 0.1.0 =
-* Internal scaffold.
-
-== Upgrade Notice ==
-
-= 1.0.0 =
-First stable release. Fixes several defects, including one that could show the wrong 3D model on a product, and the modal viewer now loads only ARkid URLs. Product pages no longer wait on the ARkid API. A block inserted before 1.0.0 is repaired when you open it in the editor and update the post.
+* Initial release.

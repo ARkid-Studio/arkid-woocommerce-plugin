@@ -3,13 +3,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ARkid Catalogue Link 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/arkid-woocommerce-plugin\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/arkid-catalogue-link\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-18T09:20:45+00:00\n"
+"POT-Creation-Date: 2026-11-11T00:09:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: arkid-catalogue-link\n"
@@ -45,12 +45,12 @@ msgstr ""
 msgid "ARkid Catalogue Link requires PHP %1$s or later. You are running PHP %2$s."
 msgstr ""
 
-#: arkid-catalogue-link.php:114
+#: arkid-catalogue-link.php:119
 msgid "ARkid Catalogue Link is missing its Composer autoloader. Run `composer install` inside the plugin directory."
 msgstr ""
 
 #. translators: %s: WooCommerce link
-#: arkid-catalogue-link.php:131
+#: arkid-catalogue-link.php:136
 #, php-format
 msgid "ARkid Catalogue Link requires %s to be installed and active."
 msgstr ""
@@ -227,27 +227,37 @@ msgstr ""
 msgid "Open settings"
 msgstr ""
 
-#: includes/Frontend/Assets.php:66
+#: includes/Frontend/Assets.php:73
 #: includes/Frontend/Modal.php:31
 msgid "Close 3D viewer"
+msgstr ""
+
+#. translators: %s: product name. Accessible name of the 3D viewer in the modal.
+#: includes/Frontend/Assets.php:75
+#, php-format
+msgid "%s — 3D viewer"
+msgstr ""
+
+#: includes/Frontend/Assets.php:76
+msgid "3D viewer"
 msgstr ""
 
 #. translators: %s: product name
 #: includes/Frontend/ClassicGalleryInjector.php:92
 #: includes/Frontend/ClassicGalleryInjector.php:109
-#: includes/Frontend/IframeFactory.php:90
+#: includes/Frontend/IframeFactory.php:107
 #, php-format
 msgid "%s 3D viewer"
 msgstr ""
 
 #. translators: %s: product name
-#: includes/Frontend/IframeFactory.php:115
+#: includes/Frontend/IframeFactory.php:132
 #, php-format
 msgid "Open 3D viewer for %s"
 msgstr ""
 
 #. translators: %s: product name
-#: includes/Frontend/IframeFactory.php:196
+#: includes/Frontend/IframeFactory.php:213
 #, php-format
 msgid "Open the 3D viewer for %s in a new window"
 msgstr ""

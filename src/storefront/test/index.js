@@ -11,6 +11,7 @@ import {
 	openDialog,
 	resetState,
 	setTitle,
+	viewerTitle,
 } from '../index';
 
 const EMBED_URL = 'https://catalogue.arkid.app/e/abc-123?source=woocommerce';
@@ -316,5 +317,68 @@ describe('embed URL allow-list', () => {
 
 		expect(open).not.toHaveBeenCalled();
 		open.mockRestore();
+	});
+});
+
+/**
+ * The modal's accessible name comes from strings the server translates. It
+ * used to be hard-coded English, so every translated storefront announced an
+ * English dialog.
+ */
+describe('viewer title', () => {
+	const GERMAN = {
+		viewerTitle: '%s – 3D-Viewer',
+		viewerTitleNoName: '3D-Viewer',
+	};
+
+	afterEach(() => {
+		document.body.innerHTML = '';
+		delete window.arkidCatalogueLinkStorefront;
+	});
+
+	it('uses the translated strings the server sends', () => {
+		window.arkidCatalogueLinkStorefront = { i18n: GERMAN };
+
+		expect(viewerTitle('Stuhl')).toBe('Stuhl – 3D-Viewer');
+		expect(viewerTitle('')).toBe('3D-Viewer');
+	});
+
+	it('falls back to English without them', () => {
+		expect(viewerTitle('Chair')).toBe('Chair — 3D viewer');
+		expect(viewerTitle('')).toBe('3D viewer');
+	});
+
+	it('ignores a translation that lost its placeholder', () => {
+		window.arkidCatalogueLinkStorefront = {
+			i18n: { viewerTitle: '3D-Viewer' },
+		};
+
+		expect(viewerTitle('Chair')).toBe('Chair — 3D viewer');
+	});
+
+	it.each([['$&'], ['$1'], ["$'"], ['$$']])(
+		'keeps a product name containing %s literally',
+		(pattern) => {
+			const name = `Chair ${pattern} Co`;
+
+			expect(viewerTitle(name)).toBe(`${name} — 3D viewer`);
+		}
+	);
+
+	it('titles both the iframe and the dialog heading', () => {
+		window.arkidCatalogueLinkStorefront = {
+			allowedHosts: ['catalogue.arkid.app'],
+			i18n: GERMAN,
+		};
+		const { dialog, host } = renderPage();
+
+		mountIframe(dialog, EMBED_URL, 'Stuhl');
+		setTitle(dialog, 'Stuhl');
+
+		expect(host.querySelector('iframe').title).toBe('Stuhl – 3D-Viewer');
+		expect(
+			dialog.querySelector('#arkid-catalogue-link__dialog-title')
+				.textContent
+		).toBe('Stuhl – 3D-Viewer');
 	});
 });

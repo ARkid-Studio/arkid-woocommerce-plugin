@@ -26,7 +26,7 @@
 		"check": "npm run check:php && npm run check:js",
 		"release": "npm run check && npm run plugin-zip",
 		"packages-update": "wp-scripts packages-update",
-		"makepot": "wp i18n make-pot . languages/arkid-catalogue-link.pot --exclude=src,bin,tests,node_modules,vendor,languages,assets",
+		"makepot": "wp i18n make-pot . languages/arkid-catalogue-link.pot --slug=arkid-catalogue-link --exclude=src,bin,tests,node_modules,vendor,languages,assets",
 		"test:php:setup": "bash bin/install-wp-tests.sh",
 		"test:php:integration": "composer test:integration",
 		"test:e2e": "dotenvx run --quiet -- playwright test",

@@ -3,7 +3,7 @@
 # This file is distributed under the GPL-3.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: ARkid Catalogue Link 0.2.0\n"
+"Project-Id-Version: ARkid Catalogue Link 1.0.0\n"
 "Report-Msgid-Bugs-To: support@arkid.app\n"
 "PO-Revision-Date: 2026-05-02 12:00+0000\n"
 "Last-Translator: ARkid <support@arkid.app>\n"
@@ -371,3 +371,13 @@ msgstr "viewer"
 #: build/blocks/embed/block.json
 msgid "catalogue"
 msgstr "catalogue"
+
+#. translators: %s: product name. Accessible name of the 3D viewer in the modal.
+#: includes/Frontend/Assets.php:75
+#, php-format
+msgid "%s — 3D viewer"
+msgstr "%s — 3D ビューワー"
+
+#: includes/Frontend/Assets.php:76
+msgid "3D viewer"
+msgstr "3D ビューワー"

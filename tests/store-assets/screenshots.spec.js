@@ -162,6 +162,18 @@ test.describe('storefront', () => {
 		viewport: { width: 1280, height: 1000 },
 	});
 
+	// A CI runner renders the 3D model in software: one storefront shot took
+	// 84-108 s there (26 s locally), against the config's 120 s per test.
+	test.describe.configure({ timeout: 300_000 });
+
+	// Unload the viewer before Playwright tears the context down. Its render
+	// loop keeps the software GPU busy until the page goes away, and on CI the
+	// next test could not even open its browser context: "Test timeout ...
+	// exceeded while setting up 'context'".
+	test.afterEach(async ({ page }) => {
+		await page.goto('about:blank').catch(() => {});
+	});
+
 	test('screenshot 2: the viewer below the product', async ({ page }) => {
 		setPosition(productId, 'below_product');
 		await page.goto(permalink(productId));

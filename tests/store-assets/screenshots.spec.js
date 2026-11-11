@@ -40,10 +40,15 @@ function outFile(n) {
 	return path.join(config.OUT_DIR, `screenshot-${n}.png`);
 }
 
+// Generous: grabbing a frame while a CI runner renders WebGL in software can
+// take far longer than the default.
+const CAPTURE_TIMEOUT = 60_000;
+
 async function shoot(page, n, options = {}) {
 	await page.screenshot({
 		path: outFile(n),
 		animations: 'disabled',
+		timeout: CAPTURE_TIMEOUT,
 		...options,
 	});
 }
@@ -64,7 +69,26 @@ async function waitForViewer(page, iframe) {
 	await frame.locator('canvas').first().waitFor({ state: 'attached' });
 	await page.waitForTimeout(9_000);
 
-	const probe = await iframe.screenshot();
+	// A page screenshot clipped to the iframe, not `iframe.screenshot()`. An
+	// element screenshot first waits for the element to sit still across
+	// animation frames, and while a CI runner renders WebGL in software the page
+	// rarely gets two quiet frames: it timed out there while passing locally.
+	const box = await iframe.boundingBox();
+	if (!box) {
+		throw new Error('The viewer iframe has no layout box to check.');
+	}
+	const view = page.viewportSize();
+	const x = Math.max(0, box.x);
+	const y = Math.max(0, box.y);
+	const probe = await page.screenshot({
+		timeout: CAPTURE_TIMEOUT,
+		clip: {
+			x,
+			y,
+			width: Math.min(box.width, view.width - x),
+			height: Math.min(box.height, view.height - y),
+		},
+	});
 	expect(
 		probe.length,
 		'The viewer iframe looks empty — the 3D model did not render.'

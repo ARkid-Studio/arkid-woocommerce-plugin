@@ -156,4 +156,26 @@ final class RefreshEmbedsTest extends TestCase {
 
 		$this->assertTrue( (bool) as_has_scheduled_action( RefreshEmbeds::HOOK_SWEEP, array(), RefreshEmbeds::GROUP ) );
 	}
+
+	/**
+	 * Action Scheduler's `as_unschedule_all_actions()` with a hook, a group and
+	 * empty args cancels only actions whose args are exactly `array()`. The
+	 * per-product workers carry `array( 'product_id' => N )`, so cancelling the
+	 * way the deactivation hook used to left every one of them pending.
+	 */
+	public function test_deactivation_cancels_pending_per_product_tasks(): void {
+		$args = array( 'product_id' => 123 );
+		as_enqueue_async_action( RefreshEmbeds::HOOK_PRODUCT, $args, RefreshEmbeds::GROUP );
+		$this->assertNotFalse(
+			as_next_scheduled_action( RefreshEmbeds::HOOK_PRODUCT, $args, RefreshEmbeds::GROUP ),
+			'Precondition: the worker is queued.'
+		);
+
+		do_action( 'deactivate_' . plugin_basename( ARKID_CATALOGUE_LINK_FILE ) );
+
+		$this->assertFalse(
+			as_next_scheduled_action( RefreshEmbeds::HOOK_PRODUCT, $args, RefreshEmbeds::GROUP )
+		);
+	}
 }
+

@@ -32,6 +32,10 @@
 		"test:e2e": "dotenvx run --quiet -- playwright test",
 		"test:e2e:ui": "dotenvx run --quiet -- playwright test --ui",
 		"e2e:install": "playwright install chromium",
+		"assets": "npm run assets:brand && npm run assets:screenshots",
+		"assets:brand": "node tests/store-assets/render-brand-assets.js",
+		"assets:record": "dotenvx run --quiet -- node tests/store-assets/record-catalogue.js",
+		"assets:screenshots": "playwright test -c playwright.assets.config.js",
 		"test:contract": "dotenvx run --quiet -- composer test:contract",
 		"env:set": "dotenvx set",
 		"env:decrypt": "dotenvx get"

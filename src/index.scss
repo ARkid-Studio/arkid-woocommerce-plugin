@@ -13,6 +13,13 @@
 		display: inline-block;
 		margin-block-start: 0.25em;
 		font-size: 0.85em;
+
+		// The browser hides [hidden] with `display: none` from its own
+		// stylesheet, which the `display` above beats. Without this the button
+		// shows under an empty picker.
+		&[hidden] {
+			display: none;
+		}
 	}
 }
 

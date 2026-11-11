@@ -157,6 +157,14 @@ rm -rf /var/www/html/wp-content/plugins/ac-check /tmp/ac
 
 One warning is expected: `load_plugin_textdomain` (see below).
 
+## WordPress.org listing assets
+
+The screenshots, icon and banner on the plugin page are generated, not
+committed — run the **Store assets** workflow, or `npm run assets` against a
+throwaway site. See [tests/store-assets/README.md](tests/store-assets/README.md).
+If you change a screen they show (the meta box, the settings, the viewer list,
+the modal), regenerate them.
+
 ## Deliberate pins — check here before "fixing" them
 
 - **PHPUnit is pinned to 9.6.** WordPress core's test suite supports PHPUnit 9

@@ -35,17 +35,16 @@ class IframeFactory {
 		return add_query_arg( 'source', 'woocommerce', $embed_url );
 	}
 
-	private function is_allowed_host( string $url ): bool {
-		if ( 'https' !== wp_parse_url( $url, PHP_URL_SCHEME ) ) {
-			return false;
-		}
-
-		$host = wp_parse_url( $url, PHP_URL_HOST );
-		if ( ! is_string( $host ) || '' === $host ) {
-			return false;
-		}
-		$host = strtolower( $host );
-
+	/**
+	 * The hosts a viewer may be loaded from, lower-cased.
+	 *
+	 * The only place the allow-list is read. The server-side check below and the
+	 * list handed to the storefront script both come from here, so the two
+	 * cannot disagree about what is allowed.
+	 *
+	 * @return array<int, string>
+	 */
+	public function allowed_hosts(): array {
 		/**
 		 * Filters the hosts a viewer iframe may be loaded from.
 		 *
@@ -57,14 +56,32 @@ class IframeFactory {
 		);
 
 		if ( ! is_array( $allowed ) ) {
+			return array();
+		}
+
+		$hosts = array();
+		foreach ( $allowed as $candidate ) {
+			$candidate = strtolower( is_scalar( $candidate ) ? (string) $candidate : '' );
+			if ( '' !== $candidate ) {
+				$hosts[] = $candidate;
+			}
+		}
+
+		return array_values( array_unique( $hosts ) );
+	}
+
+	private function is_allowed_host( string $url ): bool {
+		if ( 'https' !== wp_parse_url( $url, PHP_URL_SCHEME ) ) {
 			return false;
 		}
 
-		foreach ( $allowed as $candidate ) {
-			$candidate = strtolower( is_scalar( $candidate ) ? (string) $candidate : '' );
-			if ( '' === $candidate ) {
-				continue;
-			}
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+		if ( ! is_string( $host ) || '' === $host ) {
+			return false;
+		}
+		$host = strtolower( $host );
+
+		foreach ( $this->allowed_hosts() as $candidate ) {
 			if ( $host === $candidate || str_ends_with( $host, '.' . $candidate ) ) {
 				return true;
 			}

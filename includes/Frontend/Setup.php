@@ -28,6 +28,6 @@ final class Setup {
 
 		( new ClassicGalleryInjector( $iframe, $modal, $renderer ) )->register();
 		( new BlockGalleryInjector( $iframe, $modal, $renderer ) )->register();
-		( new Assets( $this->options ) )->register();
+		( new Assets( $this->options, $iframe ) )->register();
 	}
 }

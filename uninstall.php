@@ -50,9 +50,11 @@ function arkid_catalogue_link_uninstall_site(): void {
 	);
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
+	// By hook alone: with `array()` args and a group, Action Scheduler cancels
+	// only actions whose args are exactly `array()`, leaving the per-product tasks.
 	if ( function_exists( 'as_unschedule_all_actions' ) ) {
-		as_unschedule_all_actions( 'arkid_catalogue_link_refresh_embeds', array(), 'arkid-catalogue-link' );
-		as_unschedule_all_actions( 'arkid_catalogue_link_refresh_product', array(), 'arkid-catalogue-link' );
+		as_unschedule_all_actions( 'arkid_catalogue_link_refresh_embeds' );
+		as_unschedule_all_actions( 'arkid_catalogue_link_refresh_product' );
 	}
 }
 

@@ -92,6 +92,11 @@ test.describe('PDP embeds', () => {
 		const dialog = page.locator('#arkid-catalogue-link__dialog');
 		await expect(dialog).toBeVisible();
 		await expect(dialog.locator('iframe')).toHaveCount(1);
+		// The accessible name comes from the server's translatable strings.
+		await expect(dialog.locator('iframe')).toHaveAttribute(
+			'title',
+			/ — 3D viewer$/
+		);
 		await expect(trigger).toHaveAttribute('aria-expanded', 'true');
 	});
 

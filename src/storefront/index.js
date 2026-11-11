@@ -63,6 +63,33 @@ export function isAllowedEmbedUrl(url) {
 	);
 }
 
+/**
+ * The modal's accessible name: the iframe title and the dialog heading.
+ *
+ * Translated on the server and handed over in
+ * `arkidCatalogueLinkStorefront.i18n`; English if the strings are missing.
+ *
+ * @param {string} productName Product the viewer belongs to, possibly empty.
+ * @return {string} The title.
+ */
+export function viewerTitle(productName) {
+	const config = window.arkidCatalogueLinkStorefront;
+	const i18n = (config && config.i18n) || {};
+
+	if (!productName) {
+		return i18n.viewerTitleNoName || '3D viewer';
+	}
+
+	const template =
+		typeof i18n.viewerTitle === 'string' && i18n.viewerTitle.includes('%s')
+			? i18n.viewerTitle
+			: '%s — 3D viewer';
+	// A function, not a string: in a replacement string `$&` and `$1` are
+	// patterns, and product names are free text. (A name containing `$1` once
+	// corrupted the block gallery markup.)
+	return template.replace('%s', () => productName);
+}
+
 /** Test seam: the module keeps focus-restore state between calls. */
 export function resetState() {
 	lastTrigger = null;
@@ -177,7 +204,7 @@ export function mountIframe(dialog, url, productName) {
 	const iframe = document.createElement('iframe');
 	iframe.className = 'arkid-catalogue-link__viewer';
 	iframe.src = url;
-	iframe.title = productName ? `${productName} — 3D viewer` : '3D viewer';
+	iframe.title = viewerTitle(productName);
 	iframe.setAttribute('allowfullscreen', '');
 	iframe.setAttribute(
 		'allow',
@@ -205,8 +232,6 @@ export function emptyHost(dialog) {
 export function setTitle(dialog, productName) {
 	const titleEl = dialog.querySelector('#arkid-catalogue-link__dialog-title');
 	if (titleEl) {
-		titleEl.textContent = productName
-			? `${productName} — 3D viewer`
-			: '3D viewer';
+		titleEl.textContent = viewerTitle(productName);
 	}
 }

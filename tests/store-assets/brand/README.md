@@ -13,5 +13,6 @@ wordmark in `arkid-shopware-plugin/docs/logo.svg`, with the "CATALOGUE" line
 dropped and the glyph paths re-based to a 0,0 origin. They draw in
 `currentColor`, so the renderer sets the colour.
 
-These files are ARkid's trademark artwork, not part of the GPL-licensed plugin
-code.
+The ARkid name and logo are trademarks of ARkid Technologies GmbH. Like the
+rest of this repository these files are GPL-licensed, but the licence grants no
+right to use the trademarks (see [license.txt](../../../license.txt)).

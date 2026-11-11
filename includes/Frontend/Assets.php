@@ -70,7 +70,10 @@ class Assets {
 				// this list before it becomes an iframe or a new window.
 				'allowedHosts'   => $this->iframe->allowed_hosts(),
 				'i18n'           => array(
-					'closeViewer' => __( 'Close 3D viewer', 'arkid-catalogue-link' ),
+					'closeViewer'       => __( 'Close 3D viewer', 'arkid-catalogue-link' ),
+					/* translators: %s: product name. Accessible name of the 3D viewer in the modal. */
+					'viewerTitle'       => __( '%s — 3D viewer', 'arkid-catalogue-link' ),
+					'viewerTitleNoName' => __( '3D viewer', 'arkid-catalogue-link' ),
 				),
 			)
 		);

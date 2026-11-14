@@ -203,7 +203,11 @@ the modal), regenerate them.
 
 `languages/*.pot` and `*.po` are the committed sources. Regenerate the template
 with `npm run makepot`; the `.mo` and `.json` files are compiled at release time
-by `bin/build-plugin-zip.sh` and are gitignored.
+by `bin/build-plugin-zip.sh` and are gitignored. Strings only the JS uses ship
+in the `.json` files and are left out of the `.mo`, since PHP never looks them
+up. The script compiles from a scratch copy of the `.po` files so that it gives
+the same result on every wp-cli version (`wp i18n` changed how it splits them
+in i18n-command 2.7); don't add version-specific flags such as `--no-purge`.
 
 ## Releasing
 

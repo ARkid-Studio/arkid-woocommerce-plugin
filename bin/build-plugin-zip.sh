@@ -53,8 +53,24 @@ echo "[plugin-zip] Compiling translations (.mo + .json)…"
 # (the JSON filename hash is md5(scriptHandleSrc), so it must point at build/).
 # Run inside the devcontainer (wp-cli is on PATH there); make-mo/make-json need no
 # WordPress install. The script cd'd to ROOT, so `languages` is the plugin's dir.
-wp i18n make-mo languages >/dev/null
-wp i18n make-json languages --no-purge --pretty-print >/dev/null
+#
+# Both commands read a scratch copy of the .po files and write into languages/,
+# so the same invocation works on every wp-cli i18n-command (CI installs the
+# latest wp-cli, so the version moves without notice):
+#   - up to 2.6, make-json deletes the JS-only strings from the .po it reads
+#     unless passed --no-purge;
+#   - 2.7 removed that flag (passing it is now a fatal "unknown parameter")
+#     and does the same filtering in make-mo instead.
+# make-json runs first, so on 2.6 make-mo compiles the already-purged copy. On
+# every version, then, the .mo leaves out the strings only the JS uses (they
+# ship in the .json), the output is the same, and the committed .po files are
+# never modified.
+PO_DIR="$(mktemp -d)"
+trap 'rm -rf "${PO_DIR}"; restore_dev_deps' EXIT
+cp -p languages/*.po "${PO_DIR}/"
+wp i18n make-json "${PO_DIR}" languages --pretty-print >/dev/null
+wp i18n make-mo "${PO_DIR}" languages >/dev/null
+rm -rf "${PO_DIR}"
 
 echo "[plugin-zip] Re-installing Composer with --no-dev…"
 composer install --no-dev --optimize-autoloader --quiet --no-interaction

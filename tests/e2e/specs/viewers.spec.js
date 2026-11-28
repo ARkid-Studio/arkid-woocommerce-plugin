@@ -353,6 +353,63 @@ test.describe('ARkid Viewers screen', () => {
 			await expect(dialog).toBeHidden();
 		});
 
+		test('picking another viewer updates the colours and the preview, and removing it clears both', async ({
+			page,
+		}) => {
+			// More than one viewer to pick from; the afterEach puts it back.
+			wp(['option', 'update', 'arkid_e2e_viewers', '4']);
+			await page.goto(
+				`/wp-admin/post.php?post=${fixtures.withViewer}&action=edit`
+			);
+
+			const box = page.locator('#arkid-catalogue-link-metabox');
+			const colors = box.locator('.arkid-catalogue-link__embed-colors');
+			const preview = box.locator('.arkid-catalogue-link__preview');
+			await expect(colors).toBeVisible();
+
+			// The picker's results carry the dots of each viewer.
+			await box.locator('.select2-selection').click();
+			await page
+				.locator('.select2-dropdown .select2-search__field')
+				.fill('E2E Viewer 3');
+			const option = page.locator('.select2-results__option', {
+				hasText: 'E2E Viewer 3',
+			});
+			await expect(
+				option.getByRole('img', { name: 'Copper Terra: shown' })
+			).toBeVisible();
+			await expect(
+				option.getByRole('img', { name: 'Moon Graphite: hidden' })
+			).toBeVisible();
+
+			// Picking it replaces the colours and points Preview at it.
+			await option.click();
+			await expect(colors).toBeVisible();
+			await expect(
+				colors.getByRole('img', { name: 'Moon Graphite: hidden' })
+			).toHaveCount(1);
+			await expect(preview).toHaveAttribute(
+				'data-product-name',
+				'ARkid E2E Viewer 3'
+			);
+			await preview.click();
+			const dialog = page.locator('#arkid-catalogue-link-preview');
+			await expect(dialog).toBeVisible();
+			await expect(
+				dialog.getByRole('heading', { name: 'ARkid E2E Viewer 3' })
+			).toBeVisible();
+			await page.keyboard.press('Escape');
+			await expect(dialog).toBeHidden();
+
+			// Removing the viewer leaves nothing to show or preview.
+			await box.getByRole('button', { name: 'Remove viewer' }).click();
+			await expect(colors).toBeHidden();
+			await expect(preview).toBeHidden();
+			await expect(
+				colors.locator('.arkid-catalogue-link__dot')
+			).toHaveCount(0);
+		});
+
 		test('the product screen shows the colours of the selected viewer', async ({
 			page,
 		}) => {

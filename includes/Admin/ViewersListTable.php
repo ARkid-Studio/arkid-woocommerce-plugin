@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Arkid\CatalogueLink\Admin;
 
 use Arkid\CatalogueLink\Api\EmbedDto;
+use Arkid\CatalogueLink\Support\Text;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -83,20 +84,43 @@ class ViewersListTable extends \WP_List_Table {
 		$order       = 'desc' === strtolower( $order_param ) ? 'desc' : 'asc';
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
+		$this->rows = self::sort_rows( $this->rows, $orderby, $order );
+
+		$this->items = $this->rows;
+	}
+
+	/**
+	 * Order viewers by a sortable column.
+	 *
+	 * Names are compared the way a person reads them: without regard to case or
+	 * accents, with numbers by value ("Chair 2" before "Chair 10"). Viewers that
+	 * compare equal keep the order of their row number.
+	 *
+	 * @param array<int, EmbedDto> $rows    Viewers.
+	 * @param string               $orderby Column slug; unknown slugs sort by row number.
+	 * @param string               $order   'asc' or 'desc'.
+	 *
+	 * @return array<int, EmbedDto>
+	 */
+	public static function sort_rows( array $rows, string $orderby, string $order ): array {
 		usort(
-			$this->rows,
+			$rows,
 			static function ( EmbedDto $a, EmbedDto $b ) use ( $orderby, $order ): int {
 				$cmp = match ( $orderby ) {
-					'product_name' => strcmp( $a->product_name, $b->product_name ),
-					'brand_name'   => strcmp( $a->brand_name, $b->brand_name ),
+					'product_name' => Text::compare( $a->product_name, $b->product_name ),
+					'brand_name'   => Text::compare( $a->brand_name, $b->brand_name ),
 					'created'      => strcmp( $a->created, $b->created ),
 					default        => $a->row_number <=> $b->row_number,
 				};
-				return 'desc' === $order ? -$cmp : $cmp;
+				if ( 'desc' === $order ) {
+					$cmp = -$cmp;
+				}
+
+				return 0 !== $cmp ? $cmp : $a->row_number <=> $b->row_number;
 			}
 		);
 
-		$this->items = $this->rows;
+		return $rows;
 	}
 
 	/**

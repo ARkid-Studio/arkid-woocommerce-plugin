@@ -111,9 +111,47 @@ final class ProductLinksTest extends TestCase {
 		$this->assertSame( array(), ( new ProductLinks() )->by_embed() );
 	}
 
+	public function test_the_products_of_one_viewer_are_those_the_list_counts_for_it(): void {
+		$this->product( 'Zebra chair', 'viewer-a' );
+		$this->product( 'apple chair', 'viewer-a' );
+		$this->product( 'Work in progress', 'viewer-a', 'draft' );
+		$this->product( 'Mango table', 'viewer-b' );
+		$this->product( 'Trashed', 'viewer-a', 'trash' );
+		$this->product( 'Auto draft', 'viewer-a', 'auto-draft' );
+		$this->product( 'A page', 'viewer-a', 'publish', 'page' );
+		$this->product( 'Unlinked', '' );
+		$links = new ProductLinks();
+
+		$ids = $links->product_ids( 'viewer-a' );
+
+		$this->assertCount( 3, $ids );
+		// What the viewers list shows under "Shown on", in the same order, so that
+		// "+N more" opens as many products as it promised.
+		$this->assertSame(
+			array_map( static fn( LinkedProduct $p ): int => $p->id, $links->by_embed()['viewer-a'] ),
+			$ids
+		);
+		$this->assertSame( array(), $links->product_ids( 'viewer-c' ) );
+	}
+
+	public function test_a_viewer_is_found_whatever_case_it_is_spelt_in(): void {
+		$first  = $this->product( 'Chair', 'ABCD-1234' );
+		$second = $this->product( 'Table', 'abcd-1234' );
+
+		$this->assertSame( array( $first, $second ), ( new ProductLinks() )->product_ids( 'AbCd-1234' ) );
+	}
+
+	public function test_an_id_that_cannot_be_a_viewers_finds_no_products(): void {
+		$this->product( 'Chair', 'viewer-a' );
+		$links = new ProductLinks();
+
+		foreach ( array( '', 'viewer a', "viewer-a' OR '1'='1", '%', 'viewer-a%' ) as $id ) {
+			$this->assertSame( array(), $links->product_ids( $id ), $id );
+		}
+	}
+
 	/**
-	 * The Products list filter itself is the next step's; the viewers list links
-	 * to it now.
+	 * `Admin\ProductListFilter` answers this address; the viewers list builds it.
 	 */
 	public function test_the_products_list_link_names_the_viewer(): void {
 		$url = ProductLinks::products_url( 'abc-123' );

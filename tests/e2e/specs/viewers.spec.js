@@ -217,6 +217,75 @@ test.describe('ARkid Viewers screen', () => {
 		});
 	});
 
+	test('"+N more" opens the Products list narrowed to the products of that viewer', async ({
+		page,
+	}) => {
+		// The viewer is on four products: three are listed, the fourth is "+1 more".
+		const extras = ['E2E Extra A', 'E2E Extra B'].map((title) =>
+			wp([
+				'post',
+				'create',
+				'--post_type=product',
+				'--post_status=publish',
+				`--post_title=${title}`,
+				'--porcelain',
+			])
+		);
+		const unlinked = wp([
+			'post',
+			'create',
+			'--post_type=product',
+			'--post_status=publish',
+			'--post_title=E2E Unlinked',
+			'--porcelain',
+		]);
+		for (const id of extras) {
+			wp(['post', 'meta', 'update', id, '_arkid_embed_id', 'e2e-viewer']);
+		}
+
+		try {
+			await page.goto(VIEWERS);
+			await page
+				.locator(ROWS)
+				.first()
+				.locator('.column-shown_on')
+				.getByRole('link', { name: '+1 more' })
+				.click();
+
+			await expect(page).toHaveURL(/arkid_embed=e2e-viewer/);
+			await expect(
+				page.getByText(
+					'Showing only the products that show one ARkid viewer.'
+				)
+			).toBeVisible();
+
+			const titles = page.locator('#the-list .column-name .row-title');
+			await expect(titles).toHaveCount(4);
+			await expect(
+				titles.filter({ hasText: 'E2E Unlinked' })
+			).toHaveCount(0);
+			for (const title of ['E2E Chair', 'E2E Extra A', 'E2E Extra B']) {
+				await expect(titles.filter({ hasText: title })).toHaveCount(1);
+			}
+
+			// The way back is the list of every product again.
+			await page.getByRole('link', { name: 'Show all products' }).click();
+			await expect(page).not.toHaveURL(/arkid_embed/);
+			await expect(
+				page
+					.locator('#the-list .column-name .row-title')
+					.filter({ hasText: 'E2E Unlinked' })
+			).toHaveCount(1);
+			await expect(
+				page.getByText(
+					'Showing only the products that show one ARkid viewer.'
+				)
+			).toHaveCount(0);
+		} finally {
+			wp(['post', 'delete', ...extras, unlinked, '--force']);
+		}
+	});
+
 	test('the list renders without interactions when the statistics are unavailable', async ({
 		page,
 	}) => {

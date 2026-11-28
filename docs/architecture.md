@@ -102,8 +102,18 @@ call is made once per request.
   least one such product. A viewer id is compared in lower case everywhere, the
   list's, the stored link's and the statistics'.
 - **"+N more"** links to `edit.php?post_type=product&arkid_embed=<id>`
-  (`ProductLinks::QUERY_VAR`). The Products list's own filter for that
-  variable is the product list step's to provide; the link is built here.
+  (`ProductLinks::QUERY_VAR`, `ProductLinks::products_url()`).
+  `Admin\ProductListFilter` answers it: on the Products list's main query it
+  sets `post__in` to `ProductLinks::product_ids()`, the products the "Shown on"
+  cell counts for that viewer (same predicate as `by_embed()`, same order; a
+  test pins that). A viewer no product shows lists nothing and does not fall
+  back to every product, and a `post__in` another filter already set is
+  intersected, not replaced. The id has to look like a viewer id
+  (`PostMeta::sanitize_embed_id()`); anything else is ignored. A notice with
+  a "Show all products" link says the list is narrowed. The filter reads only
+  the shop's own database. The count tiles, columns and dropdown filter of the
+  Products list are the product list step's: they can build on the same
+  query variable.
 - **Interactions** are joined from `stats.embeds` by viewer id
   (`StatsDto::interactions_by_embed()`). ARkid's `EcomStats` lists every live
   standalone viewer that had at least one impression in the period, with its

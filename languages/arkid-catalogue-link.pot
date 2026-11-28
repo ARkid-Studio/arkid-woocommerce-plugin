@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-28T09:51:27+00:00\n"
+"POT-Creation-Date: 2026-11-28T10:38:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: arkid-catalogue-link\n"
@@ -121,7 +121,7 @@ msgstr ""
 
 #: includes/Admin/MetaBox.php:110
 #: includes/Admin/ViewersListTable.php:98
-#: includes/Admin/ViewersListTable.php:635
+#: includes/Admin/ViewersListTable.php:654
 msgid "Preview"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgid "Edit in ARkid"
 msgstr ""
 
 #: includes/Admin/PreviewDialog.php:42
-#: includes/Admin/ViewersListTable.php:651
+#: includes/Admin/ViewersListTable.php:670
 msgid "Analytics"
 msgstr ""
 
@@ -208,11 +208,19 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: includes/Admin/Setup.php:53
+#: includes/Admin/ProductListFilter.php:87
+msgid "Showing only the products that show one ARkid viewer."
+msgstr ""
+
+#: includes/Admin/ProductListFilter.php:89
+msgid "Show all products"
+msgstr ""
+
+#: includes/Admin/Setup.php:55
 msgid "Settings"
 msgstr ""
 
-#: includes/Admin/Setup.php:58
+#: includes/Admin/Setup.php:60
 msgid "Viewers"
 msgstr ""
 
@@ -264,80 +272,80 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:362
+#: includes/Admin/ViewersListTable.php:376
 msgid "All"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:363
+#: includes/Admin/ViewersListTable.php:377
 msgid "Live on a product"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:364
-#: includes/Admin/ViewersListTable.php:515
+#: includes/Admin/ViewersListTable.php:378
+#: includes/Admin/ViewersListTable.php:529
 msgid "Not linked"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:365
+#: includes/Admin/ViewersListTable.php:379
 msgid "No interactions, 30 days"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:407
+#: includes/Admin/ViewersListTable.php:421
 msgid "Filter by type"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:408
+#: includes/Admin/ViewersListTable.php:422
 msgid "All types"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:413
+#: includes/Admin/ViewersListTable.php:427
 msgid "Filter by brand"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:414
+#: includes/Admin/ViewersListTable.php:428
 msgid "All brands"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:417
+#: includes/Admin/ViewersListTable.php:431
 msgid "Filter"
 msgstr ""
 
 #. translators: %s: number of further products
-#: includes/Admin/ViewersListTable.php:528
+#: includes/Admin/ViewersListTable.php:542
 #, php-format
 msgid "+%s more"
 msgid_plural "+%s more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Admin/ViewersListTable.php:542
+#: includes/Admin/ViewersListTable.php:556
 msgid "(no title)"
 msgstr ""
 
 #. translators: %s: how long ago, for example "3 hours"
-#: includes/Admin/ViewersListTable.php:612
+#: includes/Admin/ViewersListTable.php:631
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:643
+#: includes/Admin/ViewersListTable.php:662
 msgid "Edit"
 msgstr ""
 
 #. translators: %s: product name
-#: includes/Admin/ViewersListTable.php:686
+#: includes/Admin/ViewersListTable.php:705
 #, php-format
 msgid "Preview %s"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:693
+#: includes/Admin/ViewersListTable.php:712
 msgid "No viewers found. Add a viewer in the ARkid Catalogue or check your API key."
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:697
+#: includes/Admin/ViewersListTable.php:716
 msgid "No viewers match these filters."
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:701
+#: includes/Admin/ViewersListTable.php:720
 msgid "Clear the filters"
 msgstr ""
 

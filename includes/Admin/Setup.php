@@ -11,6 +11,7 @@ namespace Arkid\CatalogueLink\Admin;
 
 use Arkid\CatalogueLink\Api\ClientFactory;
 use Arkid\CatalogueLink\Frontend\IframeFactory;
+use Arkid\CatalogueLink\Links\ProductLinks;
 use Arkid\CatalogueLink\Settings\IntegrationSettings;
 use Arkid\CatalogueLink\Settings\Options;
 
@@ -27,6 +28,7 @@ class Setup {
 		( new Notices( $this->options ) )->register();
 		( new MetaBox( $this->options, $this->api ) )->register();
 		( new ViewersPage( $this->options, $this->api ) )->register();
+		( new ProductListFilter( new ProductLinks() ) )->register();
 		( new Assets( new IframeFactory( $this->options ) ) )->register();
 
 		add_filter(

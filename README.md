@@ -85,7 +85,7 @@ includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Api/                     HTTP client (read and write), DTOs, input rules, exceptions
   Links/                   state of a product's link (none, linked, not synced, missing), live lookup, which products show which viewer
   Settings/                WooCommerce integration tab + typed options
-  Admin/                   meta box, viewer list and its page, colour dots, preview dialog, notices, assets
+  Admin/                   meta box, viewer list and its page, Products list filter, colour dots, preview dialog, notices, assets
   Frontend/                renderer, iframe builder, modal, consent, gallery injectors
   Blocks/                  server-rendered embed block
   Cron/                    Action Scheduler refresh

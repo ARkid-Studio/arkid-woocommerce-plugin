@@ -1,0 +1,450 @@
+{
+ "note": "Generated from the Shopify plugin's match.ts and embed-id.ts. Scores are floats: compare with a tolerance of 1e-9. A port must reproduce every value.",
+ "threshold": 0.7,
+ "similarity": [
+  {
+   "a": "Sofa Bed",
+   "b": "Sofa Bed",
+   "score": 1
+  },
+  {
+   "a": "sofa sofabed",
+   "b": "sofa",
+   "score": 0.8333333333333333
+  },
+  {
+   "a": "Wheel",
+   "b": "Wheels",
+   "score": 1
+  },
+  {
+   "a": "Wheel",
+   "b": "Whee",
+   "score": 1
+  },
+  {
+   "a": "Café Chair",
+   "b": "Cafe Chair",
+   "score": 1
+  },
+  {
+   "a": "Maxi-Cosi Fame",
+   "b": "Fame - New Generation",
+   "score": 0.3333333333333333
+  },
+  {
+   "a": "Maxi-Cosi Fame - New Generation",
+   "b": "Fame - New Generation",
+   "score": 0.875
+  },
+  {
+   "a": "Fame",
+   "b": "Fame New Generation",
+   "score": 0.75
+  },
+  {
+   "a": "",
+   "b": "x",
+   "score": 0
+  },
+  {
+   "a": "x",
+   "b": "",
+   "score": 0
+  },
+  {
+   "a": "  ",
+   "b": "a b",
+   "score": 0
+  },
+  {
+   "a": "A B C D",
+   "b": "A B C",
+   "score": 0.9285714285714286
+  },
+  {
+   "a": "A B C D",
+   "b": "A B",
+   "score": 0.8333333333333333
+  },
+  {
+   "a": "Große Straße",
+   "b": "Grosse Strasse",
+   "score": 0
+  },
+  {
+   "a": "ß",
+   "b": "ss",
+   "score": 0
+  },
+  {
+   "a": "Ørsted Lamp",
+   "b": "Orsted Lamp",
+   "score": 0.5
+  },
+  {
+   "a": "Łódź Table",
+   "b": "Lodz Table",
+   "score": 0.5
+  },
+  {
+   "a": "Dining Table 120",
+   "b": "Dining Table 160",
+   "score": 0.6666666666666666
+  },
+  {
+   "a": "The red chair",
+   "b": "Red chair",
+   "score": 0.9
+  },
+  {
+   "a": "Kinderwagen Fame",
+   "b": "Fame Kinderwagen",
+   "score": 1
+  },
+  {
+   "a": "日本語 テスト",
+   "b": "日本語 テスト",
+   "score": 1
+  },
+  {
+   "a": "日本語",
+   "b": "テスト",
+   "score": 0
+  },
+  {
+   "a": "Ünïcödé Nåme",
+   "b": "Unicode Name",
+   "score": 1
+  },
+  {
+   "a": "a-b_c.d",
+   "b": "a b c d",
+   "score": 1
+  },
+  {
+   "a": "Bugaboo Fox 5",
+   "b": "Fox 5",
+   "score": 0.9
+  },
+  {
+   "a": "Fox 5",
+   "b": "Fox 5 Complete",
+   "score": 0.9
+  },
+  {
+   "a": "abcd",
+   "b": "abcde",
+   "score": 1
+  },
+  {
+   "a": "abc",
+   "b": "abcd",
+   "score": 0
+  }
+ ],
+ "embeds": [
+  {
+   "id": "e1",
+   "brand": "Maxi-Cosi",
+   "product": "Fame - New Generation"
+  },
+  {
+   "id": "e2",
+   "brand": "Bugaboo",
+   "product": "Fox 5"
+  },
+  {
+   "id": "e3",
+   "brand": "Cybex",
+   "product": "Priam"
+  },
+  {
+   "id": "e4",
+   "brand": "Joolz",
+   "product": "Hub+"
+  },
+  {
+   "id": "e5",
+   "brand": "Stokke",
+   "product": "Xplory X"
+  }
+ ],
+ "bestMatch": [
+  {
+   "target": {
+    "title": "Fame",
+    "vendor": "Maxi-Cosi"
+   },
+   "bestId": "e1",
+   "rankedIds": [
+    "e1"
+   ]
+  },
+  {
+   "target": {
+    "title": "Maxi-Cosi Fame New Generation",
+    "vendor": ""
+   },
+   "bestId": "e1",
+   "rankedIds": [
+    "e1"
+   ]
+  },
+  {
+   "target": {
+    "title": "Fox 5",
+    "vendor": "Bugaboo"
+   },
+   "bestId": "e2",
+   "rankedIds": [
+    "e2"
+   ]
+  },
+  {
+   "target": {
+    "title": "Bugaboo Fox",
+    "vendor": "Bugaboo"
+   },
+   "bestId": "e2",
+   "rankedIds": [
+    "e2"
+   ]
+  },
+  {
+   "target": {
+    "title": "Priam Kinderwagen",
+    "vendor": "Cybex"
+   },
+   "bestId": "e3",
+   "rankedIds": [
+    "e3"
+   ]
+  },
+  {
+   "target": {
+    "title": "Hub",
+    "vendor": "Joolz"
+   },
+   "bestId": "e4",
+   "rankedIds": [
+    "e4"
+   ]
+  },
+  {
+   "target": {
+    "title": "Xplory X Stroller",
+    "vendor": "Stokke"
+   },
+   "bestId": "e5",
+   "rankedIds": [
+    "e5"
+   ]
+  },
+  {
+   "target": {
+    "title": "Garden Hose",
+    "vendor": "Acme"
+   },
+   "bestId": null,
+   "rankedIds": []
+  },
+  {
+   "target": {
+    "title": "",
+    "vendor": ""
+   },
+   "bestId": null,
+   "rankedIds": []
+  },
+  {
+   "target": {
+    "title": "Fame",
+    "vendor": ""
+   },
+   "bestId": "e1",
+   "rankedIds": [
+    "e1"
+   ]
+  }
+ ],
+ "viewerIdDecode": [
+  {
+   "id": "CvCHjmHfEfD2pVmj9PjNPg",
+   "uuid": "0af0878e-61df-11f0-f6a5-59a3f4f8cd3e"
+  },
+  {
+   "id": "AAAAAAAAAAAAAAAAAAAAAA",
+   "uuid": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+   "id": "0000000000000000000000",
+   "uuid": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+   "id": "zzzzzzzzzzzzzzzzzzzzz7",
+   "uuid": null
+  },
+  {
+   "id": "zzzzzzzzzzzzzzzzzzzzz8",
+   "uuid": null
+  },
+  {
+   "id": "short",
+   "uuid": null
+  },
+  {
+   "id": "",
+   "uuid": null
+  },
+  {
+   "id": "6574d6b9-db68-11f1-d179-937dd7b48e22",
+   "uuid": null
+  },
+  {
+   "id": "abcdefghijklmnopqrstuA",
+   "uuid": "69b71d79-f821-8a39-259a-7a29aabb2db8"
+  },
+  {
+   "id": "abcdefghijklmnopqrstu0",
+   "uuid": "1e27a3a2-f930-fa72-4cb4-5a0158891fda"
+  },
+  {
+   "id": "abcdefghijklmnopqrstuw",
+   "uuid": "69b71d79-f821-8a39-259a-7a29aabb2dbb"
+  },
+  {
+   "id": "ab_defghijklmnopqrstuQ",
+   "uuid": "69bfdd79-f821-8a39-259a-7a29aabb2db9"
+  }
+ ],
+ "viewerIdRoundTrip": [
+  {
+   "uuid": "6574d6b9-db68-11f1-d179-937dd7b48e22",
+   "form": "base62",
+   "id": "UaRQxyscOGPd1X8BBTcR53",
+   "decoded": "6574d6b9-db68-11f1-d179-937dd7b48e22"
+  },
+  {
+   "uuid": "6574d6b9-db68-11f1-d179-937dd7b48e22",
+   "form": "base64url",
+   "id": "ZXTWudtoEfHReZN917SOIg",
+   "decoded": "6574d6b9-db68-11f1-d179-937dd7b48e22"
+  },
+  {
+   "uuid": "3e69f23a-0000-4000-8000-000000000000",
+   "form": "base62",
+   "id": "MDDMuGHBUZOCMrzFMOwlt1",
+   "decoded": "3e69f23a-0000-4000-8000-000000000000"
+  },
+  {
+   "uuid": "3e69f23a-0000-4000-8000-000000000000",
+   "form": "base64url",
+   "id": "PmnyOgAAQACAAAAAAAAAAA",
+   "decoded": "3e69f23a-0000-4000-8000-000000000000"
+  },
+  {
+   "uuid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+   "form": "base62",
+   "id": "7chF7tm8n9klfT5MGD24n7",
+   "decoded": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+  },
+  {
+   "uuid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+   "form": "base64url",
+   "id": "_____________________w",
+   "decoded": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+  },
+  {
+   "uuid": "00000000-0000-0000-0000-000000000000",
+   "form": "base62",
+   "id": "0000000000000000000000",
+   "decoded": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+   "uuid": "00000000-0000-0000-0000-000000000000",
+   "form": "base64url",
+   "id": "AAAAAAAAAAAAAAAAAAAAAA",
+   "decoded": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+   "uuid": "0af0878e-1234-5678-9abc-def012345678",
+   "form": "base62",
+   "id": "OURU6IeZQAj7I06YLQqdK0",
+   "decoded": "0af0878e-1234-5678-9abc-def012345678"
+  },
+  {
+   "uuid": "0af0878e-1234-5678-9abc-def012345678",
+   "form": "base64url",
+   "id": "CvCHjhI0VniavN7wEjRWeA",
+   "decoded": "0af0878e-1234-5678-9abc-def012345678"
+  }
+ ],
+ "embedIdFromCode": [
+  {
+   "code": "<iframe src=\"https://catalogue.arkid.app/embed/CvCHjmHfEfD2pVmj9PjNPg?source=magento\"></iframe>",
+   "id": "0af0878e-61df-11f0-f6a5-59a3f4f8cd3e"
+  },
+  {
+   "code": "<iframe src=\"https://catalogue.arkid.app/embed/UaRQxyscOGPd1X8BBTcR53?source=x\"></iframe>",
+   "id": "6574d6b9-db68-11f1-d179-937dd7b48e22"
+  },
+  {
+   "code": "<iframe src=\"https://catalogue.arkid.app/embed/UaRQxyscOGPd1X8BBTcR53Z\"></iframe>",
+   "id": null
+  },
+  {
+   "code": "<iframe src=\"https://catalogue.arkid.app/embedx/UaRQxyscOGPd1X8BBTcR53\"></iframe>",
+   "id": null
+  },
+  {
+   "code": "null",
+   "id": null
+  },
+  {
+   "code": "",
+   "id": null
+  }
+ ],
+ "linkedEmbedList": [
+  "6574d6b9-db68-11f1-d179-937dd7b48e22",
+  "3E69F23A-0000-4000-8000-000000000000"
+ ],
+ "linkedEmbed": [
+  {
+   "link": {
+    "embedId": "6574D6B9-DB68-11F1-D179-937DD7B48E22",
+    "embedCode": null
+   },
+   "embed_id": "6574d6b9-db68-11f1-d179-937dd7b48e22"
+  },
+  {
+   "link": {
+    "embedId": null,
+    "embedCode": "<iframe src=\"https://catalogue.arkid.app/embed/UaRQxyscOGPd1X8BBTcR53?source=x\"></iframe>"
+   },
+   "embed_id": "6574d6b9-db68-11f1-d179-937dd7b48e22"
+  },
+  {
+   "link": {
+    "embedId": "unknown",
+    "embedCode": null
+   },
+   "embed_id": null
+  },
+  {
+   "link": {
+    "embedId": null,
+    "embedCode": null
+   },
+   "embed_id": null
+  },
+  {
+   "link": {
+    "embedId": "3e69f23a-0000-4000-8000-000000000000",
+    "embedCode": "garbage"
+   },
+   "embed_id": "3E69F23A-0000-4000-8000-000000000000"
+  }
+ ]
+}

@@ -1,0 +1,2158 @@
+{
+ "note": "Generated with a transcription of the Shopify plugin match.ts (nameSimilarity, bestMatch, rankedMatches): random names over a vocabulary of accented, Greek, Cyrillic, kana, Hangul, CJK and astral words. Scores are compared with a tolerance of 1e-9.",
+ "threshold": 0.7,
+ "similarity": [
+  {
+   "a": "x ΟΔΟΣ'😀",
+   "b": "sofabed_ǖ-한국어",
+   "score": 0
+  },
+  {
+   "a": "😀.иогурт",
+   "b": "new",
+   "score": 0
+  },
+  {
+   "a": "ガギグ-Å  한국",
+   "b": "İstanbul, cybex_Ёлка Ёлка, MULLER",
+   "score": 0
+  },
+  {
+   "a": "GROSSE  서울시",
+   "b": "서울시 GROSSE",
+   "score": 1
+  },
+  {
+   "a": "𠮷𠮷-서울.ΣΤΡΆΤΟΣ",
+   "b": "𠮷𠮷-서울.ΣΤΡΆΤΟΣ",
+   "score": 1
+  },
+  {
+   "a": "カキク'елка",
+   "b": "Ёлка  ΟΔΟΣ",
+   "score": 0.5
+  },
+  {
+   "a": "große'Å'CYBEX 서울시.new",
+   "b": "서울시.new große'Å'CYBEX",
+   "score": 1
+  },
+  {
+   "a": "item-1_ΣΤΡΆΤΟΣ sofabed",
+   "b": "sofabed item-1_ΣΤΡΆΤΟΣ",
+   "score": 1
+  },
+  {
+   "a": "5.wheels_table",
+   "b": "5.wheels_table",
+   "score": 1
+  },
+  {
+   "a": "テスト - PRIAM",
+   "b": "NEW - 한국 fox-fame",
+   "score": 0
+  },
+  {
+   "a": "cosi.große-서울시_MAXI, テスト",
+   "b": "120, 𠮷𠮷x",
+   "score": 0
+  },
+  {
+   "a": "new - 日本語 priam_đorđe",
+   "b": "priam_đorđe 日本語 - new",
+   "score": 1
+  },
+  {
+   "a": "ĐORĐE'ITEM-1-muller",
+   "b": "ĐORĐE'ITEM-1-muller",
+   "score": 1
+  },
+  {
+   "a": "елка",
+   "b": "strasse",
+   "score": 0
+  },
+  {
+   "a": "ЙОГУРТ đorđe - CRÈME, MAXI",
+   "b": "ΟΔΟΣ'𠮷𠮷x'fame - cafe",
+   "score": 0
+  },
+  {
+   "a": "𠮷𠮷x  đorđe",
+   "b": "đorđe 𠮷𠮷x",
+   "score": 1
+  },
+  {
+   "a": "𠮷𠮷.𠮷𠮷x.crème  ﬁne.𠮷𠮷x",
+   "b": "ﬁne.𠮷𠮷x 𠮷𠮷.𠮷𠮷x.crème",
+   "score": 1
+  },
+  {
+   "a": "ITEM-1 x  bugaboo.😀_kinderwagen",
+   "b": "bugaboo.😀_kinderwagen x ITEM-1",
+   "score": 1
+  },
+  {
+   "a": "ÆBLE, BUGABOO",
+   "b": "lodz table_한국어  cafe  ΣΤΡΆΤΟΣ",
+   "score": 0
+  },
+  {
+   "a": "5  hub'abcde",
+   "b": "hub'abcde 5",
+   "score": 1
+  },
+  {
+   "a": "ế",
+   "b": "𠮷𠮷 - MAXI'café-MÜLLER, ẞ",
+   "score": 0
+  },
+  {
+   "a": "hub  ørsted - οδος",
+   "b": "sofabed-иогурт sofabed  straße",
+   "score": 0
+  },
+  {
+   "a": "SOFABED",
+   "b": "ORSTED - cosi  ΟΔΟΣ.æble",
+   "score": 0
+  },
+  {
+   "a": "ångström-LAMP, カキク",
+   "b": "テスト'οδος.müller chair",
+   "score": 0
+  },
+  {
+   "a": "abcde",
+   "b": "abcde",
+   "score": 1
+  },
+  {
+   "a": "CHAIR_Йогурт-120 wheels",
+   "b": "wheels CHAIR_Йогурт-120",
+   "score": 1
+  },
+  {
+   "a": "ﬁne",
+   "b": "ﬁne",
+   "score": 1
+  },
+  {
+   "a": "カキク_ΟΔΟΣ.ñandú иогурт",
+   "b": "fox-ガギグ, Ế",
+   "score": 0.30952380952380953
+  },
+  {
+   "a": "ế İstanbul-generation, иогурт  иогурт",
+   "b": "στρατος  ẞ",
+   "score": 0
+  },
+  {
+   "a": "café",
+   "b": "café",
+   "score": 1
+  },
+  {
+   "a": "テスト.abcde  fox'ΟΔΟΣ-wheel",
+   "b": "priam, łódź_ΣΤΡΆΤΟΣ'fox",
+   "score": 0.2361111111111111
+  },
+  {
+   "a": "abcd'😀_lamp, Ёлка_テスト",
+   "b": "Ёлка_テスト abcd'😀_lamp,",
+   "score": 1
+  },
+  {
+   "a": "muller",
+   "b": "서울시.hub - 서울시, SOFABED",
+   "score": 0
+  },
+  {
+   "a": "ΟΔΟΣ'đorđe FAME",
+   "b": "café",
+   "score": 0
+  },
+  {
+   "a": "strasse'sofa - ÅNGSTRÖM",
+   "b": "ÅNGSTRÖM - strasse'sofa",
+   "score": 1
+  },
+  {
+   "a": "στρατος-STRASSE ångström, fame  abcd",
+   "b": "ǖ.елка",
+   "score": 0
+  },
+  {
+   "a": "muller",
+   "b": "muller",
+   "score": 1
+  },
+  {
+   "a": "ガギグ-STRASSE cosi_ORSTED_æble",
+   "b": "ÑANDÚ  ΣΤΡΆΤΟΣ_hub",
+   "score": 0
+  },
+  {
+   "a": "lamp.crème",
+   "b": "lamp.crème",
+   "score": 1
+  },
+  {
+   "a": "sofa, ørsted.fame, lamp",
+   "b": "istanbul-ørsted",
+   "score": 0.41666666666666663
+  },
+  {
+   "a": "x, 한국어-Å - ΣΤΡΆΤΟΣ Ế",
+   "b": "120'οδος sofa",
+   "score": 0
+  },
+  {
+   "a": "ẞ.カキク",
+   "b": "ẞ.カキク",
+   "score": 1
+  },
+  {
+   "a": "😀",
+   "b": "ẞ.CRÈME - đorđe - PRIAM  ABCD",
+   "score": 0
+  },
+  {
+   "a": "한국",
+   "b": "한국",
+   "score": 1
+  },
+  {
+   "a": "한국어.istanbul - COSI",
+   "b": "COSI - 한국어.istanbul",
+   "score": 1
+  },
+  {
+   "a": "new - sofa",
+   "b": "sofa - new",
+   "score": 1
+  },
+  {
+   "a": "서울시'straße abc",
+   "b": "日本語.カキク, CRÈME  müller_bugaboo",
+   "score": 0
+  },
+  {
+   "a": "ÅNGSTRÖM-ế-ΣΤΡΆΤΟΣ  한국어",
+   "b": "한국어 ÅNGSTRÖM-ế-ΣΤΡΆΤΟΣ",
+   "score": 1
+  },
+  {
+   "a": "TABLE  abcd - 한국",
+   "b": "한국 - abcd TABLE",
+   "score": 1
+  },
+  {
+   "a": "orsted'strasse.FAME",
+   "b": "orsted'strasse.FAME",
+   "score": 1
+  },
+  {
+   "a": "ΟΔΟΣ  CRÈME - lamp-item-1.hub",
+   "b": "ﬁne",
+   "score": 0
+  },
+  {
+   "a": "ÅNGSTRÖM-große.120",
+   "b": "ÅNGSTRÖM-große.120",
+   "score": 1
+  },
+  {
+   "a": "😀, cosi_ΟΔΟΣ-bugaboo",
+   "b": "cosi_ΟΔΟΣ-bugaboo 😀,",
+   "score": 1
+  },
+  {
+   "a": "café łódź'CAFÉ иогурт",
+   "b": "テスト  ΟΔΟΣ  カキク",
+   "score": 0
+  },
+  {
+   "a": "ΟΔΟΣ priam hub",
+   "b": "hub priam ΟΔΟΣ",
+   "score": 1
+  },
+  {
+   "a": "strasse_LODZ  ABCD",
+   "b": "istanbul",
+   "score": 0
+  },
+  {
+   "a": "𠮷𠮷x.bugaboo-abcde, LAMP",
+   "b": "LAMP 𠮷𠮷x.bugaboo-abcde,",
+   "score": 1
+  },
+  {
+   "a": "cybex.カキク  MAXI.x, table",
+   "b": "table MAXI.x, cybex.カキク",
+   "score": 1
+  },
+  {
+   "a": "K カキク ΟΔΟΣ",
+   "b": "ΟΔΟΣ カキク K",
+   "score": 1
+  },
+  {
+   "a": "ĐORĐE",
+   "b": "ĐORĐE",
+   "score": 1
+  },
+  {
+   "a": "maxi'カキク - 日本語",
+   "b": "日本語 - maxi'カキク",
+   "score": 1
+  },
+  {
+   "a": "οδος'ẞ_sofabed.müller.K",
+   "b": "οδος'ẞ_sofabed.müller.K",
+   "score": 1
+  },
+  {
+   "a": "sofabed",
+   "b": "sofabed",
+   "score": 1
+  },
+  {
+   "a": "sofa",
+   "b": "sofa",
+   "score": 1
+  },
+  {
+   "a": "MULLER, ISTANBUL",
+   "b": "ISTANBUL MULLER,",
+   "score": 1
+  },
+  {
+   "a": "müller_lodz",
+   "b": "müller_lodz",
+   "score": 1
+  },
+  {
+   "a": "Å.서울'kinderwagen",
+   "b": "Å.서울'kinderwagen",
+   "score": 1
+  },
+  {
+   "a": "ǖ'CYBEX",
+   "b": "ǖ'CYBEX",
+   "score": 1
+  },
+  {
+   "a": "wheel.strasse  abc'sofa",
+   "b": "priam_LODZ_æble, strasse",
+   "score": 0.25
+  },
+  {
+   "a": "στρατος",
+   "b": "στρατος",
+   "score": 1
+  },
+  {
+   "a": "ÅNGSTRÖM  ガギグ, priam_K",
+   "b": "한국 hub Йогурт",
+   "score": 0
+  },
+  {
+   "a": "wheel STRASSE, Йогурт_한국",
+   "b": "Йогурт_한국 STRASSE, wheel",
+   "score": 1
+  },
+  {
+   "a": "wheel 한국'cybex, 日本語, ΣΤΡΑΤΟΣ",
+   "b": "ΣΤΡΑΤΟΣ 日本語, 한국'cybex, wheel",
+   "score": 1
+  },
+  {
+   "a": "orsted",
+   "b": "WHEEL 𠮷𠮷 - TABLE - fox",
+   "score": 0
+  },
+  {
+   "a": "K_muller - İstanbul 😀",
+   "b": "😀 İstanbul - K_muller",
+   "score": 1
+  },
+  {
+   "a": "crème ORSTED - 한국어 - wheels  Ế",
+   "b": "Ế wheels - 한국어 - ORSTED crème",
+   "score": 1
+  },
+  {
+   "a": "fox",
+   "b": "Å - fox",
+   "score": 0.8333333333333333
+  },
+  {
+   "a": "große, 😀",
+   "b": "K-generation_x 𠮷𠮷, 한국",
+   "score": 0
+  },
+  {
+   "a": "иогурт",
+   "b": "иогурт",
+   "score": 1
+  },
+  {
+   "a": "στρατος_lamp 𠮷𠮷x_maxi",
+   "b": "bugaboo CAFÉ'テスト",
+   "score": 0
+  },
+  {
+   "a": "서울시 - 서울시",
+   "b": "K - priam'ЙОГУРТ, K",
+   "score": 0
+  },
+  {
+   "a": "στρατος.οδος  łódź_ñandú",
+   "b": "ЙОГУРТ sofabed, große",
+   "score": 0
+  },
+  {
+   "a": "abcde",
+   "b": "maxi'chair",
+   "score": 0
+  },
+  {
+   "a": "テスト'maxi  ørsted'ΟΔΟΣ",
+   "b": "wheel ÅNGSTRÖM'ﬁne  lodz, 𠮷𠮷",
+   "score": 0
+  },
+  {
+   "a": "K",
+   "b": "K",
+   "score": 1
+  },
+  {
+   "a": "chair fame",
+   "b": "LAMP.PRIAM",
+   "score": 0
+  },
+  {
+   "a": "😀",
+   "b": "ЁЛКА Йогурт",
+   "score": 0
+  },
+  {
+   "a": "𠮷𠮷",
+   "b": "sofabed_120 X - ǖ-ABCDE",
+   "score": 0
+  },
+  {
+   "a": "đorđe",
+   "b": "đorđe",
+   "score": 1
+  },
+  {
+   "a": "Ёлка.cosi_istanbul",
+   "b": "kinderwagen, ΟΔΟΣ, MAXI'cosi kinderwagen",
+   "score": 0.30952380952380953
+  },
+  {
+   "a": "Ёлка.sofa  서울시  cosi'fox",
+   "b": "CAFÉ.generation",
+   "score": 0
+  },
+  {
+   "a": "Ёлка, 서울시",
+   "b": "한국어.İstanbul  wheels-𠮷𠮷",
+   "score": 0
+  },
+  {
+   "a": "item-1.ABCDE abc.한국.CYBEX",
+   "b": "abc.한국.CYBEX item-1.ABCDE",
+   "score": 1
+  },
+  {
+   "a": "strasse.한국어 wheels.chair ΣΤΡΆΤΟΣ",
+   "b": "ΣΤΡΆΤΟΣ wheels.chair strasse.한국어",
+   "score": 1
+  },
+  {
+   "a": "maxi-cosi-orsted.abc",
+   "b": "maxi-cosi-orsted.abc",
+   "score": 1
+  },
+  {
+   "a": "cafe'LAMP",
+   "b": "muller - strasse  ΣΤΡΆΤΟΣ, café",
+   "score": 0.41666666666666663
+  },
+  {
+   "a": "οδος_cybex, SOFABED x - GROSSE",
+   "b": "GROSSE - x SOFABED οδος_cybex,",
+   "score": 1
+  },
+  {
+   "a": "ΣΤΡΑΤΟΣ  ẞ ガギグ'istanbul-İstanbul",
+   "b": "😀'maxi",
+   "score": 0
+  },
+  {
+   "a": "SOFABED - große_ĐORĐE",
+   "b": "ﬁne_istanbul  ΣΤΡΆΤΟΣ.cosi'ørsted",
+   "score": 0
+  },
+  {
+   "a": "서울.x-STRASSE  ØRSTED_οδος",
+   "b": "ØRSTED_οδος 서울.x-STRASSE",
+   "score": 1
+  },
+  {
+   "a": "x, crème.K'120 5",
+   "b": "5 crème.K'120 x,",
+   "score": 1
+  },
+  {
+   "a": "ガギグ  Ёлка - generation",
+   "b": "CYBEX",
+   "score": 0
+  },
+  {
+   "a": "fox  𠮷𠮷",
+   "b": "table, ΟΔΟΣ",
+   "score": 0
+  },
+  {
+   "a": "æble.abcd, иогурт 한국 иогурт",
+   "b": "ørsted - lamp - Å",
+   "score": 0
+  },
+  {
+   "a": "müller",
+   "b": "müller",
+   "score": 1
+  },
+  {
+   "a": "елка-müller_日本語 - CRÈME",
+   "b": "CRÈME - елка-müller_日本語",
+   "score": 1
+  },
+  {
+   "a": "maxi'ế-table  abcd_ế",
+   "b": "abcd_ế maxi'ế-table",
+   "score": 1
+  },
+  {
+   "a": "ﬁne.æble - ABCDE_Ёлка - 𠮷𠮷x",
+   "b": "ЁЛКА lodz, елка",
+   "score": 0.39285714285714285
+  },
+  {
+   "a": "abc-new  Ǖ_łódź, müller",
+   "b": "müller Ǖ_łódź, abc-new",
+   "score": 1
+  },
+  {
+   "a": "SOFABED-müller, lamp, CRÈME",
+   "b": "ABCDE - 한국어_ΣΤΡΆΤΟΣ - hub",
+   "score": 0
+  },
+  {
+   "a": "sofabed_kinderwagen",
+   "b": "generation",
+   "score": 0
+  },
+  {
+   "a": "ﬁne",
+   "b": "maxi, table  łódź",
+   "score": 0
+  },
+  {
+   "a": "ΣΤΡΆΤΟΣ'Йогурт - 𠮷𠮷x",
+   "b": "GENERATION",
+   "score": 0
+  },
+  {
+   "a": "kinderwagen'CYBEX",
+   "b": "new",
+   "score": 0
+  },
+  {
+   "a": "COSI'ǖ",
+   "b": "wheels",
+   "score": 0
+  },
+  {
+   "a": "maxi, æble-abcde, 𠮷𠮷X  FINE",
+   "b": "ΣΤΡΆΤΟΣ_𠮷𠮷x lodz müller",
+   "score": 0.2361111111111111
+  },
+  {
+   "a": "item-1-fox  5_ﬁne  hub",
+   "b": "ørsted_ﬁne",
+   "score": 0.375
+  },
+  {
+   "a": "ørsted 서울-łódź generation, ŁÓDŹ",
+   "b": "ŁÓDŹ generation, 서울-łódź ørsted",
+   "score": 1
+  },
+  {
+   "a": "😀'SOFABED.ΣΤΡΆΤΟΣ",
+   "b": "😀'SOFABED.ΣΤΡΆΤΟΣ",
+   "score": 1
+  },
+  {
+   "a": "new.ИОГУРТ",
+   "b": "ガギグ  ΣΤΡΑΤΟΣ'ế - TABLE  ΟΔΟΣ",
+   "score": 0
+  },
+  {
+   "a": "MAXI_ørsted 😀, MULLER",
+   "b": "MULLER 😀, MAXI_ørsted",
+   "score": 1
+  },
+  {
+   "a": "wheel sofa",
+   "b": "sofa wheel",
+   "score": 1
+  },
+  {
+   "a": "MÜLLER_서울시  ǖ  table",
+   "b": "ΟΔΟΣ",
+   "score": 0
+  },
+  {
+   "a": "στρατος στρατος  ǖ",
+   "b": "abcd.ﬁne",
+   "score": 0
+  },
+  {
+   "a": "İstanbul",
+   "b": "İstanbul",
+   "score": 1
+  },
+  {
+   "a": "120'æble",
+   "b": "120'æble",
+   "score": 1
+  },
+  {
+   "a": "한국어_𠮷𠮷X_abcde, fame",
+   "b": "café.KINDERWAGEN",
+   "score": 0
+  },
+  {
+   "a": "ÅNGSTRÖM - PRIAM",
+   "b": "PRIAM - ÅNGSTRÖM",
+   "score": 1
+  },
+  {
+   "a": "στρατος",
+   "b": "στρατος",
+   "score": 1
+  },
+  {
+   "a": "x_lodz'ABCD",
+   "b": "priam",
+   "score": 0
+  },
+  {
+   "a": "lamp_SOFABED  елка",
+   "b": "chair_ẞ, fame",
+   "score": 0
+  },
+  {
+   "a": "ABC'K-lodz",
+   "b": "table-елка  Å-İstanbul'カキク",
+   "score": 0
+  },
+  {
+   "a": "ñandú, Йогурт.서울 new",
+   "b": "new Йогурт.서울 ñandú,",
+   "score": 1
+  },
+  {
+   "a": "ñandú",
+   "b": "ñandú",
+   "score": 1
+  },
+  {
+   "a": "đorđe'𠮷𠮷x, ЙОГУРТ",
+   "b": "ЙОГУРТ đorđe'𠮷𠮷x,",
+   "score": 1
+  },
+  {
+   "a": "lodz - ẞ-ΣΤΡΆΤΟΣ.café-𠮷𠮷",
+   "b": "łódź",
+   "score": 0
+  },
+  {
+   "a": "item-1  wheels",
+   "b": "ế",
+   "score": 0
+  },
+  {
+   "a": "bugaboo-5",
+   "b": "bugaboo-5",
+   "score": 1
+  },
+  {
+   "a": "hub'ế",
+   "b": "한국",
+   "score": 0
+  },
+  {
+   "a": "한국 - x  große, 日本語 한국",
+   "b": "BUGABOO, PRIAM - müller-서울시 fame",
+   "score": 0
+  },
+  {
+   "a": "😀  große テスト",
+   "b": "テスト große 😀",
+   "score": 1
+  },
+  {
+   "a": "ガギグ crème",
+   "b": "crème ガギグ",
+   "score": 1
+  },
+  {
+   "a": "5, crème",
+   "b": "crème 5,",
+   "score": 1
+  },
+  {
+   "a": "𠮷𠮷",
+   "b": "𠮷𠮷",
+   "score": 1
+  },
+  {
+   "a": "Ёлка.istanbul",
+   "b": "𠮷𠮷x straße-ǖ  İstanbul_ΟΔΟΣ",
+   "score": 0.39285714285714285
+  },
+  {
+   "a": "ĐORĐE ørsted.hub  CHAIR - strasse",
+   "b": "strasse - CHAIR ørsted.hub ĐORĐE",
+   "score": 1
+  },
+  {
+   "a": "lamp - hub - 𠮷𠮷_fox",
+   "b": "𠮷𠮷_fox - hub - lamp",
+   "score": 1
+  },
+  {
+   "a": "ế_fame Å abc CHAIR",
+   "b": "CHAIR abc Å ế_fame",
+   "score": 1
+  },
+  {
+   "a": "kinderwagen_lamp-abcd Йогурт - ẞ",
+   "b": "ẞ - Йогурт kinderwagen_lamp-abcd",
+   "score": 1
+  },
+  {
+   "a": "æble, ångström - crème",
+   "b": "kinderwagen",
+   "score": 0
+  },
+  {
+   "a": "иогурт Йогурт.ǖ",
+   "b": "Йогурт.ǖ иогурт",
+   "score": 1
+  },
+  {
+   "a": "WHEELS, 𠮷𠮷x",
+   "b": "서울.orsted",
+   "score": 0
+  },
+  {
+   "a": "στρατος CAFÉ.カキク - chair'K",
+   "b": "chair'K - CAFÉ.カキク στρατος",
+   "score": 1
+  },
+  {
+   "a": "maxi.x.ẞ_ﬁne",
+   "b": "maxi.x.ẞ_ﬁne",
+   "score": 1
+  },
+  {
+   "a": "lamp ǖ, fox_ÑANDÚ",
+   "b": "x_müller",
+   "score": 0
+  },
+  {
+   "a": "new'ΣΤΡΑΤΟΣ wheels, sofabed",
+   "b": "sofabed wheels, new'ΣΤΡΑΤΟΣ",
+   "score": 1
+  },
+  {
+   "a": "SOFA'łódź - 5'priam straße",
+   "b": "hub, 5-generation  đorđe_ẞ",
+   "score": 0.2
+  },
+  {
+   "a": "K",
+   "b": "K",
+   "score": 1
+  },
+  {
+   "a": "LAMP",
+   "b": "οδος maxi",
+   "score": 0
+  },
+  {
+   "a": "maxi, bugaboo-müller - LODZ.한국어",
+   "b": "cybex.5-テスト.café",
+   "score": 0
+  },
+  {
+   "a": "ﬁne",
+   "b": "PRIAM-ΟΔΟΣ, chair-テスト - ΣΤΡΆΤΟΣ",
+   "score": 0
+  },
+  {
+   "a": "große - fox",
+   "b": "table.SOFA-maxi",
+   "score": 0
+  },
+  {
+   "a": "한국어_ế_FINE",
+   "b": "한국어_ế_FINE",
+   "score": 1
+  },
+  {
+   "a": "abc - fox - cybex.ẞ",
+   "b": "cybex.ẞ - fox - abc",
+   "score": 1
+  },
+  {
+   "a": "café.ΟΔΟΣ-sofa - Ǖ",
+   "b": "𠮷𠮷x_LAMP  ИОГУРТ - 서울",
+   "score": 0
+  },
+  {
+   "a": "GENERATION  cosi.crème иогурт",
+   "b": "GENERATION Å-SOFABED",
+   "score": 0.30952380952380953
+  },
+  {
+   "a": "στρατος_hub",
+   "b": "😀  æble'ИОГУРТ'æble - crème",
+   "score": 0
+  },
+  {
+   "a": "K'ŁÓDŹ - Ёлка - 120",
+   "b": "orsted_Ёлка",
+   "score": 0.41666666666666663
+  },
+  {
+   "a": "Ёлка.kinderwagen.table.fame",
+   "b": "æble_서울시",
+   "score": 0
+  },
+  {
+   "a": "FAME  한국어 muller-ガギグ",
+   "b": "muller-ガギグ 한국어 FAME",
+   "score": 1
+  },
+  {
+   "a": "Å-fox  x - MAXI",
+   "b": "MAXI - x Å-fox",
+   "score": 1
+  },
+  {
+   "a": "cosi  иогурт'İstanbul - ﬁne",
+   "b": "서울시  οδος lodz",
+   "score": 0
+  },
+  {
+   "a": "ẞ  οδος, wheel",
+   "b": "wheel οδος, ẞ",
+   "score": 1
+  },
+  {
+   "a": "ế_MÜLLER.maxi'abcd_FOX",
+   "b": "120 đorđe  ЙОГУРТ 120 - sofabed",
+   "score": 0
+  },
+  {
+   "a": "sofa, Йогурт.FOX  cafe BUGABOO",
+   "b": "BUGABOO cafe Йогурт.FOX sofa,",
+   "score": 1
+  },
+  {
+   "a": "müller kinderwagen_cybex.hub",
+   "b": "kinderwagen_cybex.hub müller",
+   "score": 1
+  },
+  {
+   "a": "ế_istanbul - maxi_ørsted",
+   "b": "STRASSE-item-1-new",
+   "score": 0
+  },
+  {
+   "a": "ÆBLE, ガギグ.cafe - sofa_łódź",
+   "b": "ΟΔΟΣ.cafe",
+   "score": 0.39285714285714285
+  },
+  {
+   "a": "テスト 한국어",
+   "b": "한국어 テスト",
+   "score": 1
+  },
+  {
+   "a": "CAFÉ",
+   "b": "fox 서울'sofa_Йогурт",
+   "score": 0
+  },
+  {
+   "a": "chair",
+   "b": "cosi-カキク, 한국  ЙОГУРТ - generation",
+   "score": 0
+  },
+  {
+   "a": "strasse",
+   "b": "strasse",
+   "score": 1
+  },
+  {
+   "a": "ΣΤΡΆΤΟΣ",
+   "b": "LODZ K_K  cafe",
+   "score": 0
+  },
+  {
+   "a": "crème",
+   "b": "crème",
+   "score": 1
+  },
+  {
+   "a": "𠮷𠮷'lamp.カキク",
+   "b": "𠮷𠮷'lamp.カキク",
+   "score": 1
+  },
+  {
+   "a": "lodz'strasse  서울시.ﬁne",
+   "b": "서울시.ﬁne lodz'strasse",
+   "score": 1
+  },
+  {
+   "a": "テスト-ЕЛКА'カキク.οδος - ǖ",
+   "b": "ǖ - テスト-ЕЛКА'カキク.οδος",
+   "score": 1
+  },
+  {
+   "a": "strasse.Йогурт",
+   "b": "strasse.Йогурт",
+   "score": 1
+  },
+  {
+   "a": "😀-bugaboo cybex",
+   "b": "한국어",
+   "score": 0
+  },
+  {
+   "a": "abcde",
+   "b": "abcde",
+   "score": 1
+  },
+  {
+   "a": "æble στρατος.한국",
+   "b": "Ёлка'strasse İstanbul",
+   "score": 0
+  },
+  {
+   "a": "đorđe",
+   "b": "đorđe",
+   "score": 1
+  },
+  {
+   "a": "K",
+   "b": "K",
+   "score": 1
+  },
+  {
+   "a": "müller",
+   "b": "5, 한국.İstanbul",
+   "score": 0
+  },
+  {
+   "a": "𠮷𠮷.𠮷𠮷X.İstanbul.K",
+   "b": "𠮷𠮷.𠮷𠮷X.İstanbul.K",
+   "score": 1
+  },
+  {
+   "a": "new đorđe",
+   "b": "한국",
+   "score": 0
+  },
+  {
+   "a": "table, cafe.cafe",
+   "b": "cafe.cafe table,",
+   "score": 1
+  },
+  {
+   "a": "ØRSTED - lodz.cybex",
+   "b": "カキク, 𠮷𠮷x, 한국 İstanbul.cybex",
+   "score": 0.29166666666666663
+  },
+  {
+   "a": "ΣΤΡΑΤΟΣ_chair",
+   "b": "ΣΤΡΑΤΟΣ_chair",
+   "score": 1
+  },
+  {
+   "a": "𠮷𠮷X  5'abcde wheels",
+   "b": "müller  æble_ΟΔΟΣ.K",
+   "score": 0
+  }
+ ],
+ "embeds": [
+  {
+   "id": "x0",
+   "brand": "ñandú'ガギグ",
+   "product": "😀 - X"
+  },
+  {
+   "id": "x1",
+   "brand": "bugaboo",
+   "product": "kinderwagen.abcde"
+  },
+  {
+   "id": "x2",
+   "brand": "ΟΔΟΣ",
+   "product": "wheels, テスト-Ёлка"
+  },
+  {
+   "id": "x3",
+   "brand": "ﬁne",
+   "product": "orsted 120-bugaboo  ΣΤΡΆΤΟΣ"
+  },
+  {
+   "id": "x4",
+   "brand": "abc'ñandú'łódź łódź",
+   "product": "5  ế"
+  },
+  {
+   "id": "x5",
+   "brand": "ǖ.ガギグ",
+   "product": "æble - café'120'maxi, MAXI"
+  },
+  {
+   "id": "x6",
+   "brand": "maxi - ế_서울시  fame, 𠮷𠮷",
+   "product": "table'wheels ガギグ, ΟΔΟΣ"
+  },
+  {
+   "id": "x7",
+   "brand": "æble_hub'ế priam, KINDERWAGEN",
+   "product": "straße - istanbul.한국  fox"
+  },
+  {
+   "id": "x8",
+   "brand": "orsted",
+   "product": "generation  straße"
+  },
+  {
+   "id": "x9",
+   "brand": "ΟΔΟΣ_日本語.wheels.İstanbul, ẞ",
+   "product": "x"
+  },
+  {
+   "id": "x10",
+   "brand": "서울시",
+   "product": "ẞ  テスト"
+  },
+  {
+   "id": "x11",
+   "brand": "đorđe-đorđe, 서울시.fox",
+   "product": "müller  ế_SOFA  łódź"
+  },
+  {
+   "id": "x12",
+   "brand": "日本語-ẞ",
+   "product": "x.hub - item-1, COSI_abcde"
+  },
+  {
+   "id": "x13",
+   "brand": "cafe chair  Ёлка",
+   "product": "ΣΤΡΆΤΟΣ - WHEEL.ΣΤΡΆΤΟΣ"
+  },
+  {
+   "id": "x14",
+   "brand": "Ǖ-X, đorđe 𠮷𠮷",
+   "product": "łódź, FAME"
+  },
+  {
+   "id": "x15",
+   "brand": "cosi",
+   "product": "lodz_lodz  ñandú, cosi"
+  },
+  {
+   "id": "x16",
+   "brand": "generation, ガギグ-café",
+   "product": "cosi_cosi ŁÓDŹ'ǖ"
+  },
+  {
+   "id": "x17",
+   "brand": "strasse'lodz-abcde'abcde",
+   "product": "서울시.café ΟΔΟΣ-CYBEX"
+  },
+  {
+   "id": "x18",
+   "brand": "cosi  æble.łódź",
+   "product": "abcde_ABC lodz, sofabed_𠮷𠮷x"
+  },
+  {
+   "id": "x19",
+   "brand": "crème, strasse.Å - 𠮷𠮷x-ガギグ",
+   "product": "5.στρατος"
+  },
+  {
+   "id": "x20",
+   "brand": "Ёлка - cafe.x",
+   "product": "Å.FOX'ΟΔΟΣ table 서울시"
+  },
+  {
+   "id": "x21",
+   "brand": "chair orsted, ế-sofabed'テスト",
+   "product": "müller, 日本語"
+  },
+  {
+   "id": "x22",
+   "brand": "CAFÉ - abcde'𠮷𠮷",
+   "product": "kinderwagen.ЕЛКА-new.fox-ΣΤΡΆΤΟΣ"
+  },
+  {
+   "id": "x23",
+   "brand": "CAFE æble lodz",
+   "product": "Йогурт  lamp - FINE.item-1 - sofabed"
+  },
+  {
+   "id": "x24",
+   "brand": "日本語",
+   "product": "😀, ﬁne"
+  },
+  {
+   "id": "x25",
+   "brand": "wheels  istanbul-müller - 120 fame",
+   "product": "ế-ΣΤΡΆΤΟΣ"
+  },
+  {
+   "id": "x26",
+   "brand": "sofabed æble'한국어'Å",
+   "product": "sofabed abcd"
+  },
+  {
+   "id": "x27",
+   "brand": "lamp",
+   "product": "đorđe-wheels  ΟΔΟΣ - müller"
+  },
+  {
+   "id": "x28",
+   "brand": "カキク - abcd, straße'ế",
+   "product": "sofabed - abc"
+  },
+  {
+   "id": "x29",
+   "brand": "カキク, ΣΤΡΆΤΟΣ.ångström - στρατος.FINE",
+   "product": "서울시"
+  },
+  {
+   "id": "x30",
+   "brand": "müller-muller 日本語, kinderwagen",
+   "product": "lodz, maxi'æble"
+  },
+  {
+   "id": "x31",
+   "brand": "lodz",
+   "product": "sofabed, große"
+  },
+  {
+   "id": "x32",
+   "brand": "ΣΤΡΆΤΟΣ-120, ΟΔΟΣ",
+   "product": "иогурт'lodz-テスト"
+  },
+  {
+   "id": "x33",
+   "brand": "𠮷𠮷.ABCD.ΟΔΟΣ  x",
+   "product": "abc  SOFA-елка'ΟΔΟΣ"
+  },
+  {
+   "id": "x34",
+   "brand": "MULLER-orsted",
+   "product": "ÆBLE  chair.Å"
+  },
+  {
+   "id": "x35",
+   "brand": "Å_елка_bugaboo, テスト - cafe",
+   "product": "ñandú'서울'sofa"
+  },
+  {
+   "id": "x36",
+   "brand": "서울",
+   "product": "ЙОГУРТ"
+  },
+  {
+   "id": "x37",
+   "brand": "テスト_CAFÉ'ガギグ café",
+   "product": "hub, crème - café-𠮷𠮷_strasse"
+  },
+  {
+   "id": "x38",
+   "brand": "日本語, crème'FOX-στρατος",
+   "product": "WHEEL_fox, 5'Ёлка"
+  },
+  {
+   "id": "x39",
+   "brand": "fox-abc - 한국",
+   "product": "MULLER straße"
+  },
+  {
+   "id": "x40",
+   "brand": "müller-ångström chair",
+   "product": "ABCD"
+  },
+  {
+   "id": "x41",
+   "brand": "テスト  COSI, strasse, cafe-ﬁne",
+   "product": "maxi.sofa.cybex orsted"
+  },
+  {
+   "id": "x42",
+   "brand": "strasse_cosi'ångström - hub",
+   "product": "generation"
+  },
+  {
+   "id": "x43",
+   "brand": "FINE  ЁЛКА'strasse_chair",
+   "product": "한국어 - KINDERWAGEN-crème"
+  },
+  {
+   "id": "x44",
+   "brand": "hub  иогурт.ångström.đorđe",
+   "product": "große  maxi-ñandú"
+  },
+  {
+   "id": "x45",
+   "brand": "елка",
+   "product": "Ёлка, иогурт"
+  },
+  {
+   "id": "x46",
+   "brand": "hub.LAMP - NEW, ñandú - Йогурт",
+   "product": "sofabed-한국  Å"
+  },
+  {
+   "id": "x47",
+   "brand": "日本語",
+   "product": "café - ITEM-1  x đorđe"
+  },
+  {
+   "id": "x48",
+   "brand": "한국어.иогурт",
+   "product": "στρατος_lamp sofa"
+  },
+  {
+   "id": "x49",
+   "brand": "ISTANBUL - wheel'ÅNGSTRÖM_große, fox",
+   "product": "CYBEX ørsted - FOX"
+  },
+  {
+   "id": "x50",
+   "brand": "abc_new ガギグ",
+   "product": "maxi, ǖ_æble-Ế - sofabed"
+  },
+  {
+   "id": "x51",
+   "brand": "ångström-strasse.STRASSE",
+   "product": "한국"
+  },
+  {
+   "id": "x52",
+   "brand": "ørsted, 서울'ế.ΟΔΟΣ",
+   "product": "иогурт"
+  },
+  {
+   "id": "x53",
+   "brand": "ế_Йогурт",
+   "product": "new  😀-ЙОГУРТ-große"
+  },
+  {
+   "id": "x54",
+   "brand": "sofabed, 日本語, οδος",
+   "product": "abcde-ǖ'generation'5 priam"
+  },
+  {
+   "id": "x55",
+   "brand": "иогурт.MÜLLER-LODZ.table",
+   "product": "ǖ'lodz łódź"
+  },
+  {
+   "id": "x56",
+   "brand": "στρατος  한국어'new  maxi",
+   "product": "istanbul - lamp.한국어, στρατος  chair"
+  },
+  {
+   "id": "x57",
+   "brand": "strasse_ångström - ångström CRÈME-İstanbul",
+   "product": "abcde.カキク WHEELS ÅNGSTRÖM æble"
+  },
+  {
+   "id": "x58",
+   "brand": "ﬁne",
+   "product": "ΣΤΡΆΤΟΣ.FAME, abcde.ΟΔΟΣ"
+  },
+  {
+   "id": "x59",
+   "brand": "テスト - café",
+   "product": "Ǖ, cybex"
+  }
+ ],
+ "bestMatch": [
+  {
+   "target": {
+    "title": "CAFE æble lodz Йогурт  lamp - FINE.item-1 - sofabed",
+    "vendor": ""
+   },
+   "bestId": "x23",
+   "rankedIds": [
+    "x23"
+   ]
+  },
+  {
+   "target": {
+    "title": "SOFABED ÆBLE'한국어'Å SOFABED ABCD",
+    "vendor": "sofabed æble'한국어'Å"
+   },
+   "bestId": "x26",
+   "rankedIds": [
+    "x26",
+    "x46"
+   ]
+  },
+  {
+   "target": {
+    "title": "иогурт.MÜLLER-LODZ.table ǖ'lodz łódź",
+    "vendor": ""
+   },
+   "bestId": "x55",
+   "rankedIds": [
+    "x55"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ǖ-X, đorđe 𠮷𠮷 łódź, FAME",
+    "vendor": ""
+   },
+   "bestId": "x14",
+   "rankedIds": [
+    "x14"
+   ]
+  },
+  {
+   "target": {
+    "title": "FINE  ЁЛКА'strasse_chair 한국어 - KINDERWAGEN-crème",
+    "vendor": ""
+   },
+   "bestId": "x43",
+   "rankedIds": [
+    "x43"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ǖ'LODZ ŁÓDŹ",
+    "vendor": ""
+   },
+   "bestId": "x55",
+   "rankedIds": [
+    "x55"
+   ]
+  },
+  {
+   "target": {
+    "title": "カキク - abcd, straße'ế sofabed - abc",
+    "vendor": ""
+   },
+   "bestId": "x28",
+   "rankedIds": [
+    "x28",
+    "x26"
+   ]
+  },
+  {
+   "target": {
+    "title": "서울시.café ΟΔΟΣ-CYBEX",
+    "vendor": ""
+   },
+   "bestId": "x17",
+   "rankedIds": [
+    "x17",
+    "x29"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ёлка, иогурт",
+    "vendor": ""
+   },
+   "bestId": "x45",
+   "rankedIds": [
+    "x45",
+    "x36",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "chair orsted, ế-sofabed'テスト müller, 日本語",
+    "vendor": "chair orsted, ế-sofabed'テスト"
+   },
+   "bestId": "x21",
+   "rankedIds": [
+    "x21"
+   ]
+  },
+  {
+   "target": {
+    "title": "new  😀-ЙОГУРТ-große",
+    "vendor": ""
+   },
+   "bestId": "x53",
+   "rankedIds": [
+    "x53",
+    "x36",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "bugaboo kinderwagen.abcde",
+    "vendor": ""
+   },
+   "bestId": "x1",
+   "rankedIds": [
+    "x1",
+    "x40"
+   ]
+  },
+  {
+   "target": {
+    "title": "😀 - X",
+    "vendor": "ñandú'ガギグ"
+   },
+   "bestId": "x0",
+   "rankedIds": [
+    "x0",
+    "x9"
+   ]
+  },
+  {
+   "target": {
+    "title": "maxi, ǖ_æble-Ế - sofabed",
+    "vendor": ""
+   },
+   "bestId": "x50",
+   "rankedIds": [
+    "x50"
+   ]
+  },
+  {
+   "target": {
+    "title": "wheels, テスト-Ёлка",
+    "vendor": "ΟΔΟΣ"
+   },
+   "bestId": "x2",
+   "rankedIds": [
+    "x2"
+   ]
+  },
+  {
+   "target": {
+    "title": "SOFABED, 日本語, ΟΔΟΣ ABCDE-Ǖ'GENERATION'5 PRIAM",
+    "vendor": ""
+   },
+   "bestId": "x54",
+   "rankedIds": [
+    "x54",
+    "x26"
+   ]
+  },
+  {
+   "target": {
+    "title": "abcde.カキク WHEELS ÅNGSTRÖM æble",
+    "vendor": ""
+   },
+   "bestId": "x57",
+   "rankedIds": [
+    "x57"
+   ]
+  },
+  {
+   "target": {
+    "title": "café - ITEM-1  x đorđe",
+    "vendor": ""
+   },
+   "bestId": "x47",
+   "rankedIds": [
+    "x47"
+   ]
+  },
+  {
+   "target": {
+    "title": "maxi, ǖ_æble-Ế - sofabed",
+    "vendor": ""
+   },
+   "bestId": "x50",
+   "rankedIds": [
+    "x50"
+   ]
+  },
+  {
+   "target": {
+    "title": "sofabed æble'한국어'Å sofabed abcd",
+    "vendor": ""
+   },
+   "bestId": "x26",
+   "rankedIds": [
+    "x26",
+    "x46"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ǖ-X, đorđe 𠮷𠮷 łódź, FAME",
+    "vendor": "Ǖ-X, đorđe 𠮷𠮷"
+   },
+   "bestId": "x14",
+   "rankedIds": [
+    "x14"
+   ]
+  },
+  {
+   "target": {
+    "title": "日本語-ẞ x.hub - item-1, COSI_abcde",
+    "vendor": ""
+   },
+   "bestId": "x12",
+   "rankedIds": [
+    "x12"
+   ]
+  },
+  {
+   "target": {
+    "title": "müller, 日本語",
+    "vendor": ""
+   },
+   "bestId": "x21",
+   "rankedIds": [
+    "x21",
+    "x30"
+   ]
+  },
+  {
+   "target": {
+    "title": "wheels, テスト-Ёлка",
+    "vendor": "ΟΔΟΣ"
+   },
+   "bestId": "x2",
+   "rankedIds": [
+    "x2"
+   ]
+  },
+  {
+   "target": {
+    "title": "Å_ЕЛКА_BUGABOO, テスト - CAFE ÑANDÚ'서울'SOFA",
+    "vendor": "Å_елка_bugaboo, テスト - cafe"
+   },
+   "bestId": "x35",
+   "rankedIds": [
+    "x35"
+   ]
+  },
+  {
+   "target": {
+    "title": "ABC  SOFA-ЕЛКА'ΟΔΟΣ",
+    "vendor": "𠮷𠮷.ABCD.ΟΔΟΣ  x"
+   },
+   "bestId": "x33",
+   "rankedIds": [
+    "x33",
+    "x28"
+   ]
+  },
+  {
+   "target": {
+    "title": "ISTANBUL - wheel'ÅNGSTRÖM_große, fox CYBEX ørsted - FOX",
+    "vendor": ""
+   },
+   "bestId": "x49",
+   "rankedIds": [
+    "x49"
+   ]
+  },
+  {
+   "target": {
+    "title": "서울시.café ΟΔΟΣ-CYBEX",
+    "vendor": ""
+   },
+   "bestId": "x17",
+   "rankedIds": [
+    "x17",
+    "x29"
+   ]
+  },
+  {
+   "target": {
+    "title": "bugaboo kinderwagen.abcde",
+    "vendor": ""
+   },
+   "bestId": "x1",
+   "rankedIds": [
+    "x1",
+    "x40"
+   ]
+  },
+  {
+   "target": {
+    "title": "ﬁne ΣΤΡΆΤΟΣ.FAME, abcde.ΟΔΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x58",
+   "rankedIds": [
+    "x58"
+   ]
+  },
+  {
+   "target": {
+    "title": "hub  иогурт.ångström.đorđe große  maxi-ñandú",
+    "vendor": ""
+   },
+   "bestId": "x44",
+   "rankedIds": [
+    "x44"
+   ]
+  },
+  {
+   "target": {
+    "title": "иогурт",
+    "vendor": "ørsted, 서울'ế.ΟΔΟΣ"
+   },
+   "bestId": "x36",
+   "rankedIds": [
+    "x36",
+    "x52",
+    "x45",
+    "x32",
+    "x53"
+   ]
+  },
+  {
+   "target": {
+    "title": "café - ITEM-1  x đorđe",
+    "vendor": ""
+   },
+   "bestId": "x47",
+   "rankedIds": [
+    "x47"
+   ]
+  },
+  {
+   "target": {
+    "title": "łódź, FAME",
+    "vendor": "Ǖ-X, đorđe 𠮷𠮷"
+   },
+   "bestId": "x14",
+   "rankedIds": [
+    "x14"
+   ]
+  },
+  {
+   "target": {
+    "title": "abcde-ǖ'generation'5 priam",
+    "vendor": "sofabed, 日本語, οδος"
+   },
+   "bestId": "x54",
+   "rankedIds": [
+    "x54"
+   ]
+  },
+  {
+   "target": {
+    "title": "テスト  COSI, strasse, cafe-ﬁne maxi.sofa.cybex orsted",
+    "vendor": "テスト  COSI, strasse, cafe-ﬁne"
+   },
+   "bestId": "x41",
+   "rankedIds": [
+    "x41"
+   ]
+  },
+  {
+   "target": {
+    "title": "lodz, maxi'æble",
+    "vendor": ""
+   },
+   "bestId": "x30",
+   "rankedIds": [
+    "x30"
+   ]
+  },
+  {
+   "target": {
+    "title": "ångström-strasse.STRASSE 한국",
+    "vendor": ""
+   },
+   "bestId": "x51",
+   "rankedIds": [
+    "x51"
+   ]
+  },
+  {
+   "target": {
+    "title": "lodz, maxi'æble",
+    "vendor": ""
+   },
+   "bestId": "x30",
+   "rankedIds": [
+    "x30"
+   ]
+  },
+  {
+   "target": {
+    "title": "NEW  😀-ЙОГУРТ-GROSSE",
+    "vendor": ""
+   },
+   "bestId": "x36",
+   "rankedIds": [
+    "x36",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "müller  ế_SOFA  łódź",
+    "vendor": ""
+   },
+   "bestId": "x11",
+   "rankedIds": [
+    "x11"
+   ]
+  },
+  {
+   "target": {
+    "title": "x",
+    "vendor": ""
+   },
+   "bestId": "x0",
+   "rankedIds": [
+    "x0",
+    "x9"
+   ]
+  },
+  {
+   "target": {
+    "title": "x",
+    "vendor": ""
+   },
+   "bestId": "x0",
+   "rankedIds": [
+    "x0",
+    "x9"
+   ]
+  },
+  {
+   "target": {
+    "title": "FINE ΣΤΡΆΤΟΣ.FAME, ABCDE.ΟΔΟΣ",
+    "vendor": "ﬁne"
+   },
+   "bestId": "x58",
+   "rankedIds": [
+    "x58"
+   ]
+  },
+  {
+   "target": {
+    "title": "5.στρατος",
+    "vendor": ""
+   },
+   "bestId": "x19",
+   "rankedIds": [
+    "x19",
+    "x38"
+   ]
+  },
+  {
+   "target": {
+    "title": "5.ΣΤΡΑΤΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x19",
+   "rankedIds": [
+    "x19",
+    "x38"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ǖ, cybex",
+    "vendor": "テスト - café"
+   },
+   "bestId": "x59",
+   "rankedIds": [
+    "x59"
+   ]
+  },
+  {
+   "target": {
+    "title": "한국어.ИОГУРТ ΣΤΡΑΤΟΣ_LAMP SOFA",
+    "vendor": ""
+   },
+   "bestId": "x48",
+   "rankedIds": [
+    "x48",
+    "x46"
+   ]
+  },
+  {
+   "target": {
+    "title": "ΣΤΡΑΤΟΣ  한국어'NEW  MAXI ISTANBUL - LAMP.한국어, ΣΤΡΑΤΟΣ  CHAIR",
+    "vendor": "στρατος  한국어'new  maxi"
+   },
+   "bestId": "x56",
+   "rankedIds": [
+    "x56"
+   ]
+  },
+  {
+   "target": {
+    "title": "sofabed æble'한국어'Å sofabed abcd",
+    "vendor": "sofabed æble'한국어'Å"
+   },
+   "bestId": "x26",
+   "rankedIds": [
+    "x26",
+    "x46"
+   ]
+  },
+  {
+   "target": {
+    "title": "ABCD",
+    "vendor": "müller-ångström chair"
+   },
+   "bestId": "x40",
+   "rankedIds": [
+    "x40",
+    "x1",
+    "x26",
+    "x58"
+   ]
+  },
+  {
+   "target": {
+    "title": "hub  иогурт.ångström.đorđe große  maxi-ñandú",
+    "vendor": ""
+   },
+   "bestId": "x44",
+   "rankedIds": [
+    "x44"
+   ]
+  },
+  {
+   "target": {
+    "title": "日本語, crème'FOX-στρατος WHEEL_fox, 5'Ёлка",
+    "vendor": "日本語, crème'FOX-στρατος"
+   },
+   "bestId": "x38",
+   "rankedIds": [
+    "x38",
+    "x13",
+    "x19"
+   ]
+  },
+  {
+   "target": {
+    "title": "テスト_CAFÉ'ガギグ café hub, crème - café-𠮷𠮷_strasse",
+    "vendor": ""
+   },
+   "bestId": "x37",
+   "rankedIds": [
+    "x37"
+   ]
+  },
+  {
+   "target": {
+    "title": "иогурт'lodz-テスト",
+    "vendor": ""
+   },
+   "bestId": "x32",
+   "rankedIds": [
+    "x32",
+    "x36",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "서울 ЙОГУРТ",
+    "vendor": ""
+   },
+   "bestId": "x36",
+   "rankedIds": [
+    "x36",
+    "x29",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "한국어 - KINDERWAGEN-crème",
+    "vendor": "FINE  ЁЛКА'strasse_chair"
+   },
+   "bestId": "x43",
+   "rankedIds": [
+    "x43",
+    "x51"
+   ]
+  },
+  {
+   "target": {
+    "title": "ΣΤΡΆΤΟΣ.FAME, abcde.ΟΔΟΣ",
+    "vendor": "ﬁne"
+   },
+   "bestId": "x58",
+   "rankedIds": [
+    "x58",
+    "x40"
+   ]
+  },
+  {
+   "target": {
+    "title": "Å_елка_bugaboo, テスト - cafe ñandú'서울'sofa",
+    "vendor": "Å_елка_bugaboo, テスト - cafe"
+   },
+   "bestId": "x35",
+   "rankedIds": [
+    "x35"
+   ]
+  },
+  {
+   "target": {
+    "title": "ørsted, 서울'ế.ΟΔΟΣ иогурт",
+    "vendor": ""
+   },
+   "bestId": "x52",
+   "rankedIds": [
+    "x52",
+    "x36"
+   ]
+  },
+  {
+   "target": {
+    "title": "GENERATION  STRASSE",
+    "vendor": ""
+   },
+   "bestId": "x42",
+   "rankedIds": [
+    "x42"
+   ]
+  },
+  {
+   "target": {
+    "title": "hub  иогурт.ångström.đorđe große  maxi-ñandú",
+    "vendor": ""
+   },
+   "bestId": "x44",
+   "rankedIds": [
+    "x44"
+   ]
+  },
+  {
+   "target": {
+    "title": "иогурт'lodz-テスト",
+    "vendor": "ΣΤΡΆΤΟΣ-120, ΟΔΟΣ"
+   },
+   "bestId": "x32",
+   "rankedIds": [
+    "x32",
+    "x36",
+    "x52"
+   ]
+  },
+  {
+   "target": {
+    "title": "Å_елка_bugaboo, テスト - cafe ñandú'서울'sofa",
+    "vendor": "Å_елка_bugaboo, テスト - cafe"
+   },
+   "bestId": "x35",
+   "rankedIds": [
+    "x35"
+   ]
+  },
+  {
+   "target": {
+    "title": "generation",
+    "vendor": ""
+   },
+   "bestId": "x42",
+   "rankedIds": [
+    "x42",
+    "x8"
+   ]
+  },
+  {
+   "target": {
+    "title": "KINDERWAGEN.ЕЛКА-NEW.FOX-ΣΤΡΆΤΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x22",
+   "rankedIds": [
+    "x22"
+   ]
+  },
+  {
+   "target": {
+    "title": "テスト - café Ǖ, cybex",
+    "vendor": "テスト - café"
+   },
+   "bestId": "x59",
+   "rankedIds": [
+    "x59"
+   ]
+  },
+  {
+   "target": {
+    "title": "sofabed, große",
+    "vendor": "lodz"
+   },
+   "bestId": "x31",
+   "rankedIds": [
+    "x31"
+   ]
+  },
+  {
+   "target": {
+    "title": "bugaboo kinderwagen.abcde",
+    "vendor": "bugaboo"
+   },
+   "bestId": "x1",
+   "rankedIds": [
+    "x1",
+    "x40"
+   ]
+  },
+  {
+   "target": {
+    "title": "カキク, ΣΤΡΆΤΟΣ.ångström - στρατος.FINE 서울시",
+    "vendor": "カキク, ΣΤΡΆΤΟΣ.ångström - στρατος.FINE"
+   },
+   "bestId": "x29",
+   "rankedIds": [
+    "x29"
+   ]
+  },
+  {
+   "target": {
+    "title": "KINDERWAGEN.ЕЛКА-NEW.FOX-ΣΤΡΆΤΟΣ",
+    "vendor": "CAFÉ - abcde'𠮷𠮷"
+   },
+   "bestId": "x22",
+   "rankedIds": [
+    "x22"
+   ]
+  },
+  {
+   "target": {
+    "title": "Ǖ-X, đorđe 𠮷𠮷 łódź, FAME",
+    "vendor": ""
+   },
+   "bestId": "x14",
+   "rankedIds": [
+    "x14"
+   ]
+  },
+  {
+   "target": {
+    "title": "ЙОГУРТ",
+    "vendor": "서울"
+   },
+   "bestId": "x36",
+   "rankedIds": [
+    "x36",
+    "x52",
+    "x45",
+    "x32",
+    "x53"
+   ]
+  },
+  {
+   "target": {
+    "title": "ORSTED 120-BUGABOO  ΣΤΡΆΤΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x3",
+   "rankedIds": [
+    "x3"
+   ]
+  },
+  {
+   "target": {
+    "title": "FINE ORSTED 120-BUGABOO  ΣΤΡΆΤΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x3",
+   "rankedIds": [
+    "x3"
+   ]
+  },
+  {
+   "target": {
+    "title": "maxi - ế_서울시  fame, 𠮷𠮷 table'wheels ガギグ, ΟΔΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x6",
+   "rankedIds": [
+    "x6"
+   ]
+  },
+  {
+   "target": {
+    "title": "ΣΤΡΆΤΟΣ.FAME, ABCDE.ΟΔΟΣ",
+    "vendor": ""
+   },
+   "bestId": "x58",
+   "rankedIds": [
+    "x58",
+    "x40"
+   ]
+  },
+  {
+   "target": {
+    "title": "kinderwagen.ЕЛКА-new.fox-ΣΤΡΆΤΟΣ",
+    "vendor": "CAFÉ - abcde'𠮷𠮷"
+   },
+   "bestId": "x22",
+   "rankedIds": [
+    "x22"
+   ]
+  },
+  {
+   "target": {
+    "title": "sofabed æble'한국어'Å sofabed abcd",
+    "vendor": "sofabed æble'한국어'Å"
+   },
+   "bestId": "x26",
+   "rankedIds": [
+    "x26",
+    "x46"
+   ]
+  },
+  {
+   "target": {
+    "title": "ЙОГУРТ  LAMP - FINE.ITEM-1 - SOFABED",
+    "vendor": "CAFE æble lodz"
+   },
+   "bestId": "x23",
+   "rankedIds": [
+    "x23"
+   ]
+  }
+ ]
+}

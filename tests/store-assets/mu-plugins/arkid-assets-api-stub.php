@@ -36,6 +36,21 @@ add_filter(
 			return $preempt;
 		}
 
+		// Only reads are recorded. Answer a write the way ARkid answers a method it
+		// does not offer, instead of handing back the list.
+		if ( 'GET' !== strtoupper( (string) ( $args['method'] ?? 'GET' ) ) ) {
+			return array(
+				'headers'  => array( 'allow' => 'GET, HEAD' ),
+				'body'     => (string) wp_json_encode( array( 'errors' => array( 'method' => 'Allowed: GET, HEAD.' ) ) ),
+				'response' => array(
+					'code'    => 405,
+					'message' => 'Method Not Allowed',
+				),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		}
+
 		$path = (string) wp_parse_url( (string) $url, PHP_URL_PATH );
 		$id   = rawurldecode( substr( $path, strlen( '/api/ecom/embed' ) ) );
 		$id   = ltrim( $id, '/' );
@@ -44,7 +59,7 @@ add_filter(
 		if ( '' === $id ) {
 			$body = array( 'data' => $embeds );
 		} else {
-			$body   = array( 'error' => 'Not found' );
+			$body   = array( 'errors' => array( 'embed_id' => 'Not found.' ) );
 			$status = 404;
 			foreach ( $embeds as $embed ) {
 				if ( is_array( $embed ) && ( $embed['embed_id'] ?? null ) === $id ) {

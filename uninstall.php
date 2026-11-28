@@ -4,7 +4,9 @@
  * 0.2.x cache rows, and our scheduled actions.
  *
  * Per-product post meta is deliberately KEPT so that reinstalling restores every
- * product's viewer without re-picking it.
+ * product's viewer without re-picking it. The users' preferences for the viewers
+ * screen (its page size and hidden columns) are removed: they are only a way of
+ * looking at the screen.
  *
  * @package Arkid\CatalogueLink
  */
@@ -81,4 +83,10 @@ if ( is_multisite() ) {
 	} while ( $arkid_found === $arkid_batch_max );
 } else {
 	arkid_catalogue_link_uninstall_site();
+}
+
+// Screen Options of the viewers screen. Users and their meta are shared by every
+// site of a network, so this is done once and not per site.
+foreach ( array( 'arkid_viewers_per_page', 'managewoocommerce_page_arkid-viewerscolumnshidden' ) as $arkid_user_meta_key ) {
+	delete_metadata( 'user', 0, $arkid_user_meta_key, '', true );
 }

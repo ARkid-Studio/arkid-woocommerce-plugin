@@ -78,7 +78,7 @@ the repo in a dev container does all of this for you.
 
 ```text
 arkid-catalogue-link.php   entry point: header, constants, bootstrap, compat declarations
-uninstall.php              removes settings and scheduled jobs (keeps per-product choices)
+uninstall.php              removes settings, scheduled jobs and Screen Options choices (keeps per-product choices)
 includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Plugin.php               bootstrap
   PostMeta.php             per-product meta: registration, sanitisers, snapshot writes, link status

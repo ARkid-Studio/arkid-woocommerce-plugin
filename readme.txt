@@ -147,10 +147,11 @@ Yes. The viewer shows a small "3D by ARkid" credit that links to arkid.app. It i
 
 = What happens to my data if I uninstall? =
 
-The API key, the plugin's settings and its scheduled jobs are removed. The
-viewer chosen for each product is deliberately kept, so reinstalling restores
-every product's viewer without you re-picking them. On a multisite network this
-is done for every site.
+The API key, the plugin's settings and its scheduled jobs are removed, and so
+are the page size and column choices that users made in Screen Options on the
+viewers list. The viewer chosen for each product is deliberately kept, so
+reinstalling restores every product's viewer without you re-picking them. On a
+multisite network the settings and jobs are removed for every site.
 
 = Does it work with variable products? =
 

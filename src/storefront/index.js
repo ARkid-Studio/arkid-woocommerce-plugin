@@ -12,6 +12,11 @@
  * markup that exists.
  */
 
+/**
+ * Internal dependencies
+ */
+import { isAllowedEmbedUrl as isAllowedHostUrl } from '../shared/viewer-url';
+
 /* eslint-disable @typescript-eslint/no-use-before-define -- Function declarations are hoisted; ordering reflects call flow. */
 export const DIALOG_ID = 'arkid-catalogue-link__dialog';
 export const TRIGGER_SELECTOR = '.arkid-catalogue-link__trigger';
@@ -21,7 +26,8 @@ let lastTrigger = null;
 /**
  * Whether `url` may be loaded as a viewer: an absolute https URL on a host the
  * server allows. The list is the one PHP's IframeFactory uses, handed over in
- * `arkidCatalogueLinkStorefront.allowedHosts`.
+ * `arkidCatalogueLinkStorefront.allowedHosts`; the check itself is shared with
+ * the admin preview (see `src/shared/viewer-url.js`).
  *
  * The URL comes from a `data-embed-url` attribute, and attributes are page
  * content, not a trusted channel: WordPress lets users without
@@ -36,30 +42,10 @@ let lastTrigger = null;
  */
 export function isAllowedEmbedUrl(url) {
 	const config = window.arkidCatalogueLinkStorefront;
-	const hosts =
-		config && Array.isArray(config.allowedHosts) ? config.allowedHosts : [];
 
-	// Mirror the server, which accepts only a literal `https://` URL.
-	if (
-		typeof url !== 'string' ||
-		!url.startsWith('https://') ||
-		!hosts.length
-	) {
-		return false;
-	}
-
-	let host;
-	try {
-		host = new URL(url).hostname.toLowerCase();
-	} catch {
-		return false;
-	}
-
-	return hosts.some(
-		(allowed) =>
-			typeof allowed === 'string' &&
-			allowed !== '' &&
-			(host === allowed || host.endsWith(`.${allowed}`))
+	return isAllowedHostUrl(
+		url,
+		config && Array.isArray(config.allowedHosts) ? config.allowedHosts : []
 	);
 }
 

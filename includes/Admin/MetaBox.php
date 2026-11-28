@@ -10,12 +10,15 @@ declare( strict_types = 1 );
 namespace Arkid\CatalogueLink\Admin;
 
 use Arkid\CatalogueLink\Api\ClientFactory;
+use Arkid\CatalogueLink\Api\EmbedDto;
 use Arkid\CatalogueLink\Cron\RefreshEmbeds;
+use Arkid\CatalogueLink\Frontend\IframeFactory;
 use Arkid\CatalogueLink\Links\EmbedLookup;
 use Arkid\CatalogueLink\Links\LinkState;
 use Arkid\CatalogueLink\Links\Lookup;
 use Arkid\CatalogueLink\PostMeta;
 use Arkid\CatalogueLink\Settings\Options;
+use Arkid\CatalogueLink\Support\Url;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,11 +29,14 @@ class MetaBox {
 
 	private readonly EmbedLookup $lookup;
 
+	private readonly IframeFactory $iframes;
+
 	public function __construct(
 		private readonly Options $options,
 		ClientFactory $api
 	) {
-		$this->lookup = new EmbedLookup( $api );
+		$this->lookup  = new EmbedLookup( $api );
+		$this->iframes = new IframeFactory( $options );
 	}
 
 	public function register(): void {
@@ -67,6 +73,8 @@ class MetaBox {
 		}
 
 		$position_options = $this->position_choices();
+		$embed            = null !== $lookup ? $lookup->embed : null;
+		$preview          = $this->preview_attributes( $post->ID, $embed );
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 		?>
@@ -95,6 +103,14 @@ class MetaBox {
 				</select>
 				<button
 					type="button"
+					class="button-link arkid-catalogue-link__preview"
+					aria-haspopup="dialog"
+					<?php echo '' !== $preview ? $preview : 'hidden'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped attribute by attribute in preview_attributes(). ?>
+				>
+					<?php esc_html_e( 'Preview', 'arkid-catalogue-link' ); ?>
+				</button>
+				<button
+					type="button"
 					class="button-link arkid-catalogue-link__remove-viewer"
 					data-target="arkid_catalogue_link_embed_id"
 					<?php echo '' !== $current_id ? '' : 'hidden'; ?>
@@ -109,6 +125,11 @@ class MetaBox {
 					alt=""
 					style="max-width:200px;max-height:200px;width:auto;height:auto;border:1px solid #ddd;"
 				/>
+			</p>
+
+			<?php $dots = null !== $embed ? ColorDots::render( $embed ) : ''; ?>
+			<p class="arkid-catalogue-link__embed-colors" <?php echo '' !== $dots ? '' : 'hidden'; ?>>
+				<?php echo $dots; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in ColorDots. ?>
 			</p>
 
 			<p>
@@ -134,6 +155,29 @@ class MetaBox {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * The data attributes of the Preview button for the product's viewer, or ''
+	 * when there is nothing to preview.
+	 *
+	 * The live answer is used when there is one; otherwise the address stored
+	 * with the product, which is what the storefront shows. Either way the
+	 * address goes through the same host check as the storefront's.
+	 */
+	private function preview_attributes( int $post_id, ?EmbedDto $embed ): string {
+		$url = $this->iframes->viewer_url( null !== $embed ? $embed->embed_url : PostMeta::embed_url( $post_id ) );
+		if ( '' === $url ) {
+			return '';
+		}
+
+		return sprintf(
+			'data-embed-url="%1$s" data-product-name="%2$s" data-edit-url="%3$s" data-analytics-url="%4$s"',
+			esc_url( $url ),
+			esc_attr( null !== $embed ? trim( $embed->brand_name . ' ' . $embed->product_name ) : wp_strip_all_tags( get_the_title( $post_id ) ) ),
+			esc_url( null !== $embed ? Url::https( $embed->edit_url ) : '' ),
+			esc_url( null !== $embed ? Url::https( $embed->analytics_url ) : '' )
+		);
 	}
 
 	/**

@@ -414,4 +414,96 @@ final class MetaBoxTest extends TestCase {
 		$this->assertSame( 'new-222', PostMeta::embed_id( $product_id ), 'The choice is kept for the retry.' );
 		$this->assertSame( '', PostMeta::status( $product_id ), 'An API key problem says nothing about the viewer.' );
 	}
+
+	// ---- Preview button and colour dots ------------------------------------
+
+	/**
+	 * @param array<string, mixed> $extra
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function viewer_with_colours( array $extra = array() ): array {
+		return array_merge(
+			$this->embed_payload( 'abc-123' ),
+			array(
+				'brand_name'    => 'Felix',
+				'product_name'  => 'Learning Tower',
+				'edit_url'      => 'https://catalogue.arkid.app/configure/edit/abc',
+				'analytics_url' => 'https://catalogue.arkid.app/analytics/abc',
+				'colors'        => array(
+					array( 'variant_id' => 'v1', 'name' => 'Copper', 'rgb' => '#b55f39', 'enabled' => true ),
+					array( 'variant_id' => 'v2', 'name' => 'Graphite', 'rgb' => '#929498', 'enabled' => false ),
+				),
+			),
+			$extra
+		);
+	}
+
+	public function test_the_box_offers_a_preview_of_the_selected_viewer(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http( '/api/ecom/embed/', $this->viewer_with_colours() );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertMatchesRegularExpression( '/<button[^>]*arkid-catalogue-link__preview[^>]*data-embed-url="https:\/\/catalogue\.arkid\.app\/e\/abc-123\?source=woocommerce"/', $html );
+		$this->assertStringContainsString( 'data-product-name="Felix Learning Tower"', $html );
+		$this->assertStringContainsString( 'data-edit-url="https://catalogue.arkid.app/configure/edit/abc"', $html );
+		$this->assertStringContainsString( 'data-analytics-url="https://catalogue.arkid.app/analytics/abc"', $html );
+		$this->assertStringContainsString( 'aria-haspopup="dialog"', $html );
+	}
+
+	public function test_without_a_viewer_there_is_nothing_to_preview(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertMatchesRegularExpression( '/<button[^>]*arkid-catalogue-link__preview[^>]*\bhidden\b/', $html );
+		$this->assertStringNotContainsString( 'data-embed-url', $html );
+	}
+
+	/**
+	 * What the storefront shows is what is stored with the product; that is what
+	 * is previewed when ARkid cannot be asked.
+	 */
+	public function test_when_arkid_is_unreachable_the_stored_viewer_is_previewed_under_the_product_name(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', '', 'https://catalogue.arkid.app/e/abc-123' );
+		wp_update_post( array( 'ID' => $product_id, 'post_title' => 'Shop Chair' ) );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'data-embed-url="https://catalogue.arkid.app/e/abc-123?source=woocommerce"', $html );
+		$this->assertStringContainsString( 'data-product-name="Shop Chair"', $html );
+		$this->assertStringContainsString( 'data-edit-url=""', $html );
+	}
+
+	public function test_a_stored_address_outside_the_arkid_hosts_is_not_previewed(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', '', 'https://evil.example/e/abc-123' );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringNotContainsString( 'data-embed-url', $html );
+	}
+
+	public function test_the_colours_of_the_selected_viewer_are_shown_under_its_image(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http( '/api/ecom/embed/', $this->viewer_with_colours() );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'aria-label="Copper: shown"', $html );
+		$this->assertStringContainsString( 'aria-label="Graphite: hidden"', $html );
+		$this->assertDoesNotMatchRegularExpression( '/arkid-catalogue-link__embed-colors"[^>]*\bhidden\b/', $html );
+	}
+
+	public function test_no_colours_are_shown_when_the_viewer_cannot_be_asked_about(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringNotContainsString( 'arkid-catalogue-link__dot', $html );
+		$this->assertMatchesRegularExpression( '/arkid-catalogue-link__embed-colors"[^>]*\bhidden\b/', $html );
+	}
 }

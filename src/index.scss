@@ -19,9 +19,11 @@
 		}
 	}
 
-	.arkid-catalogue-link__remove-viewer {
+	.arkid-catalogue-link__remove-viewer,
+	.arkid-catalogue-link__preview {
 		display: inline-block;
 		margin-block-start: 0.25em;
+		margin-inline-end: 1em;
 		font-size: 0.85em;
 
 		// The browser hides [hidden] with `display: none` from its own
@@ -31,9 +33,123 @@
 			display: none;
 		}
 	}
+
+	.arkid-catalogue-link__embed-colors {
+		margin: 0;
+	}
+}
+
+// The colours of a viewer: the viewers table, the product meta box and the
+// picker's results. A colour the viewer shows is a filled dot; one it hides
+// keeps its colour and is struck through, with a grey edge so that the stripe
+// stays visible on a light colour.
+.arkid-catalogue-link__dots {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	vertical-align: middle;
+}
+
+.arkid-catalogue-link__dot {
+	box-sizing: border-box;
+	inline-size: 18px;
+	block-size: 18px;
+	border: 1px solid #c3c4c7;
+	border-radius: 50%;
+	background: var(--arkid-dot, #dcdcde);
+
+	&.is-hidden {
+		background:
+			linear-gradient(to top right, transparent calc(50% - 3px), rgb(0 0 0 / 25%) calc(50% - 3px), rgb(0 0 0 / 25%) calc(50% - 2px), #fff calc(50% - 2px), #fff calc(50% + 2px), rgb(0 0 0 / 25%) calc(50% + 2px), rgb(0 0 0 / 25%) calc(50% + 3px), transparent calc(50% + 3px)),
+			var(--arkid-dot, #dcdcde);
+	}
+
+	// Windows high contrast replaces colours; keep the dot's own, which is the
+	// information, and give it an edge the system can draw.
+	@media (forced-colors: active) {
+		forced-color-adjust: none;
+		border-color: CanvasText;
+	}
+}
+
+// One row of the picker's results: the label, then the colours.
+.arkid-catalogue-link__result {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75em;
 }
 
 .arkid-catalogue-link__viewers {
+
+	.arkid-catalogue-link__thumb {
+		display: block;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	.arkid-catalogue-link__thumb-image {
+		display: block;
+		inline-size: 48px;
+		block-size: 48px;
+		border-radius: 4px;
+		object-fit: cover;
+	}
+
+	// The names open the preview: they are buttons that read as the table's links.
+	.arkid-catalogue-link__preview {
+		text-align: start;
+
+		&.button-link {
+			font-weight: inherit;
+		}
+	}
+
+	.arkid-catalogue-link__products {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	// The product is not published, so it does not show the viewer yet.
+	.arkid-catalogue-link__state {
+		color: #50575e;
+
+		&::before {
+			content: "— ";
+		}
+	}
+
+	// On a phone the table keeps the cells that come before the product (the
+	// thumbnail and the number) beside its name, as WordPress does with a post
+	// list's thumbnail. They need no heading of their own there.
+	@media (max-width: 782px) {
+
+		.column-image::before,
+		.column-row_number::before {
+			content: none !important; // Beats core's `attr(data-colname)`.
+		}
+	}
+
+	// Numbers line up on their last digit. Only on the wide table: the narrow
+	// one labels each value with its heading, and text there starts at the edge.
+	@media (min-width: 783px) {
+
+		.column-image {
+			inline-size: 60px;
+		}
+
+		.column-row_number {
+			inline-size: 3.5em;
+		}
+
+		.column-interactions,
+		.column-views {
+			text-align: end;
+		}
+	}
 
 	.arkid-catalogue-link__type-badge {
 		display: inline-block;
@@ -50,4 +166,98 @@
 
 .arkid-catalogue-link__reveal {
 	margin-inline-start: 0.5em;
+}
+
+// The preview of a viewer in wp-admin. A native <dialog>: showModal() traps
+// focus and closes on Escape; this is only how it looks.
+.arkid-catalogue-link__admin-dialog {
+	box-sizing: border-box;
+	inline-size: min(960px, calc(100vw - 32px));
+	max-inline-size: none;
+	max-block-size: calc(100vh - 32px);
+	padding: 0;
+	border: 0;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+	box-shadow: 0 3px 30px rgb(0 0 0 / 35%);
+	overflow: hidden;
+
+	&::backdrop {
+		background: rgb(0 0 0 / 65%);
+	}
+}
+
+.arkid-catalogue-link__admin-dialog-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1em;
+	padding: 8px 8px 8px 16px;
+	border-block-end: 1px solid #dcdcde;
+}
+
+.arkid-catalogue-link__admin-dialog-title {
+	margin: 0;
+	font-size: 1.1em;
+	line-height: 1.4;
+}
+
+.arkid-catalogue-link__admin-dialog-dismiss {
+	padding: 4px;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	background: transparent;
+	color: #50575e;
+	line-height: 1;
+	cursor: pointer;
+
+	&:hover {
+		color: #d63638;
+	}
+
+	&:focus-visible {
+		outline: 2px solid #2271b1;
+		outline-offset: 1px;
+	}
+}
+
+.arkid-catalogue-link__admin-dialog-body {
+	position: relative;
+	background: #f0f0f1;
+}
+
+// Shown until the viewer's frame has loaded, and announced as a status.
+.arkid-catalogue-link__admin-dialog-status {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	margin: 0;
+	color: #50575e;
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.arkid-catalogue-link__admin-dialog-viewer {
+	position: relative;
+	display: block;
+	inline-size: 100%;
+	block-size: min(60vh, 540px);
+	border: 0;
+}
+
+.arkid-catalogue-link__admin-dialog-footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 12px 16px;
+	border-block-start: 1px solid #dcdcde;
+
+	.button[hidden] {
+		display: none;
+	}
 }

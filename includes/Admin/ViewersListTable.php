@@ -602,8 +602,10 @@ class ViewersListTable extends \WP_List_Table {
 	 * A time as the date it is on this site, "3 hours ago" when `$relative`, and
 	 * the exact date and time as a tooltip.
 	 *
-	 * ARkid writes its times in UTC without saying so; see ApiTime. A value that
-	 * is not a time is shown as it came.
+	 * ARkid writes its times in UTC without saying so; see ApiTime. A date with no
+	 * time of day names a day and not an instant, so it is shown as that day: moved
+	 * into the site's zone it would read as the day before on a site west of UTC. A
+	 * value that is not a time is shown as it came.
 	 */
 	private function time_html( string $stamp, bool $relative ): string {
 		$time = ApiTime::parse( $stamp );
@@ -617,8 +619,11 @@ class ViewersListTable extends \WP_List_Table {
 		$time_format = is_string( $time_format ) && '' !== $time_format ? $time_format : 'H:i';
 
 		$has_time = ApiTime::has_time( $stamp );
-		$exact    = wp_date( $has_time ? $date_format . ' ' . $time_format : $date_format, $time );
-		$exact    = false === $exact ? $stamp : $exact;
+		// ApiTime reads a date alone as midnight UTC, so UTC is the zone that
+		// gives its day back; null is the site's zone.
+		$zone  = $has_time ? null : new \DateTimeZone( 'UTC' );
+		$exact = wp_date( $has_time ? $date_format . ' ' . $time_format : $date_format, $time, $zone );
+		$exact = false === $exact ? $stamp : $exact;
 
 		if ( $relative && $has_time && $time <= time() ) {
 			$text = sprintf(
@@ -627,12 +632,12 @@ class ViewersListTable extends \WP_List_Table {
 				human_time_diff( $time )
 			);
 		} else {
-			$text = (string) wp_date( $date_format, $time );
+			$text = (string) wp_date( $date_format, $time, $zone );
 		}
 
 		return sprintf(
 			'<time datetime="%1$s" title="%2$s">%3$s</time>',
-			esc_attr( gmdate( 'c', $time ) ),
+			esc_attr( gmdate( $has_time ? 'c' : 'Y-m-d', $time ) ),
 			esc_attr( $exact ),
 			esc_html( $text )
 		);

@@ -126,7 +126,11 @@ call is made once per request.
   `date.timezone`, `UTC`), so `Support\ApiTime` reads a time without a zone as
   UTC and shows it in the site's time zone, as "3 hours ago" with the exact
   time as the tooltip. Treat that as an assumption to confirm with ARkid: if the
-  zone were different, the relative times would be off by that difference.
+  zone were different, the relative times would be off by that difference. A
+  date with no time of day (`2026-01-01`) names a day, not an instant, and is
+  shown as that day whatever the site's zone is; moved into a zone west of UTC
+  it would read as the day before. ARkid sends date-times, so this is for a
+  payload that does not.
 - **Screen Options.** WordPress handles the Screen Options form in
   `wp-admin/admin.php`, before the admin menu is built and before any `load-*`
   hook. The `set_screen_option_arkid_viewers_per_page` filter is therefore

@@ -537,6 +537,53 @@ final class ViewersTableTest extends TestCase {
 		$this->assertStringContainsString( '>' . wp_date( (string) get_option( 'date_format' ), (int) gmmktime( 0, 0, 0, 1, 1, 2026 ) ) . '<', $table->column_modified( $plain ) );
 	}
 
+	/**
+	 * "2026-01-01" names a day, not an instant. Moved into a zone west of UTC as if
+	 * it were midnight UTC, it would read as December 31.
+	 *
+	 * @dataProvider site_zones
+	 */
+	public function test_a_date_alone_is_the_same_day_in_whatever_zone_the_site_is( string $zone ): void {
+		update_option( 'timezone_string', $zone );
+		update_option( 'date_format', 'Y-m-d' );
+		$embed = $this->embed( 1, array( 'created' => '2026-01-01', 'modified' => '2026-01-01' ) );
+		$table = $this->table( array( $embed ) );
+
+		foreach ( array( $table->column_created( $embed ), $table->column_modified( $embed ) ) as $html ) {
+			$this->assertStringContainsString( '>2026-01-01<', $html, $zone );
+			$this->assertStringContainsString( 'title="2026-01-01"', $html, $zone );
+			$this->assertStringContainsString( 'datetime="2026-01-01"', $html, $zone );
+		}
+	}
+
+	/**
+	 * A time of day is an instant, and is still moved to the site's zone: the
+	 * contrast with a date alone.
+	 */
+	public function test_a_time_of_day_is_still_shown_in_the_sites_zone(): void {
+		update_option( 'timezone_string', 'America/Los_Angeles' );
+		update_option( 'date_format', 'Y-m-d' );
+		update_option( 'time_format', 'H:i' );
+		$embed = $this->embed( 1, array( 'created' => '2026-01-01 02:00:00' ) );
+
+		$html = $this->table( array( $embed ) )->column_created( $embed );
+
+		$this->assertStringContainsString( '>2025-12-31<', $html );
+		$this->assertStringContainsString( 'title="2025-12-31 18:00"', $html );
+		$this->assertStringContainsString( 'datetime="2026-01-01T02:00:00+00:00"', $html );
+	}
+
+	/**
+	 * @return array<string, array{0: string}>
+	 */
+	public static function site_zones(): array {
+		return array(
+			'west of UTC' => array( 'America/Los_Angeles' ),
+			'UTC'         => array( 'UTC' ),
+			'east of UTC' => array( 'Pacific/Auckland' ),
+		);
+	}
+
 	public function test_a_time_from_the_future_is_shown_as_a_date_not_as_negative_time(): void {
 		$embed = $this->embed( 1, array( 'modified' => gmdate( 'Y-m-d H:i:s', time() + 5 * DAY_IN_SECONDS ) ) );
 

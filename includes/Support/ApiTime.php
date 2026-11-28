@@ -43,6 +43,10 @@ final class ApiTime {
 
 	/**
 	 * Whether the value says what time of day it is, and not only the date.
+	 *
+	 * `parse()` reads a date alone as midnight UTC. That is a way to order it, not
+	 * a moment: a caller that shows it shows the day as written, and does not move
+	 * it into another time zone, where it could become the day before.
 	 */
 	public static function has_time( string $value ): bool {
 		return 1 === preg_match( '/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/', trim( $value ) );

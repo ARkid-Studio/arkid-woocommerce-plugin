@@ -108,7 +108,11 @@ Sign in to ARkid Catalogue and open your developer settings at [catalogue.arkid.
 
 Check that WooCommerce's "Coming soon" mode is off: WooCommerce → Settings → Site visibility must be set to Live. While "Coming soon" is on, every storefront URL is replaced with a placeholder.
 
-If the product edit screen shows "This viewer has not been synced from ARkid yet", the plugin has a viewer selected but has not been able to fetch its details — usually a wrong API key or a temporary connection problem. The plugin retries in the background, and the viewer appears once the connection succeeds.
+The "ARkid Catalogue Link" box on the product edit screen says what is wrong with a selected viewer:
+
+* "This viewer no longer exists in your ARkid account" — ARkid does not have it (it was deleted, or your API key belongs to another account). It will not come back by itself unless you restore it in ARkid. Pick another viewer or remove it.
+* "This viewer has not been synced from ARkid yet" — the plugin has a viewer selected but has not been able to fetch its details, usually a wrong API key or a temporary connection problem. The plugin retries in the background, and the viewer appears once the connection succeeds.
+* "ARkid could not be reached, or it did not accept the API key, so this viewer could not be checked just now" — the product page keeps showing the last synced viewer. Check the API key under WooCommerce → Settings → Integration → ARkid Catalogue Link if it keeps happening.
 
 = Can I use this on a block theme? =
 
@@ -171,6 +175,7 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 * Fix: The "Button text" setting no longer claims to label the last-image modal button. It labels the standalone "Button only" trigger, as it always did.
 * Fix: The viewers list sorts by product and brand without regard to case or accents, and numbers in names by value, instead of putting every capital letter before every lower-case one.
 * Fix: The viewer picker search no longer misses non-ASCII names (for example German, Danish, Polish or Japanese brands) and matches every word of the query across brand, product and note, so "felix learning" finds "Felix - Learning Tower".
+* Fix: A viewer that was deleted in ARkid is no longer reported on the product edit screen as "not synced yet" with the promise that it will appear once the connection succeeds. The screen now says that the viewer no longer exists in your ARkid account, and tells that apart from ARkid being unreachable.
 * Tweak: The connection to ARkid can now also create and change viewers, and read the catalogue's products, the available environments and your viewing statistics. Nothing in this version sends any of that yet; it is the groundwork for managing viewers from WordPress.
 
 = 1.0.0 =

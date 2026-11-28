@@ -208,4 +208,210 @@ final class MetaBoxTest extends TestCase {
 
 		$this->assertStringContainsString( 'not been synced', $html );
 	}
+
+	/**
+	 * BF-UNSYNCED. The refresh job drops the snapshot of a viewer that ARkid
+	 * answers 404 for and keeps its id. The meta box then said "has not been
+	 * synced yet ... will appear once the connection succeeds", which never
+	 * happens for a viewer that is gone.
+	 */
+	public function test_a_viewer_deleted_in_arkid_is_reported_as_gone_not_as_unsynced(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'no longer exists in your ARkid account', $html );
+		$this->assertStringNotContainsString( 'not been synced', $html );
+		$this->assertStringNotContainsString( 'once the connection succeeds', $html );
+		$this->assertStringContainsString( 'notice-error', $html );
+	}
+
+	public function test_a_viewer_ARkid_cannot_be_asked_about_keeps_the_not_synced_warning_when_there_is_no_snapshot(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'abc-123' );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'not been synced', $html );
+		$this->assertStringNotContainsString( 'no longer exists', $html );
+	}
+
+	public function test_an_unreachable_arkid_is_said_so_where_the_viewer_is_still_shown(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'could not be checked', $html );
+		$this->assertStringContainsString( 'last synced viewer', $html );
+		$this->assertStringNotContainsString( 'no longer exists', $html );
+		$this->assertStringNotContainsString( 'not been synced', $html );
+		// The raw id stays visible so the merchant still sees what is attached.
+		$this->assertStringContainsString( '>abc-123<', preg_replace( '/\s+/', '', $html ) ?? '' );
+	}
+
+	public function test_a_rejected_api_key_reads_as_could_not_be_checked_not_as_a_deleted_viewer(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http_status( '/api/ecom/embed/', 401 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'could not be checked', $html );
+		$this->assertStringNotContainsString( 'no longer exists', $html );
+	}
+
+	public function test_a_healthy_viewer_shows_no_link_notice_at_all(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'abc-123' ) );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringNotContainsString( 'arkid-catalogue-link__link-notice', $html );
+		$this->assertStringContainsString( '#7 - ARkid - Test Chair', $html, 'The live label is shown.' );
+	}
+
+	public function test_no_viewer_means_no_request_and_no_notice(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertSame( array(), $this->http_calls );
+		$this->assertStringNotContainsString( 'arkid-catalogue-link__link-notice', $html );
+	}
+
+	/**
+	 * A viewer that has just been created or restored answers 200. A `missing`
+	 * left over from before must not be shown as missing, because the live
+	 * answer wins over the stored one.
+	 */
+	public function test_a_viewer_that_exists_now_is_never_shown_as_missing_because_of_an_old_status(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'back-777' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'back-777' ) );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringNotContainsString( 'no longer exists', $html );
+	}
+
+	public function test_the_stored_missing_status_is_shown_when_arkid_cannot_confirm_it(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'no longer exists in your ARkid account', $html );
+	}
+
+	public function test_the_missing_notice_offers_the_two_ways_out(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$html = $this->render( fn() => $this->metabox()->render( get_post( $product_id ) ) );
+
+		$this->assertStringContainsString( 'Pick another viewer or remove it', $html );
+		$this->assertStringContainsString( 'arkid-catalogue-link__remove-viewer', $html );
+	}
+
+	public function test_saving_a_viewer_that_does_not_exist_keeps_the_choice_and_flags_it_missing(): void {
+		$product_id = $this->make_product_with_embed( 'old-111', '', 'https://catalogue.arkid.app/e/old-111' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$this->post_a_save( $product_id, 'gone-404', 'below_product' );
+
+		$this->assertSame( 'gone-404', PostMeta::embed_id( $product_id ), 'The choice is kept so the merchant can see it.' );
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_url( $product_id ), 'Nothing of the previous viewer may render under the new id.' );
+		$this->assertSame( '', PostMeta::embed_image( $product_id ) );
+		$this->assertSame( 'below_product', PostMeta::position( $product_id ) );
+	}
+
+	public function test_saving_a_viewer_that_does_not_exist_queues_a_retry(): void {
+		$product_id = $this->make_product_with_embed( 'old-111' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$this->post_a_save( $product_id, 'gone-404' );
+
+		$this->assertTrue(
+			(bool) as_has_scheduled_action( 'arkid_catalogue_link_refresh_product', array( 'product_id' => $product_id ), 'arkid-catalogue-link' ),
+			'A viewer that was just created may not be visible to the API yet; the retry heals it.'
+		);
+	}
+
+	public function test_saving_a_viewer_that_vanished_drops_its_snapshot_even_when_it_is_the_same_id(): void {
+		$product_id = $this->make_product_with_embed( 'same-333', '', 'https://catalogue.arkid.app/e/same-333' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$this->post_a_save( $product_id, 'same-333' );
+
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_url( $product_id ), 'ARkid says it is gone, so it must stop rendering.' );
+	}
+
+	/**
+	 * A stale `missing` must never survive a re-link.
+	 */
+	public function test_picking_another_viewer_clears_the_missing_status(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'new-999', 'https://catalogue.arkid.app/e/new-999' ) );
+
+		$this->post_a_save( $product_id, 'new-999' );
+
+		$this->assertSame( '', PostMeta::status( $product_id ) );
+		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_STATUS ), 'The key is removed, not stored empty.' );
+		$this->assertSame( 'https://catalogue.arkid.app/e/new-999', PostMeta::embed_url( $product_id ) );
+	}
+
+	public function test_picking_another_viewer_while_arkid_is_down_does_not_inherit_the_old_status(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$this->post_a_save( $product_id, 'new-222' );
+
+		$this->assertSame( 'new-222', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( '', PostMeta::status( $product_id ), 'The old viewer\'s verdict says nothing about the new one.' );
+	}
+
+	public function test_resaving_the_same_viewer_while_arkid_is_down_keeps_what_was_known(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+
+		$this->post_a_save( $product_id, 'gone-404' );
+
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ) );
+	}
+
+	public function test_removing_the_viewer_clears_the_missing_status(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		update_post_meta( $product_id, PostMeta::KEY_EMBED_ID, 'gone-404' );
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, PostMeta::STATUS_MISSING );
+
+		$this->post_a_save( $product_id, '' );
+
+		$this->assertSame( '', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_STATUS ) );
+	}
+
+	public function test_a_rejected_key_on_save_is_not_a_missing_viewer(): void {
+		$product_id = (int) self::factory()->post->create( array( 'post_type' => 'product' ) );
+		$this->stub_http_status( '/api/ecom/embed/', 403 );
+
+		$this->post_a_save( $product_id, 'new-222' );
+
+		$this->assertSame( 'new-222', PostMeta::embed_id( $product_id ), 'The choice is kept for the retry.' );
+		$this->assertSame( '', PostMeta::status( $product_id ), 'An API key problem says nothing about the viewer.' );
+	}
 }

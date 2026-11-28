@@ -20,10 +20,8 @@ declare( strict_types = 1 );
 
 namespace Arkid\CatalogueLink\Cron;
 
-use Arkid\CatalogueLink\Api\ApiException;
-use Arkid\CatalogueLink\Api\AuthException;
 use Arkid\CatalogueLink\Api\ClientFactory;
-use Arkid\CatalogueLink\Api\NotFoundException;
+use Arkid\CatalogueLink\Links\EmbedLookup;
 use Arkid\CatalogueLink\PostMeta;
 
 defined( 'ABSPATH' ) || exit;
@@ -41,7 +39,11 @@ class RefreshEmbeds {
 	/** Products dispatched per sweep action. */
 	private const PAGE_SIZE = 100;
 
-	public function __construct( private readonly ClientFactory $api ) {}
+	private readonly EmbedLookup $lookup;
+
+	public function __construct( private readonly ClientFactory $api ) {
+		$this->lookup = new EmbedLookup( $api );
+	}
 
 	public function register(): void {
 		add_action( 'init', array( $this, 'maybe_schedule' ), 20 );
@@ -109,34 +111,30 @@ class RefreshEmbeds {
 	 * Worker: refresh exactly one product.
 	 */
 	public function refresh_product( int $product_id ): void {
-		$client = $this->api->create();
-		if ( null === $client ) {
-			return;
-		}
-
 		$embed_id = PostMeta::embed_id( $product_id );
 		if ( '' === $embed_id ) {
 			return;
 		}
 
-		try {
-			$embed = $client->get_embed( $embed_id );
-		} catch ( NotFoundException $e ) {
-			// Removed upstream: stop rendering it, but keep the selection so
-			// the merchant can still see what was chosen and so it heals by
-			// itself if ARkid restores the embed.
-			delete_post_meta( $product_id, PostMeta::KEY_EMBED_URL );
-			delete_post_meta( $product_id, PostMeta::KEY_EMBED_IMAGE );
-			return;
-		} catch ( AuthException $e ) {
-			// A bad key must not be allowed to wipe every snapshot in the store.
-			return;
-		} catch ( ApiException $e ) {
-			// Transient failure; the next sweep retries.
+		$lookup = $this->lookup->find( $embed_id );
+
+		if ( $lookup->is_not_found() ) {
+			// Removed upstream: stop rendering it and say why, but keep the
+			// selection so the merchant can see what was chosen and so it heals
+			// by itself if ARkid restores the embed.
+			PostMeta::mark_missing( $product_id );
 			return;
 		}
 
-		PostMeta::write( $product_id, $embed, PostMeta::position( $product_id ) );
+		if ( null === $lookup->embed ) {
+			// No key, a bad key or a transient failure. A bad key must not be
+			// allowed to wipe every snapshot in the store, and the next sweep
+			// retries the rest. None of it says anything about the viewer, so
+			// nothing is touched.
+			return;
+		}
+
+		PostMeta::write( $product_id, $lookup->embed, PostMeta::position( $product_id ) );
 	}
 
 	/**

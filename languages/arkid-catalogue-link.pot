@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-28T07:21:08+00:00\n"
+"POT-Creation-Date: 2026-11-28T08:39:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: arkid-catalogue-link\n"
 
 #. Plugin Name of the plugin
 #: arkid-catalogue-link.php
-#: includes/Admin/MetaBox.php:38
+#: includes/Admin/MetaBox.php:44
 #: includes/Admin/Notices.php:42
 #: includes/Settings/IntegrationSettings.php:38
 #: build/blocks/embed/index.js:1
@@ -56,7 +56,7 @@ msgid "ARkid Catalogue Link requires %s to be installed and active."
 msgstr ""
 
 #: includes/Admin/Assets.php:73
-#: includes/Admin/MetaBox.php:76
+#: includes/Admin/MetaBox.php:83
 msgid "Search viewers…"
 msgstr ""
 
@@ -82,56 +82,64 @@ msgstr ""
 msgid "Could not load viewers."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:65
-msgid "This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds."
-msgstr ""
-
-#: includes/Admin/MetaBox.php:70
+#: includes/Admin/MetaBox.php:77
 #: build/blocks/embed/index.js:1
 msgid "Viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:81
+#: includes/Admin/MetaBox.php:89
 msgid "— No viewer —"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:94
+#: includes/Admin/MetaBox.php:102
 msgid "Remove viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:108
+#: includes/Admin/MetaBox.php:116
 msgid "Position override"
 msgstr ""
 
 #. translators: %s: site default position label
-#: includes/Admin/MetaBox.php:122
+#: includes/Admin/MetaBox.php:130
 #, php-format
 msgid "Site default: %s"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:136
+#: includes/Admin/MetaBox.php:167
+msgid "This viewer no longer exists in your ARkid account. Pick another viewer or remove it."
+msgstr ""
+
+#: includes/Admin/MetaBox.php:170
+msgid "This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds."
+msgstr ""
+
+#: includes/Admin/MetaBox.php:173
+msgid "ARkid could not be reached, or it did not accept the API key, so this viewer could not be checked just now. The product page keeps showing the last synced viewer."
+msgstr ""
+
+#: includes/Admin/MetaBox.php:189
 msgid "Use site default"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:137
+#: includes/Admin/MetaBox.php:190
 msgid "First image (gallery)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:138
+#: includes/Admin/MetaBox.php:191
 msgid "Last image (gallery, modal)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:139
+#: includes/Admin/MetaBox.php:192
 #: includes/Settings/IntegrationSettings.php:65
 msgid "Above product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:140
+#: includes/Admin/MetaBox.php:193
 #: includes/Settings/IntegrationSettings.php:66
 msgid "Below product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:141
+#: includes/Admin/MetaBox.php:194
 msgid "Button only"
 msgstr ""
 

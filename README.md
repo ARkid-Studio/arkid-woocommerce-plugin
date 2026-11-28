@@ -77,8 +77,9 @@ arkid-catalogue-link.php   entry point: header, constants, bootstrap, compat dec
 uninstall.php              removes settings and scheduled jobs (keeps per-product choices)
 includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Plugin.php               bootstrap
-  PostMeta.php             per-product meta: registration, sanitisers, snapshot writes
-  Api/                     HTTP client, DTO, exceptions
+  PostMeta.php             per-product meta: registration, sanitisers, snapshot writes, link status
+  Api/                     HTTP client (read and write), DTOs, input rules, exceptions
+  Links/                   state of a product's link (none, linked, not synced, missing), live lookup
   Settings/                WooCommerce integration tab + typed options
   Admin/                   meta box, viewer list, notices, assets
   Frontend/                renderer, iframe builder, modal, consent, gallery injectors
@@ -93,7 +94,7 @@ tests/
   phpunit/                 unit tests (Brain Monkey)
   integration/             real WordPress + WooCommerce
   e2e/                     Playwright
-  fixtures/api/            recorded ARkid API responses
+  fixtures/api/            ARkid API responses: recorded (viewers) and modelled (products, environments, stats)
 bin/                       release zip, test provisioning, dev-stack wrapper
 docs/                      architecture notes
 readme.txt                 the WordPress.org plugin readme

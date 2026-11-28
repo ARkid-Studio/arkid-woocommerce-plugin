@@ -128,6 +128,7 @@ function bindEmbedPicker() {
 		// button (programmatic `val('').trigger('change')`), and any
 		// future call site.
 		$select.on('change', () => {
+			syncLinkNotice($select);
 			const value = $select.val();
 			if (value === '' || value === null) {
 				updatePreview($select, '');
@@ -135,6 +136,24 @@ function bindEmbedPicker() {
 			}
 		});
 	});
+}
+
+/**
+ * The notice above the picker describes the viewer that is saved. Once the
+ * selection differs from it the notice is about something else, so hide it;
+ * it comes back if the merchant goes back to the saved viewer.
+ *
+ * @param {Object} $select The picker, as a jQuery object.
+ */
+function syncLinkNotice($select) {
+	const notice = $select
+		.closest('.arkid-catalogue-link__metabox')
+		.find('.arkid-catalogue-link__link-notice')[0];
+	if (!notice) {
+		return;
+	}
+	const saved = $select.attr('data-saved-id') || '';
+	notice.hidden = String($select.val() || '') !== saved;
 }
 
 function updatePreview($select, imageUrl) {

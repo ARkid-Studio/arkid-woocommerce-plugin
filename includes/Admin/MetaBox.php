@@ -10,8 +10,10 @@ declare( strict_types = 1 );
 namespace Arkid\CatalogueLink\Admin;
 
 use Arkid\CatalogueLink\Api\ClientFactory;
-use Arkid\CatalogueLink\Api\EmbedDto;
 use Arkid\CatalogueLink\Cron\RefreshEmbeds;
+use Arkid\CatalogueLink\Links\EmbedLookup;
+use Arkid\CatalogueLink\Links\LinkState;
+use Arkid\CatalogueLink\Links\Lookup;
 use Arkid\CatalogueLink\PostMeta;
 use Arkid\CatalogueLink\Settings\Options;
 
@@ -22,10 +24,14 @@ class MetaBox {
 	private const NONCE_ACTION = 'arkid_catalogue_link_metabox';
 	private const NONCE_NAME   = 'arkid_catalogue_link_metabox_nonce';
 
+	private readonly EmbedLookup $lookup;
+
 	public function __construct(
 		private readonly Options $options,
-		private readonly ClientFactory $api
-	) {}
+		ClientFactory $api
+	) {
+		$this->lookup = new EmbedLookup( $api );
+	}
 
 	public function register(): void {
 		add_action( 'add_meta_boxes_product', array( $this, 'add_meta_box' ) );
@@ -47,9 +53,14 @@ class MetaBox {
 		$current_id       = PostMeta::embed_id( $post->ID );
 		$current_position = PostMeta::position( $post->ID );
 		$current_image    = PostMeta::embed_image( $post->ID );
-		$current_label    = $this->resolve_current_label( $current_id );
 
-		// Fall back to the raw id when ARkid is unreachable, so the merchant can
+		// One live question per render. The answer decides both the label and
+		// which notice, if any, is shown.
+		$lookup        = '' === $current_id ? null : $this->lookup->find( $current_id );
+		$state         = $this->state( $post->ID, $lookup );
+		$current_label = null !== $lookup && null !== $lookup->embed ? $lookup->embed->picker_label() : '';
+
+		// Fall back to the raw id when ARkid could not say, so the merchant can
 		// still see which viewer is attached.
 		if ( '' !== $current_id && '' === $current_label ) {
 			$current_label = $current_id;
@@ -60,11 +71,7 @@ class MetaBox {
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 		?>
 		<div class="arkid-catalogue-link__metabox">
-			<?php if ( '' !== $current_id && '' === PostMeta::embed_url( $post->ID ) ) : ?>
-				<p class="notice notice-warning notice-alt" style="padding:6px 10px;">
-					<?php esc_html_e( 'This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds.', 'arkid-catalogue-link' ); ?>
-				</p>
-			<?php endif; ?>
+			<?php $this->render_link_notice( $state, null !== $lookup && $lookup->is_unavailable() ); ?>
 			<p>
 				<label for="arkid_catalogue_link_embed_id">
 					<strong><?php esc_html_e( 'Viewer', 'arkid-catalogue-link' ); ?></strong>
@@ -76,6 +83,7 @@ class MetaBox {
 					data-placeholder="<?php esc_attr_e( 'Search viewers…', 'arkid-catalogue-link' ); ?>"
 					data-rest-url="<?php echo esc_attr( rest_url( 'arkid-catalogue-link/v1/embeds' ) ); ?>"
 					data-rest-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"
+					data-saved-id="<?php echo esc_attr( $current_id ); ?>"
 					style="width:100%;"
 				>
 					<option value=""><?php esc_html_e( '— No viewer —', 'arkid-catalogue-link' ); ?></option>
@@ -125,6 +133,51 @@ class MetaBox {
 				?>
 			</p>
 		</div>
+		<?php
+	}
+
+	/**
+	 * The state of the link as the editor should see it.
+	 *
+	 * What ARkid says now beats what was stored: a viewer it has is not missing,
+	 * whatever an earlier refresh left behind, and one it answers 404 for is
+	 * missing even before the refresh has noticed. When ARkid could not say, the
+	 * stored state stands.
+	 */
+	private function state( int $post_id, ?Lookup $lookup ): LinkState {
+		if ( null === $lookup || $lookup->is_unavailable() ) {
+			return LinkState::of_product( $post_id );
+		}
+		if ( $lookup->is_not_found() ) {
+			return LinkState::Missing;
+		}
+
+		return LinkState::classify( PostMeta::embed_id( $post_id ), PostMeta::embed_url( $post_id ), '' );
+	}
+
+	/**
+	 * Say what is wrong with the link, if anything. Each message names its own
+	 * problem; none of them relies on colour alone.
+	 *
+	 * @param bool $unverified Whether ARkid could not be asked just now.
+	 */
+	private function render_link_notice( LinkState $state, bool $unverified ): void {
+		if ( LinkState::Missing === $state ) {
+			$class   = 'notice-error';
+			$message = __( 'This viewer no longer exists in your ARkid account. Pick another viewer or remove it.', 'arkid-catalogue-link' );
+		} elseif ( LinkState::NotSynced === $state ) {
+			$class   = 'notice-warning';
+			$message = __( 'This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds.', 'arkid-catalogue-link' );
+		} elseif ( LinkState::Linked === $state && $unverified ) {
+			$class   = 'notice-warning';
+			$message = __( 'ARkid could not be reached, or it did not accept the API key, so this viewer could not be checked just now. The product page keeps showing the last synced viewer.', 'arkid-catalogue-link' );
+		} else {
+			return;
+		}
+		?>
+		<p class="notice <?php echo esc_attr( $class ); ?> notice-alt arkid-catalogue-link__link-notice" data-state="<?php echo esc_attr( $state->value ); ?>" style="padding:6px 10px;">
+			<?php echo esc_html( $message ); ?>
+		</p>
 		<?php
 	}
 
@@ -182,14 +235,35 @@ class MetaBox {
 			return;
 		}
 
-		$embed = $this->fetch_embed( $embed_id );
+		$lookup = $this->lookup->find( $embed_id );
 
-		if ( null === $embed ) {
-			$this->save_unverified( $post_id, $embed_id, $position );
+		if ( null !== $lookup->embed ) {
+			PostMeta::write( $post_id, $lookup->embed, $position );
 			return;
 		}
 
-		PostMeta::write( $post_id, $embed, $position );
+		if ( $lookup->is_not_found() ) {
+			$this->save_missing( $post_id, $embed_id, $position );
+			return;
+		}
+
+		$this->save_unverified( $post_id, $embed_id, $position );
+	}
+
+	/**
+	 * Save path for a viewer that ARkid says does not exist.
+	 *
+	 * The merchant's choice is kept, so the editor can show which viewer it was
+	 * and offer to replace it, but nothing is left to render under it: not the
+	 * previous viewer's snapshot, and not this id's own, which ARkid has just
+	 * disowned. A retry is queued because a viewer created a moment ago may not
+	 * be visible to the API yet; it heals the link if so.
+	 */
+	private function save_missing( int $post_id, string $embed_id, string $position ): void {
+		update_post_meta( $post_id, PostMeta::KEY_EMBED_ID, $embed_id );
+		PostMeta::mark_missing( $post_id );
+		PostMeta::write_position( $post_id, $position );
+		$this->queue_refresh( $post_id );
 	}
 
 	/**
@@ -199,7 +273,9 @@ class MetaBox {
 	 * never be left describing a DIFFERENT embed than the stored id — that
 	 * combination makes the storefront render the previous viewer under the new
 	 * id. Keep the merchant's selection either way, but drop the snapshot when
-	 * we can't vouch for it, and queue a retry.
+	 * we can't vouch for it, and queue a retry. What ARkid last said about the
+	 * previous viewer (that it is missing) says nothing about a different one,
+	 * so it goes too; for the same one it still stands.
 	 */
 	private function save_unverified( int $post_id, string $embed_id, string $position ): void {
 		$is_same_embed = PostMeta::embed_id( $post_id ) === $embed_id;
@@ -209,10 +285,14 @@ class MetaBox {
 		if ( ! $is_same_embed ) {
 			delete_post_meta( $post_id, PostMeta::KEY_EMBED_URL );
 			delete_post_meta( $post_id, PostMeta::KEY_EMBED_IMAGE );
+			PostMeta::clear_status( $post_id );
 		}
 
 		PostMeta::write_position( $post_id, $position );
+		$this->queue_refresh( $post_id );
+	}
 
+	private function queue_refresh( int $post_id ): void {
 		if ( function_exists( 'as_enqueue_async_action' ) ) {
 			as_enqueue_async_action(
 				RefreshEmbeds::HOOK_PRODUCT,
@@ -220,22 +300,5 @@ class MetaBox {
 				RefreshEmbeds::GROUP
 			);
 		}
-	}
-
-	private function fetch_embed( string $embed_id ): ?EmbedDto {
-		try {
-			return $this->api->create()?->get_embed( $embed_id );
-		} catch ( \Throwable $e ) {
-			return null;
-		}
-	}
-
-	private function resolve_current_label( string $embed_id ): string {
-		if ( '' === $embed_id ) {
-			return '';
-		}
-
-		$embed = $this->fetch_embed( $embed_id );
-		return null === $embed ? '' : $embed->picker_label();
 	}
 }

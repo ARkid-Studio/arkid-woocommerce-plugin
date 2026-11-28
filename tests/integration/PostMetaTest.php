@@ -54,4 +54,55 @@ final class PostMetaTest extends TestCase {
 
 		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_POSITION ) );
 	}
+
+	public function test_marking_a_link_missing_drops_the_snapshot_but_keeps_the_choice(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404', 'above_product' );
+
+		PostMeta::mark_missing( $product_id );
+
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ) );
+		$this->assertSame( 'gone-404', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( 'above_product', PostMeta::position( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_url( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_image( $product_id ) );
+	}
+
+	public function test_linking_a_viewer_clears_the_missing_status(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404' );
+		PostMeta::mark_missing( $product_id );
+
+		PostMeta::write( $product_id, $this->embed(), '' );
+
+		$this->assertSame( '', PostMeta::status( $product_id ) );
+		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_STATUS ) );
+	}
+
+	public function test_unlinking_clears_the_missing_status(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404' );
+		PostMeta::mark_missing( $product_id );
+
+		PostMeta::write( $product_id, null, '' );
+
+		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_STATUS ) );
+	}
+
+	public function test_only_the_known_status_is_ever_stored_or_read(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
+
+		update_post_meta( $product_id, PostMeta::KEY_STATUS, 'something-else' );
+
+		$this->assertSame( '', PostMeta::status( $product_id ), 'An unknown value is no status.' );
+		$this->assertSame( '', PostMeta::sanitize_status( 'something-else' ) );
+		$this->assertSame( '', PostMeta::sanitize_status( array( 'missing' ) ) );
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::sanitize_status( 'missing' ) );
+	}
+
+	public function test_the_status_key_is_registered_and_not_exposed_over_rest(): void {
+		// The test case unregisters every meta key after each test.
+		( new PostMeta() )->register_meta_keys();
+		$registered = get_registered_meta_keys( 'post', 'product' );
+
+		$this->assertArrayHasKey( PostMeta::KEY_STATUS, $registered );
+		$this->assertFalse( $registered[ PostMeta::KEY_STATUS ]['show_in_rest'] );
+	}
 }

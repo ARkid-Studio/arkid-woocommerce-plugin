@@ -18,6 +18,7 @@ post meta snapshot  ────────────────────
   _arkid_embed_url
   _arkid_embed_image
   _arkid_embed_position
+  _arkid_embed_status  (absent, or `missing`)
         ▲
         └── Action Scheduler: a daily sweep fans out one async task per linked
             product (`arkid_catalogue_link_refresh_interval` filters the period).
@@ -38,6 +39,45 @@ post meta snapshot  ────────────────────
   saved but the URL/image snapshot is dropped rather than left describing the
   previous viewer, and a retry is queued. A snapshot must never describe a
   different embed than the stored ID.
+
+## Link states
+
+A product that has a viewer selected is in one of four states
+(`Links\LinkState`), told apart by what is stored, so a list of any size needs
+no request:
+
+| State | Stored | Meaning |
+| --- | --- | --- |
+| `None` | no id | no viewer selected |
+| `Linked` | id and URL | the product page shows it |
+| `NotSynced` | id, no URL, no status | selected but never fetched, or ARkid could not be reached when it was tried; the refresh retries |
+| `Missing` | id, status `missing` | ARkid answered **404** for it: deleted, or it belongs to another account's key. It will not sync until the merchant acts |
+
+`NotSynced` and `Missing` are what "needs attention" counts: the merchant chose
+a viewer and the product page shows none.
+
+- **`_arkid_embed_status` is written only by a live 404**, by the refresh job
+  or by a save, through `Links\EmbedLookup`, which is the single place that
+  reads an answer of ARkid as "gone" (404 only) or "could not ask" (a bad key, a
+  limit, an outage, a body that cannot be read). It is never derived from a
+  list of viewers: a list says nothing about a viewer created after it was
+  read, and a viewer created a minute ago would be flagged as missing.
+- **The live answer wins on the edit screen.** The meta box asks ARkid once per
+  render. A viewer it has is shown as in order even if an earlier refresh left
+  `missing` behind (the next refresh clears it); a 404 is shown as missing
+  before the refresh has noticed; when ARkid cannot say, the stored state is
+  shown, with a note that it could not be checked if the viewer is `Linked`.
+- **A re-link never inherits a verdict about the old viewer.** Linking, unlinking
+  and saving a different viewer while ARkid is down all clear the status.
+  Saving the same viewer while ARkid is down keeps it. A save that gets a 404
+  keeps the choice, drops the snapshot, sets `missing` and queues a retry,
+  because a viewer created a moment ago may not be visible to the API yet.
+- **A changed API key** queues a full resync. The viewers of the old account
+  answer 404 for the new key (verified in ARkid's source: an id of another
+  organisation is a 404, not a 403), so they become `Missing`; a rejected key
+  leaves everything as it is.
+- No migration: a link that was already deleted upstream before this status
+  existed reads as `NotSynced` until the next daily refresh finds the 404.
 
 ## Embedding and the host allow-list
 

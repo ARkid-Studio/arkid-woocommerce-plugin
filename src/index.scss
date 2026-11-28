@@ -9,6 +9,16 @@
 		margin: 0;
 	}
 
+	.arkid-catalogue-link__link-notice {
+		margin: 0;
+
+		// As for the remove button below: an author `display` would beat the
+		// browser's own `[hidden]` rule.
+		&[hidden] {
+			display: none;
+		}
+	}
+
 	.arkid-catalogue-link__remove-viewer {
 		display: inline-block;
 		margin-block-start: 0.25em;

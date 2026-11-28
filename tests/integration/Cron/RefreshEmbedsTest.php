@@ -9,6 +9,7 @@ namespace Arkid\CatalogueLink\Tests\Integration\Cron;
 
 use Arkid\CatalogueLink\Api\ClientFactory;
 use Arkid\CatalogueLink\Cron\RefreshEmbeds;
+use Arkid\CatalogueLink\Links\LinkState;
 use Arkid\CatalogueLink\PostMeta;
 use Arkid\CatalogueLink\Settings\Options;
 use Arkid\CatalogueLink\Tests\Integration\TestCase;
@@ -115,6 +116,90 @@ final class RefreshEmbedsTest extends TestCase {
 			PostMeta::embed_id( $product_id ),
 			'The selection is kept so it heals if ARkid restores the embed.'
 		);
+	}
+
+	/**
+	 * The status is what lets the editor and the list screens tell "deleted"
+	 * from "never synced" without asking ARkid.
+	 */
+	public function test_a_removed_embed_is_remembered_as_missing(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$this->job()->refresh_product( $product_id );
+
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ) );
+		$this->assertSame( LinkState::Missing, LinkState::of_product( $product_id ) );
+	}
+
+	public function test_a_removed_embed_keeps_the_position_override(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404', 'button_only' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+
+		$this->job()->refresh_product( $product_id );
+
+		$this->assertSame( 'button_only', PostMeta::position( $product_id ) );
+	}
+
+	/**
+	 * Heals by itself, as the comment on the 404 branch promises: ARkid restores
+	 * the viewer, the next sweep finds it, and the product shows it again.
+	 */
+	public function test_a_restored_embed_stops_being_missing(): void {
+		$product_id = $this->make_product_with_embed( 'back-777' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+		$this->job()->refresh_product( $product_id );
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ), 'Precondition.' );
+
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'back-777', 'https://catalogue.arkid.app/e/back-777' ) );
+		$this->job()->refresh_product( $product_id );
+
+		$this->assertSame( '', PostMeta::status( $product_id ) );
+		$this->assertSame( array(), get_post_meta( $product_id, PostMeta::KEY_STATUS ) );
+		$this->assertSame( 'https://catalogue.arkid.app/e/back-777', PostMeta::embed_url( $product_id ) );
+		$this->assertSame( LinkState::Linked, LinkState::of_product( $product_id ) );
+	}
+
+	/**
+	 * Only a live 404 may say missing. A bad key answers 403 and an outage 5xx;
+	 * neither is evidence against the viewer.
+	 *
+	 * @dataProvider answers_that_are_not_a_404
+	 */
+	public function test_only_a_404_marks_a_viewer_missing( int $status ): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', '', 'https://catalogue.arkid.app/e/keep-me' );
+		$this->stub_http_status( '/api/ecom/embed/', $status );
+
+		$this->job()->refresh_product( $product_id );
+
+		$this->assertSame( '', PostMeta::status( $product_id ) );
+		$this->assertSame( 'https://catalogue.arkid.app/e/keep-me', PostMeta::embed_url( $product_id ) );
+	}
+
+	/**
+	 * @return array<string, array{int}>
+	 */
+	public static function answers_that_are_not_a_404(): array {
+		return array(
+			'unauthorised'     => array( 401 ),
+			'forbidden'        => array( 403 ),
+			'payment required' => array( 402 ),
+			'unprocessable'    => array( 422 ),
+			'too many'         => array( 429 ),
+			'server error'     => array( 500 ),
+			'unavailable'      => array( 503 ),
+		);
+	}
+
+	public function test_an_outage_does_not_clear_a_missing_status_either(): void {
+		$product_id = $this->make_product_with_embed( 'gone-404' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+		$this->job()->refresh_product( $product_id );
+
+		$this->stub_http_status( '/api/ecom/embed/', 503 );
+		$this->job()->refresh_product( $product_id );
+
+		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ), 'Not knowing is not the same as found.' );
 	}
 
 	public function test_a_rejected_api_key_does_not_wipe_snapshots(): void {

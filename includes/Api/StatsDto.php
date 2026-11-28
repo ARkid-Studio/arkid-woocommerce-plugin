@@ -50,6 +50,28 @@ final class StatsDto {
 	}
 
 	/**
+	 * The interactions of each viewer in the period, by lower-case viewer id, to
+	 * be joined to the list of viewers.
+	 *
+	 * ARkid lists every live viewer that was viewed in the period (it is not a
+	 * ranking cut off at a few), with the interactions it had. A viewer that is
+	 * not listed was not viewed, and so had no interactions: `?? 0` is the right
+	 * answer for it.
+	 *
+	 * @return array<string, int>
+	 */
+	public function interactions_by_embed(): array {
+		$out = array();
+		foreach ( $this->embeds as $row ) {
+			if ( '' !== $row['embed_id'] ) {
+				$out[ strtolower( $row['embed_id'] ) ] = $row['interactions'];
+			}
+		}
+
+		return $out;
+	}
+
+	/**
 	 * @param array<string, mixed> $payload
 	 */
 	public static function from_array( array $payload ): self {

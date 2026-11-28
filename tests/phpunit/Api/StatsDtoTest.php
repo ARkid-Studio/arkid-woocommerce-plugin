@@ -36,6 +36,46 @@ final class StatsDtoTest extends TestCase {
 		$this->assertSame( array( 'embed_id', 'impressions', 'interactions' ), array_keys( $stats->embeds[0] ) );
 	}
 
+	public function test_interactions_are_joined_by_lower_case_viewer_id(): void {
+		$payload           = ApiFixture::load( 'stats' );
+		$payload['embeds'] = array(
+			array( 'embed_id' => 'AAAA-1', 'impressions' => 10, 'interactions' => 4 ),
+			array( 'embed_id' => 'bbbb-2', 'impressions' => 5, 'interactions' => 0 ),
+			array( 'embed_id' => '', 'impressions' => 1, 'interactions' => 1 ),
+		);
+
+		$this->assertSame(
+			array( 'aaaa-1' => 4, 'bbbb-2' => 0 ),
+			StatsDto::from_array( $payload )->interactions_by_embed()
+		);
+	}
+
+	/**
+	 * ARkid lists every live viewer that was viewed in the period, not a top few:
+	 * the recorded answer lists them all, and so does a larger one. A viewer
+	 * that is missing from the map has had no interactions.
+	 */
+	public function test_the_map_holds_every_listed_viewer_however_many(): void {
+		$payload           = ApiFixture::load( 'stats' );
+		$payload['embeds'] = array();
+		for ( $i = 1; $i <= 12; $i++ ) {
+			$payload['embeds'][] = array( 'embed_id' => 'embed-' . $i, 'impressions' => 100 - $i, 'interactions' => $i );
+		}
+
+		$map = StatsDto::from_array( $payload )->interactions_by_embed();
+
+		$this->assertCount( 12, $map );
+		$this->assertSame( 12, $map['embed-12'] );
+		$this->assertArrayNotHasKey( 'embed-13', $map );
+	}
+
+	public function test_a_payload_without_traffic_gives_an_empty_map(): void {
+		$payload           = ApiFixture::load( 'stats' );
+		$payload['embeds'] = array();
+
+		$this->assertSame( array(), StatsDto::from_array( $payload )->interactions_by_embed() );
+	}
+
 	public function test_the_newest_products_say_whether_they_are_embedded(): void {
 		$stats = StatsDto::from_array( ApiFixture::load( 'stats' ) );
 

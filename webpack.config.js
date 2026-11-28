@@ -7,7 +7,6 @@ module.exports = {
 		index: './src/index.js',
 		storefront: './src/storefront/boot.js',
 		'blocks/embed/index': './src/blocks/embed/index.js',
-		'blocks/embed/view': './src/blocks/embed/view.js',
 	},
 	plugins: [
 		...defaultConfig.plugins.filter(

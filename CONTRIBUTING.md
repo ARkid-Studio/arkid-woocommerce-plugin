@@ -52,6 +52,16 @@ pushing.
 
 When fixing a bug, add a test that fails on the code before the fix.
 
+`ext-intl` is optional on WordPress hosts, and `Support\Text` sorts and
+searches names differently without it (ICU collation with it, a folded natural
+order without). CI therefore names the extension instead of trusting the runner
+image: the unit job runs on every PHP version with `intl` and once more on PHP
+8.3 with it switched off, and a step fails the leg if the extension is not in
+the state its name claims. The two ICU-only unit tests skip themselves on a PHP
+without `intl`, so `composer test` there reports two skipped tests. To run the
+fallback locally, point `PHP_INI_SCAN_DIR` at a copy of your `conf.d` directory
+without the `intl` ini file.
+
 ### Integration tests
 
 ```bash

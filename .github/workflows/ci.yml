@@ -54,13 +54,20 @@ jobs:
           done
 
   unit:
-    name: Unit (PHP ${{ matrix.php }})
+    name: Unit (PHP ${{ matrix.php }}, ${{ matrix.intl && 'with' || 'without' }} intl)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         php: ['8.1', '8.2', '8.3', '8.4']
+        intl: [true]
+        include:
+          # Name sorting and searching (Support\Text) takes a different path on
+          # a host without ext-intl, and WordPress hosts often lack it. This leg
+          # runs that path for real; the others run the ICU collation tests,
+          # which skip themselves where the extension is missing.
+          - { php: '8.3', intl: false }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -69,7 +76,16 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
+          # Spelled out either way: what the runner image loads by default is
+          # not something the suite should depend on.
+          extensions: ${{ matrix.intl && 'intl' || ':intl' }}
           tools: composer:v2
+      - name: Check ext-intl is ${{ matrix.intl && 'loaded' || 'absent' }}
+        env:
+          EXPECT_INTL: ${{ matrix.intl }}
+        run: |
+          php -r 'exit( class_exists( "Collator" ) === ( "true" === getenv( "EXPECT_INTL" ) ) ? 0 : 1 );' \
+            || { echo "::error::ext-intl is not in the state this leg expects ($EXPECT_INTL)"; exit 1; }
       - run: composer install --prefer-dist --no-progress
       - run: composer test
 
@@ -115,8 +131,11 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           # WordPress talks to MariaDB through mysqli; without it every job here
-          # dies inside the test bootstrap instead of at setup.
-          extensions: mysqli
+          # dies inside the test bootstrap instead of at setup. intl is named so
+          # that the viewers list is sorted with ICU collation on every leg
+          # instead of whatever the runner image happens to load; the fallback
+          # is covered by the unit leg without it.
+          extensions: mysqli, intl
           tools: composer:v2, wp-cli
 
       - run: composer install --prefer-dist --no-progress

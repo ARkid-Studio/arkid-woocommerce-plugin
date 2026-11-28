@@ -15,6 +15,7 @@ use Arkid\CatalogueLink\Api\ClientFactory;
 use Arkid\CatalogueLink\Api\EmbedDto;
 use Arkid\CatalogueLink\Api\EmbedSource;
 use Arkid\CatalogueLink\Api\NotFoundException;
+use Arkid\CatalogueLink\Support\EmbedSearch;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -99,19 +100,7 @@ class Controller {
 		}
 
 		$search_param = $request->get_param( 'search' );
-		$search       = is_string( $search_param ) ? strtolower( $search_param ) : '';
-		if ( '' !== $search ) {
-			$embeds = array_values(
-				array_filter(
-					$embeds,
-					static function ( EmbedDto $e ) use ( $search ): bool {
-						$label = strtolower( $e->picker_label() );
-						// An empty label can't contain a non-empty search term.
-						return '' !== $label && str_contains( $label, $search );
-					}
-				)
-			);
-		}
+		$embeds       = EmbedSearch::filter( $embeds, is_string( $search_param ) ? $search_param : '' );
 
 		$payload = array_map(
 			static fn( EmbedDto $e ): array => array(

@@ -86,6 +86,7 @@ includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Cron/                    Action Scheduler refresh
   Migrations/              schema-version upgrades
   Rest/                    /arkid-catalogue-link/v1/embeds proxy
+  Support/                 multibyte-safe text helpers: viewer search, name ordering
 src/                       JS / SCSS sources (built with @wordpress/scripts into build/)
 languages/                 .pot and .po sources
 tests/

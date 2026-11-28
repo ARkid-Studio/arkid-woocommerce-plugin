@@ -164,6 +164,108 @@
 	}
 }
 
+// The ARkid column of the Products list: the viewer a product shows, or the one
+// its name matches.
+.wp-list-table .column-arkid {
+
+	@media (min-width: 783px) {
+		inline-size: 17em;
+	}
+
+	.arkid-catalogue-link__cell {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.arkid-catalogue-link__thumb-image {
+		flex: none;
+		inline-size: 40px;
+		block-size: 40px;
+		border-radius: 4px;
+		object-fit: cover;
+	}
+
+	.arkid-catalogue-link__cell-body {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px 8px;
+		min-inline-size: 0;
+	}
+
+	// The name opens the preview: a button that reads as a link.
+	.arkid-catalogue-link__preview {
+		text-align: start;
+
+		&.button-link {
+			font-weight: 600;
+		}
+	}
+
+	.arkid-catalogue-link__viewer-id {
+		overflow-wrap: anywhere;
+	}
+
+	.arkid-catalogue-link__note {
+		flex-basis: 100%;
+	}
+}
+
+// What a link is in: a word, never only a colour.
+.arkid-catalogue-link__badge {
+	display: inline-block;
+	padding: 0.125em 0.5em;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	background: #f0f0f1;
+	color: #1d2327;
+	// 12px, the smallest text wp-admin sets; a state is read, not skimmed.
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.5;
+	white-space: nowrap;
+
+	&--ok {
+		background: #edfaef;
+		color: #005c12;
+	}
+
+	&--warning {
+		background: #fcf9e8;
+		color: #614200;
+	}
+
+	&--error {
+		background: #fcf0f1;
+		color: #8a2424;
+	}
+
+	&--info {
+		background: #f0f6fc;
+		color: #0a4b78;
+	}
+
+	// Windows high contrast takes the backgrounds away; the edge keeps the pill.
+	@media (forced-colors: active) {
+		border-color: CanvasText;
+	}
+}
+
+// The viewer or catalogue product that a name matches. It is a suggestion, and
+// reads as one: dashed, in italics.
+.arkid-catalogue-link__chip {
+	display: inline-block;
+	padding: 0.125em 0.6em;
+	border: 1px dashed #8c8f94;
+	border-radius: 999px;
+	font-style: italic;
+
+	a {
+		text-decoration: none;
+	}
+}
+
 .arkid-catalogue-link__reveal {
 	margin-inline-start: 0.5em;
 }

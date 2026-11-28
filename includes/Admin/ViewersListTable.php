@@ -674,29 +674,22 @@ class ViewersListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * The data attributes that make a button open the preview of a viewer, or ''
-	 * when it cannot be previewed.
-	 *
-	 * The address is the viewer's own, through the same check the storefront uses:
-	 * an https address on an ARkid host. Anything else gets no preview rather than
-	 * a frame that points somewhere unexpected.
+	 * The data attributes that make a button open the preview of a viewer, with a
+	 * space before them, or '' when it cannot be previewed (`PreviewButton`).
 	 */
 	private function preview_attributes( EmbedDto $item ): string {
 		if ( null === $this->iframes ) {
 			return '';
 		}
-		$url = $this->iframes->viewer_url( $item->embed_url );
-		if ( '' === $url ) {
-			return '';
-		}
-
-		return sprintf(
-			' data-embed-url="%1$s" data-product-name="%2$s" data-edit-url="%3$s" data-analytics-url="%4$s"',
-			esc_url( $url ),
-			esc_attr( trim( $item->brand_name . ' ' . $item->product_name ) ),
-			esc_url( Url::https( $item->edit_url ) ),
-			esc_url( Url::https( $item->analytics_url ) )
+		$attributes = PreviewButton::attributes(
+			$this->iframes,
+			$item->embed_url,
+			trim( $item->brand_name . ' ' . $item->product_name ),
+			$item->edit_url,
+			$item->analytics_url
 		);
+
+		return '' === $attributes ? '' : ' ' . $attributes;
 	}
 
 	private function preview_label( EmbedDto $item ): string {

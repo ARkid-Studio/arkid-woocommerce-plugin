@@ -83,6 +83,13 @@ class AccountData {
 	}
 
 	/**
+	 * Whether the viewers of the account are known: ARkid was asked, and answered.
+	 */
+	public function has_embeds(): bool {
+		return null !== $this->embeds();
+	}
+
+	/**
 	 * The products of ARkid's catalogue, or null when ARkid could not be asked, or
 	 * when the viewers could not be, which makes a second try pointless.
 	 *
@@ -111,7 +118,7 @@ class AccountData {
 	 * Whether both lists were read: what a count of matches needs.
 	 */
 	public function is_complete(): bool {
-		return null !== $this->embeds() && null !== $this->catalog();
+		return $this->has_embeds() && null !== $this->catalog();
 	}
 
 	/**

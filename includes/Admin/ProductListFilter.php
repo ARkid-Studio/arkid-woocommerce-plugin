@@ -55,10 +55,18 @@ final class ProductListFilter {
 			return;
 		}
 
-		$ids = $this->links->product_ids( $embed_id );
+		self::restrict_to( $query, $this->links->product_ids( $embed_id ) );
+	}
 
-		// Another filter of the list may already hold it to some products (a
-		// search by SKU does); the ones in both are shown.
+	/**
+	 * Hold the list to these products, and to the ones another filter of it
+	 * already holds it to: a search by SKU sets `post__in`, and the products in
+	 * both are shown. No product at all lists nothing, not every product: an empty
+	 * `post__in` means "no restriction", and 0 is no post.
+	 *
+	 * @param array<int, int> $ids Product ids.
+	 */
+	public static function restrict_to( \WP_Query $query, array $ids ): void {
 		$already = $query->get( 'post__in' );
 		if ( is_array( $already ) && array() !== $already ) {
 			$ids = array_values(
@@ -69,7 +77,6 @@ final class ProductListFilter {
 			);
 		}
 
-		// An empty `post__in` means "no restriction"; 0 is no post.
 		$query->set( 'post__in', array() === $ids ? array( 0 ) : $ids );
 	}
 
@@ -90,7 +97,10 @@ final class ProductListFilter {
 		);
 	}
 
-	private static function is_products_list(): bool {
+	/**
+	 * Whether this request is the Products list of wp-admin.
+	 */
+	public static function is_products_list(): bool {
 		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
 			return false;
 		}

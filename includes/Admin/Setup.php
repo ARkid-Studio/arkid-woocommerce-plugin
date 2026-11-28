@@ -11,7 +11,11 @@ namespace Arkid\CatalogueLink\Admin;
 
 use Arkid\CatalogueLink\Api\ClientFactory;
 use Arkid\CatalogueLink\Frontend\IframeFactory;
+use Arkid\CatalogueLink\Links\AccountData;
 use Arkid\CatalogueLink\Links\ProductLinks;
+use Arkid\CatalogueLink\Links\ProductMatches;
+use Arkid\CatalogueLink\Links\ProductScan;
+use Arkid\CatalogueLink\Links\ProductStates;
 use Arkid\CatalogueLink\Settings\IntegrationSettings;
 use Arkid\CatalogueLink\Settings\Options;
 
@@ -29,6 +33,13 @@ class Setup {
 		( new MetaBox( $this->options, $this->api ) )->register();
 		( new ViewersPage( $this->options, $this->api ) )->register();
 		( new ProductListFilter( new ProductLinks() ) )->register();
+
+		// One reading of the account per request, shared by the column, the views
+		// and the filters of the Products list.
+		$account = new AccountData( $this->api );
+		( new ProductListColumns( $account, new IframeFactory( $this->options ) ) )->register();
+		( new ProductListViews( $account, new ProductStates(), new ProductMatches( new ProductScan(), $account ) ) )->register();
+
 		( new Assets( new IframeFactory( $this->options ) ) )->register();
 
 		add_filter(

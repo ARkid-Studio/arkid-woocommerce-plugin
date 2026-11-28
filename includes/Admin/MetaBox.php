@@ -18,7 +18,6 @@ use Arkid\CatalogueLink\Links\LinkState;
 use Arkid\CatalogueLink\Links\Lookup;
 use Arkid\CatalogueLink\PostMeta;
 use Arkid\CatalogueLink\Settings\Options;
-use Arkid\CatalogueLink\Support\Url;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -166,17 +165,12 @@ class MetaBox {
 	 * address goes through the same host check as the storefront's.
 	 */
 	private function preview_attributes( int $post_id, ?EmbedDto $embed ): string {
-		$url = $this->iframes->viewer_url( null !== $embed ? $embed->embed_url : PostMeta::embed_url( $post_id ) );
-		if ( '' === $url ) {
-			return '';
-		}
-
-		return sprintf(
-			'data-embed-url="%1$s" data-product-name="%2$s" data-edit-url="%3$s" data-analytics-url="%4$s"',
-			esc_url( $url ),
-			esc_attr( null !== $embed ? trim( $embed->brand_name . ' ' . $embed->product_name ) : wp_strip_all_tags( get_the_title( $post_id ) ) ),
-			esc_url( null !== $embed ? Url::https( $embed->edit_url ) : '' ),
-			esc_url( null !== $embed ? Url::https( $embed->analytics_url ) : '' )
+		return PreviewButton::attributes(
+			$this->iframes,
+			null !== $embed ? $embed->embed_url : PostMeta::embed_url( $post_id ),
+			null !== $embed ? trim( $embed->brand_name . ' ' . $embed->product_name ) : wp_strip_all_tags( get_the_title( $post_id ) ),
+			null !== $embed ? $embed->edit_url : '',
+			null !== $embed ? $embed->analytics_url : ''
 		);
 	}
 

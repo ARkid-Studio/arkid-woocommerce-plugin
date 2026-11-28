@@ -121,11 +121,15 @@ class Assets {
 	}
 
 	/**
-	 * The screens with a "Preview" button: the viewers list and the product edit
-	 * screen.
+	 * The screens with a "Preview" button: the viewers list, the product edit
+	 * screen and the Products list.
 	 */
 	private function is_preview_screen( string $hook_suffix ): bool {
 		if ( 'woocommerce_page_' . ViewersPage::MENU_SLUG === $hook_suffix ) {
+			return true;
+		}
+
+		if ( $this->is_products_list( $hook_suffix ) ) {
 			return true;
 		}
 
@@ -138,7 +142,21 @@ class Assets {
 		return false;
 	}
 
+	/**
+	 * The Products list, for the people who see the ARkid column on it.
+	 */
+	private function is_products_list( string $hook_suffix ): bool {
+		return 'edit.php' === $hook_suffix
+			&& ProductListFilter::is_products_list()
+			&& current_user_can( 'manage_woocommerce' );
+	}
+
 	private function is_relevant_screen( string $hook_suffix ): bool {
+		// The Products list: the column's styles and its preview button.
+		if ( $this->is_products_list( $hook_suffix ) ) {
+			return true;
+		}
+
 		// Product edit screens.
 		if ( in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) ) {
 			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;

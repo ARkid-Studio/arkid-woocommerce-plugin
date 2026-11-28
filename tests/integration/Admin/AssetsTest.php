@@ -21,6 +21,10 @@ final class AssetsTest extends TestCase {
 
 	public function tear_down(): void {
 		remove_all_filters( 'arkid_catalogue_link_allowed_embed_hosts' );
+		wp_dequeue_script( 'arkid-catalogue-link-admin' );
+		wp_dequeue_style( 'arkid-catalogue-link-admin' );
+		unset( $GLOBALS['hook_suffix'] );
+		set_current_screen( 'front' );
 		parent::tear_down();
 	}
 
@@ -68,6 +72,51 @@ final class AssetsTest extends TestCase {
 	public function test_the_dialog_is_only_printed_on_screens_that_open_it(): void {
 		$assets = $this->assets();
 
+		$this->assertSame( '', $this->render( array( $assets, 'print_preview_dialog' ) ) );
+	}
+
+	/**
+	 * The scripts and styles are built by `npm run build`; the screens that load
+	 * them are only checked where that has been done.
+	 */
+	private function enqueue_on( string $screen, string $hook_suffix ): Assets {
+		if ( ! file_exists( ARKID_CATALOGUE_LINK_PATH . 'build/index.asset.php' ) ) {
+			$this->markTestSkipped( 'The admin script is not built (npm run build).' );
+		}
+		set_current_screen( $screen );
+		$GLOBALS['hook_suffix'] = $hook_suffix;
+
+		$assets = $this->assets();
+		$assets->enqueue( $hook_suffix );
+
+		return $assets;
+	}
+
+	public function test_the_products_list_gets_the_script_and_the_preview_dialog_for_a_store_manager(): void {
+		wp_set_current_user( (int) self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$assets = $this->enqueue_on( 'edit-product', 'edit.php' );
+
+		$this->assertTrue( wp_script_is( 'arkid-catalogue-link-admin', 'enqueued' ) );
+		$this->assertTrue( wp_style_is( 'arkid-catalogue-link-admin', 'enqueued' ) );
+		$this->assertStringContainsString( '<dialog id="arkid-catalogue-link-preview"', $this->render( array( $assets, 'print_preview_dialog' ) ) );
+	}
+
+	public function test_the_products_list_gets_nothing_for_someone_who_does_not_see_the_column(): void {
+		wp_set_current_user( (int) self::factory()->user->create( array( 'role' => 'editor' ) ) );
+
+		$assets = $this->enqueue_on( 'edit-product', 'edit.php' );
+
+		$this->assertFalse( wp_script_is( 'arkid-catalogue-link-admin', 'enqueued' ) );
+		$this->assertSame( '', $this->render( array( $assets, 'print_preview_dialog' ) ) );
+	}
+
+	public function test_the_list_of_another_post_type_gets_nothing(): void {
+		wp_set_current_user( (int) self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$assets = $this->enqueue_on( 'edit-post', 'edit.php' );
+
+		$this->assertFalse( wp_script_is( 'arkid-catalogue-link-admin', 'enqueued' ) );
 		$this->assertSame( '', $this->render( array( $assets, 'print_preview_dialog' ) ) );
 	}
 }

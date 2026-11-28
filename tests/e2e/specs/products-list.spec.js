@@ -255,6 +255,23 @@ test.describe('ARkid on the Products list', () => {
 		await expect(viewer).toContainText('ARkid E2E Viewer (3 products)');
 	});
 
+	test("the views narrow next to the list's own search", async ({ page }) => {
+		// WooCommerce turns a search into a list of product ids; the ARkid
+		// filters have to hold to those, and not replace them.
+		await page.goto(`${PRODUCTS}&s=Hose&arkid=without`);
+		expect(await listed(page, 1)).toEqual(['E2E Garden Hose']);
+
+		await page.goto(`${PRODUCTS}&s=Hose&arkid=with`);
+		await expect(page.locator(TITLES)).toHaveCount(0);
+
+		await page.goto(`${PRODUCTS}&s=Chair&arkid=with`);
+		expect(await listed(page, 1)).toEqual(['E2E Chair']);
+
+		// Without a search the same view lists every product that has a viewer.
+		await page.goto(`${PRODUCTS}&arkid=with`);
+		await expect(page.locator(TITLES)).toHaveCount(4);
+	});
+
 	test('the list still renders, with a notice, when ARkid rejects the key', async ({
 		page,
 	}) => {

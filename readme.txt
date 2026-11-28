@@ -186,7 +186,7 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 * New: A viewer can be previewed in a dialog from the viewers list and from the product edit screen. The viewer loads only when you click Preview.
 * New: The colours of a viewer are shown as dots in the viewers list, under the selected viewer on the product edit screen and in the picker's results. A colour the viewer hides is struck through.
 * Tweak: The links, thumbnails and previews of the viewers list only use https addresses from ARkid.
-* Tweak: The connection to ARkid can now also create and change viewers, and read the catalogue's products, the available environments and your viewing statistics. Nothing in this version sends any of that yet; it is the groundwork for managing viewers from WordPress.
+* Tweak: The connection to ARkid can now also create and change viewers, and read the catalogue's products, the available environments and your viewing statistics. Of these only the viewing statistics are asked for yet, by the viewers list; the rest is the groundwork for managing viewers from WordPress.
 
 = 1.0.0 =
 * Initial release.

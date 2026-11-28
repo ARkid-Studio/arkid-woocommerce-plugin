@@ -321,7 +321,8 @@ final class ProductListViewsTest extends ProductListTestCase {
 		$this->assertStringContainsString( '<option value="viewer-fame" selected=\'selected\'>Maxi-Cosi Fame - New Generation (2 products)</option>', $html );
 		$this->assertStringContainsString( '>Bugaboo Fox 5 (1 product)</option>', $html );
 		$this->assertStringContainsString( '>viewer-gone (1 product)</option>', $html, 'a viewer the account does not list is named by its id' );
-		$this->assertStringContainsString( 'class="screen-reader-text" for="arkid-catalogue-link-state"', $html );
+		$this->assertStringContainsString( 'class="screen-reader-text" for="arkid-catalogue-link-state">Filter by ARkid status<', $html );
+		$this->assertStringContainsString( 'class="screen-reader-text" for="arkid-catalogue-link-embed">Filter by ARkid viewer<', $html, 'the two selects are told apart by their labels' );
 	}
 
 	public function test_the_dropdowns_are_printed_on_top_of_the_products_list_only(): void {

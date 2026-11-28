@@ -238,8 +238,7 @@ test.describe('ARkid on the Products list', () => {
 		await page.goto(PRODUCTS);
 
 		await page
-			.getByLabel('Filter by ARkid viewer')
-			.first()
+			.getByLabel('Filter by ARkid status')
 			.selectOption('attention');
 		await page.getByRole('button', { name: 'Filter', exact: true }).click();
 		await expect(page).toHaveURL(/arkid=attention/);

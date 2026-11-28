@@ -181,7 +181,7 @@ final class ProductListViews {
 
 		printf(
 			'<label class="screen-reader-text" for="arkid-catalogue-link-state">%s</label><select name="%s" id="arkid-catalogue-link-state"><option value="">%s</option>',
-			esc_html__( 'Filter by ARkid viewer', 'arkid-catalogue-link' ),
+			esc_html__( 'Filter by ARkid status', 'arkid-catalogue-link' ),
 			esc_attr( self::QUERY_VAR ),
 			esc_html( $this->prefixed( __( 'All products', 'arkid-catalogue-link' ) ) )
 		);

@@ -146,6 +146,20 @@ final class NameMatcherTest extends TestCase {
 		$this->assertSame( array( 'σα', 'σ' ), NameMatcher::words( 'ΣΑ Σ' ), 'A capital sigma at the start of a word, or alone, is not final' );
 	}
 
+	/**
+	 * What JavaScript's `toLowerCase()` gives (ICU's Final_Sigma): "cased" is more
+	 * than the letters that have a case. PHP before 8.3 does not know the rule at
+	 * all, so these are what `NameMatcher` itself has to get right there.
+	 */
+	public function test_a_capital_sigma_after_a_cased_character_that_is_no_letter_of_a_case_is_final(): void {
+		$this->assertSame( array( 'ⅷς' ), NameMatcher::words( 'ⅷΣ' ), 'a Roman numeral is cased' );
+		$this->assertSame( array( 'ªς' ), NameMatcher::words( 'ªΣ' ), 'so is the feminine ordinal indicator' );
+		$this->assertSame( array( 'ς' ), NameMatcher::words( 'ⓐΣ' ), 'and a circled letter (which is no word of its own)' );
+		$this->assertSame( array( 'ⅷς' ), NameMatcher::words( 'ⅷΣ.' ), 'a full stop after it is ignored' );
+		$this->assertSame( array( 'σa' ), NameMatcher::words( 'ⓐΣa' ), 'a cased letter after it makes it not final' );
+		$this->assertSame( array( 'ʰσ' ), NameMatcher::words( 'ʰΣ' ), 'a modifier letter is ignored before it is cased, as in ICU' );
+	}
+
 	public function test_a_word_is_the_same_as_itself_or_as_a_prefix_of_four_or_more(): void {
 		$this->assertTrue( NameMatcher::same_word( 'wheel', 'wheel' ) );
 		$this->assertTrue( NameMatcher::same_word( 'wheel', 'wheels' ) );

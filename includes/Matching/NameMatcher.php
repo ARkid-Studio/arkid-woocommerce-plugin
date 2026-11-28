@@ -219,10 +219,14 @@ final class NameMatcher {
 	 * The rule is Unicode's Final_Sigma: a cased letter before, skipping the
 	 * characters that are ignored when casing (apostrophes, full stops, colons and
 	 * a few more, and the marks that are gone by now), and none after, skipping
-	 * the same. "ΟΔΟΣ" ends in one, "ΟΔΟΣ.ΟΔΟΣ" does not.
+	 * the same. "ΟΔΟΣ" ends in one, "ΟΔΟΣ.ΟΔΟΣ" does not. Besides the letters that
+	 * have a case, "cased" holds the few characters that Unicode calls cased
+	 * without being letters of a case: "ª", "º", the Roman numerals and the circled
+	 * and squared letters ("ⓐΣ" ends in a final sigma). The modifier letters are
+	 * cased too, but ignored first, as ICU and so JavaScript read them.
 	 */
 	private static function lower( string $text ): string {
-		$cased   = '[\p{Lu}\p{Ll}\p{Lt}]';
+		$cased   = '[\p{Lu}\p{Ll}\p{Lt}\x{AA}\x{BA}\x{2160}-\x{217F}\x{24B6}-\x{24E9}\x{1F130}-\x{1F149}\x{1F150}-\x{1F169}\x{1F170}-\x{1F189}]';
 		$ignored = '[\p{Mn}\p{Me}\p{Cf}\p{Lm}\p{Sk}\x{27}\x{2E}\x{3A}\x{B7}\x{387}\x{55F}\x{5F4}\x{2018}\x{2019}\x{2024}\x{2027}\x{FE13}\x{FE52}\x{FE55}\x{FF07}\x{FF0E}\x{FF1A}]';
 
 		$text = preg_replace( '/(' . $cased . $ignored . '*)Σ(?!' . $ignored . '*' . $cased . ')/u', '$1ς', $text ) ?? '';

@@ -40,11 +40,12 @@ final class Suggester {
 	}
 
 	/**
-	 * Whether a viewer or a catalogue product matches. As `suggest()`, without
-	 * looking at the catalogue when a viewer already does.
+	 * Whether a viewer or a catalogue product matches, which is whether `suggest()`
+	 * has anything: for counting, so it does not look for the closest, nor at the
+	 * catalogue when a viewer already matches.
 	 */
 	public function has_match( string $title, string $vendor ): bool {
-		return null !== $this->embeds->best( $title, $vendor )
-			|| null !== $this->catalog->best( $title, $vendor );
+		return $this->embeds->any( $title, $vendor )
+			|| $this->catalog->any( $title, $vendor );
 	}
 }

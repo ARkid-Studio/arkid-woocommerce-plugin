@@ -254,6 +254,7 @@ final class NameMatcherTest extends TestCase {
 			$this->assertSame( $vector['bestId'], NameMatcher::best( $target['title'], $target['vendor'], $embeds )?->id, $label );
 			$this->assertSame( $vector['rankedIds'], $ids( NameMatcher::ranked( $target['title'], $target['vendor'], $embeds ) ), $label );
 			$this->assertSame( $vector['bestId'], $index->best( $target['title'], $target['vendor'] )?->id, $label );
+			$this->assertSame( null !== $vector['bestId'], $index->any( $target['title'], $target['vendor'] ), $label );
 			$this->assertSame( $vector['rankedIds'], $ids( $index->ranked( $target['title'], $target['vendor'] ) ), $label );
 		}
 	}
@@ -295,6 +296,7 @@ final class NameMatcherTest extends TestCase {
 			$vendor = 0 === $next( 2 ) ? $name() : '';
 
 			$this->assertSame( NameMatcher::best( $title, $vendor, $candidates )?->id, $index->best( $title, $vendor )?->id, "$vendor / $title" );
+			$this->assertSame( null !== NameMatcher::best( $title, $vendor, $candidates ), $index->any( $title, $vendor ), "$vendor / $title" );
 			$this->assertSame( $ids( NameMatcher::ranked( $title, $vendor, $candidates ) ), $ids( $index->ranked( $title, $vendor ) ), "$vendor / $title" );
 			$answered += null === $index->best( $title, $vendor ) ? 0 : 1;
 		}

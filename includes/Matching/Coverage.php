@@ -33,11 +33,12 @@ final class Coverage {
 	 * Classify products.
 	 *
 	 * @param array<int, ShopProduct> $products
-	 * @param array<int, Candidate>   $embeds   The viewers of the account.
-	 * @param array<int, Candidate>   $catalog  The products of ARkid's catalogue.
+	 * @param array<int, Candidate>   $embeds    The viewers of the account.
+	 * @param array<int, Candidate>   $catalog   The products of ARkid's catalogue.
+	 * @param Suggester|null          $suggester Built from `$embeds` and `$catalog` already, to save building it again.
 	 */
-	public static function classify( array $products, array $embeds, array $catalog ): self {
-		$suggester = new Suggester( $embeds, $catalog );
+	public static function classify( array $products, array $embeds, array $catalog, ?Suggester $suggester = null ): self {
+		$suggester ??= new Suggester( $embeds, $catalog );
 
 		$linked    = array();
 		$unknown   = array();

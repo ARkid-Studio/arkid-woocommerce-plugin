@@ -1,0 +1,79 @@
+{
+  "data": [
+    {
+      "environment": "env1",
+      "name": "Floor",
+      "group": "2D Environments"
+    },
+    {
+      "environment": "env2",
+      "name": "Radial",
+      "group": "2D Environments"
+    },
+    {
+      "environment": "env3",
+      "name": "Stage light",
+      "group": "2D Environments"
+    },
+    {
+      "environment": "env9",
+      "name": "Floor",
+      "group": "3D Environments"
+    },
+    {
+      "environment": "env10",
+      "name": "Radial",
+      "group": "3D Environments"
+    },
+    {
+      "environment": "env11",
+      "name": "Stage light",
+      "group": "3D Environments"
+    },
+    {
+      "environment": "env12",
+      "name": "Room",
+      "group": "3D Environments"
+    },
+    {
+      "environment": "env13",
+      "name": "Room (variant)",
+      "group": "3D Environments"
+    },
+    {
+      "environment": "env0",
+      "name": "None - Transparent Background",
+      "group": "No Environment"
+    },
+    {
+      "environment": "env4",
+      "name": "Nature",
+      "group": "Worlds"
+    },
+    {
+      "environment": "env6",
+      "name": "Winter",
+      "group": "Worlds"
+    },
+    {
+      "environment": "env8",
+      "name": "Industrial Hall",
+      "group": "Worlds"
+    },
+    {
+      "environment": "env14",
+      "name": "Evening Parking Space",
+      "group": "Worlds"
+    },
+    {
+      "environment": "env15",
+      "name": "Sandy Dunes",
+      "group": "Worlds"
+    },
+    {
+      "environment": "env17",
+      "name": "Water Plateau",
+      "group": "Worlds"
+    }
+  ]
+}

@@ -14,8 +14,18 @@ defined( 'ABSPATH' ) || exit;
 final class EmbedDto {
 
 	/**
-	 * @param array<int, array{name: string, rgb?: string}> $colors The colours the viewer shows.
+	 * `colors` is the legacy shape the picker and the block read: the colours
+	 * the viewer shows, name and rgb only. `all_colors` is what the API sends:
+	 * every colour of the product, in display order, with its variant id and
+	 * whether the viewer shows it.
+	 *
+	 * @param array<int, array{name: string, rgb?: string}> $colors                The colours the viewer shows.
 	 * @param array<int, array{name: string}>               $tags
+	 * @param array<int, string>                            $variants              Ids of the enabled variants, in display order.
+	 * @param array<int, array{variant_id: string, name: string, rgb: string, enabled: bool}> $all_colors Every colour of the product.
+	 * @param bool                                          $can_edit              Whether the API key may change this viewer.
+	 * @param bool                                          $colors_editable       Whether colour A and B can be set, or a skin fixes them.
+	 * @param bool                                          $environment_editable  Whether the environment can be set, or a skin fixes it.
 	 */
 	public function __construct(
 		public readonly string $embed_id,
@@ -36,7 +46,16 @@ final class EmbedDto {
 		public readonly string $author_name,
 		public readonly string $type,
 		public readonly array $colors,
-		public readonly array $tags
+		public readonly array $tags,
+		public readonly string $product_id = '',
+		public readonly array $variants = array(),
+		public readonly array $all_colors = array(),
+		public readonly string $color_a = '',
+		public readonly string $color_b = '',
+		public readonly string $environment = '',
+		public readonly bool $can_edit = false,
+		public readonly bool $colors_editable = true,
+		public readonly bool $environment_editable = true
 	) {}
 
 	/**
@@ -45,31 +64,52 @@ final class EmbedDto {
 	 * @param array<string, mixed> $payload
 	 */
 	public static function from_array( array $payload ): self {
+		// `to_array()` writes the full list as `all_colors` and the shown ones as
+		// `colors`; the API writes the full list as `colors`. Read whichever
+		// carries the full list, so that a round trip loses nothing.
+		$source = isset( $payload['all_colors'] ) && is_array( $payload['all_colors'] ) && array() !== $payload['all_colors']
+			? $payload['all_colors']
+			: ( $payload['colors'] ?? array() );
+		$all    = self::all_colors( $source );
+
 		return new self(
-			embed_id:      self::str( $payload, 'embed_id' ),
-			row_number:    self::int( $payload, 'row_number' ),
-			product_name:  self::str( $payload, 'product_name' ),
-			brand_name:    self::str( $payload, 'brand_name' ),
-			image:         self::str( $payload, 'image' ),
-			embed_url:     self::str( $payload, 'embed_url' ),
-			embedder_url:  self::str( $payload, 'embedder_url' ),
-			created:       self::str( $payload, 'created' ),
-			modified:      self::str( $payload, 'modified' ),
-			edit_url:      self::str( $payload, 'edit_url' ),
-			analytics_url: self::str( $payload, 'analytics_url' ),
-			internal_note: self::str( $payload, 'internal_note' ),
-			buybutton_url: self::str( $payload, 'buybutton_url' ),
-			cta_url:       self::str( $payload, 'cta_url' ),
-			views:         self::int( $payload, 'views' ),
-			author_name:   self::str( $payload, 'author_name' ),
-			type:          self::str( $payload, 'type' ),
-			colors:        self::colors( $payload['colors'] ?? array() ),
+			embed_id:      Cast::str( $payload, 'embed_id' ),
+			row_number:    Cast::int( $payload, 'row_number' ),
+			product_name:  Cast::str( $payload, 'product_name' ),
+			brand_name:    Cast::str( $payload, 'brand_name' ),
+			image:         Cast::str( $payload, 'image' ),
+			embed_url:     Cast::str( $payload, 'embed_url' ),
+			embedder_url:  Cast::str( $payload, 'embedder_url' ),
+			created:       Cast::str( $payload, 'created' ),
+			modified:      Cast::str( $payload, 'modified' ),
+			edit_url:      Cast::str( $payload, 'edit_url' ),
+			analytics_url: Cast::str( $payload, 'analytics_url' ),
+			internal_note: Cast::str( $payload, 'internal_note' ),
+			buybutton_url: Cast::str( $payload, 'buybutton_url' ),
+			cta_url:       Cast::str( $payload, 'cta_url' ),
+			views:         Cast::int( $payload, 'views' ),
+			author_name:   Cast::str( $payload, 'author_name' ),
+			type:          Cast::str( $payload, 'type' ),
+			colors:        self::shown( $all ),
 			tags:          self::tags( $payload['tags'] ?? array() ),
+			product_id:    Cast::str( $payload, 'product_id' ),
+			variants:      Cast::strings( $payload['variants'] ?? array() ),
+			all_colors:    $all,
+			color_a:       Cast::str( $payload, 'color_a' ),
+			color_b:       Cast::str( $payload, 'color_b' ),
+			environment:   Cast::str( $payload, 'environment' ),
+			can_edit:      Cast::flag( $payload, 'can_edit', false ),
+			colors_editable:      Cast::flag( $payload, 'colors_editable', true ),
+			environment_editable: Cast::flag( $payload, 'environment_editable', true ),
 		);
 	}
 
 	/**
-	 * Convert to a plain array for caching / REST responses.
+	 * Convert to a plain array for REST responses. `from_array()` reads it back
+	 * without loss.
+	 *
+	 * `colors` keeps the legacy meaning (the colours the viewer shows) because
+	 * the picker and the block read it; the full list is `all_colors`.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -94,6 +134,29 @@ final class EmbedDto {
 			'type'          => $this->type,
 			'colors'        => $this->colors,
 			'tags'          => $this->tags,
+			'product_id'    => $this->product_id,
+			'variants'      => $this->variants,
+			'all_colors'    => $this->all_colors,
+			'color_a'       => $this->color_a,
+			'color_b'       => $this->color_b,
+			'environment'   => $this->environment,
+			'can_edit'      => $this->can_edit,
+			'colors_editable'      => $this->colors_editable,
+			'environment_editable' => $this->environment_editable,
+		);
+	}
+
+	/**
+	 * The colours the viewer shows, with their variant ids, in display order.
+	 *
+	 * @return array<int, array{variant_id: string, name: string, rgb: string, enabled: bool}>
+	 */
+	public function shown_colors(): array {
+		return array_values(
+			array_filter(
+				$this->all_colors,
+				static fn( array $color ): bool => $color['enabled']
+			)
 		);
 	}
 
@@ -116,30 +179,14 @@ final class EmbedDto {
 	}
 
 	/**
-	 * @param array<string, mixed> $payload
-	 */
-	private static function str( array $payload, string $key ): string {
-		$value = $payload[ $key ] ?? '';
-		return is_scalar( $value ) ? (string) $value : '';
-	}
-
-	/**
-	 * @param array<string, mixed> $payload
-	 */
-	private static function int( array $payload, string $key ): int {
-		$value = $payload[ $key ] ?? 0;
-		return is_numeric( $value ) ? (int) $value : 0;
-	}
-
-	/**
-	 * Keeps the colours the viewer shows. The API lists every colour of the
-	 * product and flags the shown ones `enabled`; an entry without the flag,
-	 * as `to_array()` writes it, is shown.
+	 * Every colour of the product. The API lists them all and flags the shown
+	 * ones `enabled`; an entry without the flag, as older payloads and
+	 * hand-written ones have it, is shown.
 	 *
 	 * @param mixed $raw
-	 * @return array<int, array{name: string, rgb?: string}>
+	 * @return array<int, array{variant_id: string, name: string, rgb: string, enabled: bool}>
 	 */
-	private static function colors( $raw ): array {
+	private static function all_colors( $raw ): array {
 		if ( ! is_array( $raw ) ) {
 			return array();
 		}
@@ -148,11 +195,30 @@ final class EmbedDto {
 			if ( ! is_array( $color ) || ! isset( $color['name'] ) || ! is_string( $color['name'] ) ) {
 				continue;
 			}
-			if ( false === ( $color['enabled'] ?? true ) ) {
+			$out[] = array(
+				'variant_id' => isset( $color['variant_id'] ) && is_string( $color['variant_id'] ) ? $color['variant_id'] : '',
+				'name'       => $color['name'],
+				'rgb'        => isset( $color['rgb'] ) && is_string( $color['rgb'] ) ? $color['rgb'] : '',
+				'enabled'    => false !== ( $color['enabled'] ?? true ),
+			);
+		}
+		return $out;
+	}
+
+	/**
+	 * The legacy `colors` shape: the shown colours, name and rgb only.
+	 *
+	 * @param array<int, array{variant_id: string, name: string, rgb: string, enabled: bool}> $all
+	 * @return array<int, array{name: string, rgb?: string}>
+	 */
+	private static function shown( array $all ): array {
+		$out = array();
+		foreach ( $all as $color ) {
+			if ( ! $color['enabled'] ) {
 				continue;
 			}
 			$entry = array( 'name' => $color['name'] );
-			if ( isset( $color['rgb'] ) && is_string( $color['rgb'] ) ) {
+			if ( '' !== $color['rgb'] ) {
 				$entry['rgb'] = $color['rgb'];
 			}
 			$out[] = $entry;

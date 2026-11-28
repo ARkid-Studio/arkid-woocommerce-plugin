@@ -1,6 +1,7 @@
 <?php
 /**
- * Network / 5xx / malformed-JSON failure.
+ * Network failure, 5xx, an unexpected status or a malformed body: ARkid could
+ * not be asked, or its answer cannot be used. Worth retrying later.
  *
  * @package Arkid\CatalogueLink
  */

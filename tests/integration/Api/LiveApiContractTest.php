@@ -134,6 +134,67 @@ final class LiveApiContractTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * The three endpoints behind the overview and the viewer forms. Reads only.
+	 * Their fixtures are modelled on ARkid's demo data, so this is what proves
+	 * the live answer still has the keys the DTOs read.
+	 */
+	public function test_the_live_catalogue_products_still_parse(): void {
+		$products = ( new Client( $this->api_key ) )->list_products();
+
+		$this->assertNotEmpty( $products, 'The live account lists no catalogue products.' );
+		foreach ( $products as $product ) {
+			$this->assertNotSame( '', $product->product_id );
+			$this->assertNotSame( '', $product->name );
+			$this->assertNotEmpty( $product->variants, "{$product->name} has no variants" );
+			$this->assertStringStartsWith( 'https://', $product->image );
+		}
+	}
+
+	public function test_the_live_environments_still_parse(): void {
+		$environments = ( new Client( $this->api_key ) )->list_environments( 'en_US' );
+
+		$this->assertNotEmpty( $environments );
+		foreach ( $environments as $environment ) {
+			$this->assertMatchesRegularExpression( '/^env[0-9]+$/', $environment->environment );
+			$this->assertNotSame( '', $environment->name );
+			$this->assertNotSame( '', $environment->group );
+		}
+	}
+
+	public function test_the_live_statistics_still_carry_the_recorded_keys(): void {
+		$response = wp_remote_get(
+			'https://catalogue.arkid.app/api/ecom/stats?source=woocommerce&days=7',
+			array(
+				'timeout' => 15,
+				'headers' => array(
+					'Accept'        => 'application/json',
+					'Authorization' => 'Basic ' . base64_encode( 'woocommerce:' . $this->api_key ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				),
+			)
+		);
+
+		$this->assertNotWPError( $response );
+		$this->assertSame( 200, (int) wp_remote_retrieve_response_code( $response ) );
+
+		$live     = json_decode( wp_remote_retrieve_body( $response ), true );
+		$recorded = EmbedSchemaTest::fixture( 'stats' );
+
+		$this->assertIsArray( $live );
+		$this->assertSame( 7, $live['days'] );
+		foreach ( array_keys( $recorded ) as $key ) {
+			$this->assertArrayHasKey( $key, $live, "The statistics lost `{$key}`." );
+		}
+		foreach ( array( 'impressions', 'interactions', 'ar' ) as $series ) {
+			foreach ( array( 'total', 'before', 'series', 'before_series' ) as $key ) {
+				$this->assertArrayHasKey( $key, $live[ $series ], "`{$series}` lost `{$key}`." );
+			}
+			$this->assertCount( 7, $live[ $series ]['series'] );
+			$this->assertCount( 7, $live[ $series ]['before_series'] );
+		}
+		$this->assertCount( 7, $live['dates'] );
+	}
+
 	public function test_a_bad_key_is_still_rejected_as_auth_not_transport(): void {
 		$this->expectException( \Arkid\CatalogueLink\Api\AuthException::class );
 

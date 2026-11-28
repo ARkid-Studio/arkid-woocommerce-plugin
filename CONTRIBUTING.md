@@ -90,8 +90,13 @@ Two halves:
 | `EmbedSchemaTest` | always, offline | that *our parser* still reads a real payload |
 | `LiveApiContractTest` | opt-in | that *ARkid still sends* one |
 
-`tests/fixtures/api/*.json` are verbatim recorded responses, so the offline half
-runs in CI and under QIT's network isolation with no key. The live half carries
+`tests/fixtures/api/embed-*.json` are verbatim recorded responses, so the offline
+half runs in CI and under QIT's network isolation with no key. `product-list.json`,
+`environment-list.json` and `stats.json` are **not** recordings: a live account's
+catalogue and traffic are not ours to commit, so they are modelled on the demo
+data of ARkid's test key (`EcomProduct::fixtureList()`, `EcomStats::fixture()` in
+the backend) and have the shape `View\EcomEmbed` answers. The opt-in live half
+checks the real answers still parse. The live half carries
 `@group live-api`, which `phpunit-integration.xml.dist` excludes by default, and
 skips itself unless `ARKID_API_KEY` is set:
 

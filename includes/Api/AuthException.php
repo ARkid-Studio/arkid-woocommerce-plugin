@@ -1,6 +1,9 @@
 <?php
 /**
- * 403 — bad / missing API key.
+ * ARkid does not accept the API key: missing, unknown or revoked.
+ *
+ * 401, or a 403 that names the key (ARkid answers 403 for a bad key). A 403
+ * that says the key is fine but may not do this is a {@see RefusedException}.
  *
  * @package Arkid\CatalogueLink
  */

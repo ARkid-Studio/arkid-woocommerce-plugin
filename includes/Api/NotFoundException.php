@@ -1,6 +1,6 @@
 <?php
 /**
- * 404 — embed not found upstream.
+ * 404: the viewer, or whatever was asked for, does not exist in the account.
  *
  * @package Arkid\CatalogueLink
  */

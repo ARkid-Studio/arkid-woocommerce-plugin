@@ -171,6 +171,7 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 * Fix: The "Button text" setting no longer claims to label the last-image modal button. It labels the standalone "Button only" trigger, as it always did.
 * Fix: The viewers list sorts by product and brand without regard to case or accents, and numbers in names by value, instead of putting every capital letter before every lower-case one.
 * Fix: The viewer picker search no longer misses non-ASCII names (for example German, Danish, Polish or Japanese brands) and matches every word of the query across brand, product and note, so "felix learning" finds "Felix - Learning Tower".
+* Tweak: The connection to ARkid can now also create and change viewers, and read the catalogue's products, the available environments and your viewing statistics. Nothing in this version sends any of that yet; it is the groundwork for managing viewers from WordPress.
 
 = 1.0.0 =
 * Initial release.

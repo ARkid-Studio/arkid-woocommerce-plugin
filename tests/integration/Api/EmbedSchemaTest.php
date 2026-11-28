@@ -7,8 +7,11 @@ declare( strict_types = 1 );
 
 namespace Arkid\CatalogueLink\Tests\Integration\Api;
 
+use Arkid\CatalogueLink\Api\CatalogProductDto;
 use Arkid\CatalogueLink\Api\Client;
 use Arkid\CatalogueLink\Api\EmbedDto;
+use Arkid\CatalogueLink\Api\EnvironmentDto;
+use Arkid\CatalogueLink\Api\StatsDto;
 use Arkid\CatalogueLink\Frontend\IframeFactory;
 use Arkid\CatalogueLink\Settings\Options;
 use Arkid\CatalogueLink\Tests\Integration\TestCase;
@@ -154,6 +157,167 @@ final class EmbedSchemaTest extends TestCase {
 
 		$this->assertSame( 'Oak only?', $oak_only->internal_note );
 		$this->assertSame( array( array( 'name' => 'Eiche', 'rgb' => '#ab681f' ) ), $oak_only->colors );
+	}
+
+	/**
+	 * What the DTO used to throw away: the product, the enabled variants in
+	 * display order, the look and the edit flags. Read off a payload recorded
+	 * from the live API.
+	 */
+	public function test_the_recorded_payload_keeps_the_look_the_variants_and_the_edit_flags(): void {
+		$this->stub_http( '/api/ecom/embed', self::fixture( 'embed-list' ) );
+
+		$felix = $this->client()->list_embeds()[3];
+
+		$this->assertSame( 'ad21f15e-7164-11ef-fd5b-87131cfe84d0', $felix->embed_id );
+		$this->assertSame( '3c9e1f02-7db1-11ef-9b4a-6e2d1c0f7a31', $felix->product_id );
+		$this->assertSame( '#f4efe8', $felix->color_a );
+		$this->assertSame( '#d9cfc1', $felix->color_b );
+		$this->assertSame( 'env1', $felix->environment );
+		$this->assertTrue( $felix->can_edit );
+		$this->assertTrue( $felix->colors_editable );
+		$this->assertTrue( $felix->environment_editable );
+		$this->assertCount( 11, $felix->variants );
+		$this->assertSame( '3c9e2a10-7db1-11ef-b1c4-5f0a6e7d8c01', $felix->variants[0] );
+	}
+
+	/**
+	 * "Oak only?" shows one of the eleven colours of its product. The other ten
+	 * must still be there, with their ids, for the dots to be built on.
+	 */
+	public function test_a_viewer_with_one_shown_colour_still_lists_all_eleven(): void {
+		$this->stub_http( '/api/ecom/embed', self::fixture( 'embed-list' ) );
+
+		$oak_only = $this->client()->list_embeds()[1];
+
+		$this->assertCount( 11, $oak_only->all_colors );
+		$this->assertCount( 1, $oak_only->shown_colors() );
+		$this->assertSame( 'Eiche', $oak_only->shown_colors()[0]['name'] );
+		$this->assertSame( array( '3c9e2a10-7db1-11ef-b1c4-5f0a6e7d8c03' ), $oak_only->variants );
+		$this->assertSame(
+			$oak_only->variants,
+			array_column( $oak_only->shown_colors(), 'variant_id' ),
+			'The variants list and the enabled colours name the same viewers.'
+		);
+		$this->assertSame( array( array( 'name' => 'Eiche', 'rgb' => '#ab681f' ) ), $oak_only->colors );
+	}
+
+	/**
+	 * Every colour of every recorded row has the four keys the dots need, and
+	 * the enabled ones are exactly the row's `variants`.
+	 */
+	public function test_in_every_recorded_row_the_enabled_colours_are_the_variants(): void {
+		$this->stub_http( '/api/ecom/embed', self::fixture( 'embed-list' ) );
+
+		foreach ( $this->client()->list_embeds() as $embed ) {
+			$enabled = array_column( $embed->shown_colors(), 'variant_id' );
+			$this->assertSame( $embed->variants, $enabled, "{$embed->embed_id}: variants and enabled colours differ" );
+			foreach ( $embed->all_colors as $color ) {
+				$this->assertNotSame( '', $color['variant_id'] );
+				$this->assertNotSame( '', $color['name'] );
+				$this->assertMatchesRegularExpression( '/^#[0-9a-f]{6}$/', $color['rgb'] );
+			}
+		}
+	}
+
+	public function test_the_picker_payload_keeps_its_shape_and_gains_the_full_colour_list(): void {
+		$this->stub_http( '/api/ecom/embed', self::fixture( 'embed-list' ) );
+
+		$payload = $this->client()->list_embeds()[1]->to_array();
+
+		$this->assertSame( array( array( 'name' => 'Eiche', 'rgb' => '#ab681f' ) ), $payload['colors'] );
+		$this->assertCount( 11, $payload['all_colors'] );
+		$this->assertArrayNotHasKey( 'embed_code', $payload );
+	}
+
+	/**
+	 * Modelled on the demo data of ARkid's test key (`EcomProduct::fixtureList()`),
+	 * not recorded from an account: the live account's products are not ours to
+	 * commit. The shape is the one `View\EcomEmbed::product()` answers.
+	 */
+	public function test_the_catalogue_products_parse(): void {
+		$this->stub_http( '/api/ecom/product', self::fixture( 'product-list' ) );
+
+		$products = $this->client()->list_products();
+
+		$this->assertCount( 6, $products );
+		$this->assertContainsOnlyInstancesOf( CatalogProductDto::class, $products );
+		foreach ( $products as $product ) {
+			$this->assertMatchesRegularExpression( '/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/', $product->product_id );
+			$this->assertNotEmpty( $product->variants );
+			$this->assertStringStartsWith( 'https://cloud.arkid.app/', $product->image );
+		}
+	}
+
+	public function test_the_environments_parse_and_carry_the_language_asked_for(): void {
+		$this->stub_http( '/api/ecom/environment', self::fixture( 'environment-list' ) );
+
+		$environments = $this->client()->list_environments( 'de_DE' );
+
+		$this->assertCount( 15, $environments );
+		$this->assertContainsOnlyInstancesOf( EnvironmentDto::class, $environments );
+		$this->assertSame(
+			'https://catalogue.arkid.app/api/ecom/environment?source=woocommerce&lang=de',
+			$this->http_calls[0]
+		);
+	}
+
+	public function test_the_statistics_parse_and_ask_for_the_period(): void {
+		$this->stub_http( '/api/ecom/stats', self::fixture( 'stats' ) );
+
+		$stats = $this->client()->stats( 90 );
+
+		$this->assertInstanceOf( StatsDto::class, $stats );
+		$this->assertSame( 'https://catalogue.arkid.app/api/ecom/stats?source=woocommerce&days=90', $this->http_calls[0] );
+		$this->assertSame( -6, $stats->impressions->percent_change() );
+		$this->assertCount( count( $stats->dates ), $stats->impressions->series );
+		$this->assertCount( count( $stats->dates ), $stats->interactions->before_series );
+		$this->assertCount( count( $stats->dates ), $stats->ar->series );
+		$this->assertSame( 14.5, $stats->avg_interaction_seconds );
+	}
+
+	/**
+	 * Through the real WordPress HTTP API, not the unit stubs: a write is sent as
+	 * JSON with the method and headers ARkid needs.
+	 */
+	public function test_a_write_goes_through_wordpress_as_json_with_the_right_method(): void {
+		$sent = null;
+		add_filter(
+			'pre_http_request',
+			static function ( $preempt, array $args, string $url ) use ( &$sent ) {
+				$sent = array( $args, $url );
+				return array(
+					'headers'  => array(),
+					'body'     => (string) wp_json_encode( array( 'embed_id' => 'abc-123', 'color_a' => '#000000' ) ),
+					'response' => array( 'code' => 200, 'message' => 'OK' ),
+					'cookies'  => array(),
+					'filename' => null,
+				);
+			},
+			20, // After the base class's catch-all, which ignores what came before it.
+			3
+		);
+
+		$embed = $this->client()->update_embed( 'abc-123', new \Arkid\CatalogueLink\Api\EmbedInput( color_a: '#000000' ) );
+
+		$this->assertSame( '#000000', $embed->color_a );
+		$this->assertIsArray( $sent );
+		$this->assertSame( 'PUT', $sent[0]['method'] );
+		$this->assertSame( 'https://catalogue.arkid.app/api/ecom/embed/abc-123?source=woocommerce', $sent[1] );
+		$this->assertSame( '{"color_a":"#000000"}', $sent[0]['body'] );
+		$this->assertSame( 'application/json', $sent[0]['headers']['Content-Type'] );
+		$this->assertSame( 10, $sent[0]['timeout'] );
+	}
+
+	public function test_a_write_that_arkid_refuses_with_field_errors_surfaces_them(): void {
+		$this->stub_http( '/api/ecom/embed/', array( 'errors' => array( 'variants' => 'Not a variant of the product: x.' ) ), 422 );
+
+		try {
+			$this->client()->update_embed( 'abc-123', new \Arkid\CatalogueLink\Api\EmbedInput( name: 'n' ) );
+			$this->fail( 'A ValidationException was expected.' );
+		} catch ( \Arkid\CatalogueLink\Api\ValidationException $e ) {
+			$this->assertSame( 'Not a variant of the product: x.', $e->error_for( 'variants' ) );
+		}
 	}
 
 	/**

@@ -88,8 +88,80 @@ in, so this check is what keeps an arbitrary iframe off the product page.
   `?source=magento`.
 - **The API also sends `embed_code`**, a ready-made `<iframe>`. It is ignored:
   ours carries a different sandbox and a `referrerpolicy`.
-- `colors` lists every colour of the product, each with an `enabled` flag.
-  `EmbedDto` keeps only the enabled ones, the colours the viewer shows.
+- `colors` lists every colour of the product, each with a `variant_id`, its
+  `rgb` and an `enabled` flag. `EmbedDto` keeps all of them in `all_colors`
+  (and `shown_colors()` the enabled ones). Its `colors` property and the
+  `colors` key of `to_array()` keep the legacy meaning, the colours the viewer
+  shows with name and rgb only, because the picker and the block read that.
+  `from_array( to_array() )` loses nothing.
+- The same payload carries what editing needs, and `EmbedDto` keeps it:
+  `product_id`, `variants` (the enabled variant ids in display order),
+  `color_a`, `color_b`, `environment`, `can_edit`, `colors_editable` and
+  `environment_editable`. Check the last three before offering a change: a
+  viewer the key may not change, or whose skin fixes the look, answers a write
+  with a 403 or 422.
+
+### The client
+
+`Client` implements `EmbedSource` and is the only thing that talks to ARkid.
+Every call goes out when it is made: there is no cache, so an admin screen
+always shows what ARkid says now. A **storefront request never calls any method
+of it**; product pages render from the stored snapshot.
+
+| Method | Request |
+| --- | --- |
+| `list_embeds()`, `get_embed( $id )`, `probe()` | `GET embed`, `GET embed/{id}` |
+| `create_embed( EmbedInput )` | `POST embed`, JSON body, needs the key's write permission |
+| `update_embed( $id, EmbedInput )` | `PUT embed/{id}`, needs the viewer's `can_edit` |
+| `list_products()` | `GET product`, the catalogue products a viewer can be created for |
+| `list_environments( $locale )` | `GET environment?lang=`, named in the language asked for |
+| `stats( $days )` | `GET stats?days=`; 7, 30 or 90, anything else is read as 30 |
+
+`create_embed` and `update_embed` exist for the viewer forms that follow; no
+screen calls them yet, so no write request leaves the site today.
+
+- **Query strings are encoded here, not by `add_query_arg()`**, which encodes
+  only the query string it is handed and splices argument values in as they
+  are. `source=woocommerce` always comes first and cannot be overridden.
+  `days` is whitelisted, and `lang` is reduced to the two or three letters of a
+  WordPress locale (`de_DE` gives `de`) or left out, so a locale can never add
+  a parameter. A test pins that `de&source=magento` sends no `lang` at all.
+- **Ids in a path** are 1 to 64 characters of `A-Za-z0-9_-` (a UUID, or the
+  22-character form of viewer URLs) and are `rawurlencode`d. Anything else
+  throws `NotFoundException` without a request. `product_id` and variant ids in
+  a body must be UUIDs.
+- **Writes** send `Content-Type: application/json` (ARkid answers 415 otherwise),
+  wait up to 10 s instead of 5, and follow no redirect, which would replay the
+  write as a body-less GET. The products and statistics reads also get 10 s.
+  `EmbedInput` checks the rules of ARkid's `EcomEmbedInput` first and throws
+  the same `ValidationException` a 422 would, so one handler serves both. Only
+  fields that are set are sent; ARkid keeps the rest (or, on a create, takes
+  the account's default). ARkid keeps a page URL a viewer already has, so
+  `embedder_url` only ever fills an empty one.
+- **What a failed answer means.** ARkid reports problems as
+  `{"errors": {"field": "message"}}`.
+
+  | Answer | Exception |
+  | --- | --- |
+  | 401 | `AuthException`: check the API key |
+  | 403 on a read, or on a write whose `errors.auth` says "invalid API key", or without any explanation | `AuthException` |
+  | 403 on a write with another explanation ("The user of this API key may not do this.", a plan limit) | `RefusedException` |
+  | 402, 429 | `RefusedException`; `retry_after()` carries `Retry-After` of a 429 |
+  | 422, 400 | `ValidationException` with `errors()` by field |
+  | 404 | `NotFoundException`, its message names what was asked for |
+  | 5xx, 405, 415, other, network error, non-JSON body | `TransportException` |
+
+  ARkid answers a **bad key with 403**, not 401 (`EcomEmbed::api()` turns its
+  `PermissionDenied` into `{"errors": {"auth": "Missing or invalid API key."}}`),
+  so a 403 with a structured body cannot simply be taken as "not the key". A
+  read can only fail on the key, which makes every 403 on a read an
+  `AuthException`. On a write the same 403 carries "The user of this API key
+  may not do this." when the key is fine and the action is not allowed. A
+  plan limit or a rate limit therefore never reads as "check your API key".
+  `ErrorReplyException::errors()` holds the messages exactly as ARkid sent them
+  (bounded in number of characters): escape them where they are shown.
+- **Timeouts and retries.** One attempt per call. `Retry-After` is exposed, never
+  waited on.
 
 How the contract is tested — the offline schema test against recorded fixtures,
 and the opt-in live check — is in [CONTRIBUTING.md](../CONTRIBUTING.md#the-arkid-api-contract).

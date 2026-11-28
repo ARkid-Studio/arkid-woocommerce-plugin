@@ -205,11 +205,11 @@ class ViewersListTable extends \WP_List_Table {
 
 		$type = $this->request_value( 'viewer_type' );
 		if ( '' !== $type && isset( $this->type_options()[ $type ] ) ) {
-			$rows = array_values( array_filter( $rows, static fn( EmbedDto $embed ): bool => $embed->type === $type ) );
+			$rows = array_values( array_filter( $rows, static fn( EmbedDto $embed ): bool => self::option_value( $embed->type ) === $type ) );
 		}
 		$brand = $this->request_value( 'viewer_brand' );
 		if ( '' !== $brand && isset( $this->brand_options()[ $brand ] ) ) {
-			$rows = array_values( array_filter( $rows, static fn( EmbedDto $embed ): bool => $embed->brand_name === $brand ) );
+			$rows = array_values( array_filter( $rows, static fn( EmbedDto $embed ): bool => self::option_value( $embed->brand_name ) === $brand ) );
 		}
 
 		$rows = EmbedSearch::filter( $rows, $this->request_value( 's' ) );
@@ -310,8 +310,9 @@ class ViewersListTable extends \WP_List_Table {
 	private function type_options(): array {
 		$types = array();
 		foreach ( $this->rows as $embed ) {
-			if ( '' !== $embed->type ) {
-				$types[ $embed->type ] = strtoupper( $embed->type );
+			$type = self::option_value( $embed->type );
+			if ( '' !== $type ) {
+				$types[ $type ] = strtoupper( $type );
 			}
 		}
 		uasort( $types, array( Text::class, 'compare' ) );
@@ -325,8 +326,9 @@ class ViewersListTable extends \WP_List_Table {
 	private function brand_options(): array {
 		$brands = array();
 		foreach ( $this->rows as $embed ) {
-			if ( '' !== $embed->brand_name ) {
-				$brands[ $embed->brand_name ] = $embed->brand_name;
+			$brand = self::option_value( $embed->brand_name );
+			if ( '' !== $brand ) {
+				$brands[ $brand ] = $brand;
 			}
 		}
 		uasort( $brands, array( Text::class, 'compare' ) );
@@ -341,6 +343,18 @@ class ViewersListTable extends \WP_List_Table {
 		return null !== $this->screen && function_exists( 'get_hidden_columns' )
 			? get_hidden_columns( $this->screen )
 			: self::default_hidden_columns();
+	}
+
+	/**
+	 * A type or brand as the filter dropdowns carry it.
+	 *
+	 * The request is read through `sanitize_text_field()`, which collapses runs
+	 * of white space and trims, so a name that has such spaces would come back
+	 * different from what the dropdown sent and find nothing. Both sides go
+	 * through the same function instead.
+	 */
+	private static function option_value( string $name ): string {
+		return sanitize_text_field( $name );
 	}
 
 	private function request_value( string $key ): string {

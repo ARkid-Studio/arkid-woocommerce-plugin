@@ -273,6 +273,24 @@ final class ViewersTableTest extends TestCase {
 		$this->assertSame( array( 1, 2 ), $this->shown_rows( $this->table( $rows ) ) );
 	}
 
+	/**
+	 * What the dropdown posts is the name as ARkid spells it, and WordPress's text
+	 * sanitiser collapses runs of spaces and trims. A name with such spaces must
+	 * still find its own viewers, and still be the selected option.
+	 */
+	public function test_a_brand_with_extra_spaces_can_be_filtered_and_stays_selected(): void {
+		$rows = array(
+			$this->embed( 1, array( 'brand_name' => "Acme  Home \t" ) ),
+			$this->embed( 2, array( 'brand_name' => 'Other' ) ),
+		);
+
+		$this->request( array( 'viewer_brand' => "Acme  Home \t" ) );
+		$table = $this->table( $rows );
+
+		$this->assertSame( array( 1 ), $this->shown_rows( $table ) );
+		$this->assertMatchesRegularExpression( '/<option value="Acme Home" selected/', $this->html( $this->table( $rows ) ) );
+	}
+
 	public function test_the_filter_dropdowns_offer_each_type_and_brand_once_and_keep_the_selection(): void {
 		$rows = array(
 			$this->embed( 1, array( 'type' => 'pdp', 'brand_name' => 'Zeta' ) ),

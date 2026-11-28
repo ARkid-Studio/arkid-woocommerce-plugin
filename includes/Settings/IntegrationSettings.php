@@ -88,7 +88,7 @@ class IntegrationSettings extends \WC_Integration {
 				'type'        => 'text',
 				'default'     => '',
 				'placeholder' => Options::default_button_text(),
-				'description' => __( 'Label for the standalone "Button only" trigger and for the modal-opening button on the last-image position. Leave empty to use the localized default for each visitor.', 'arkid-catalogue-link' ),
+				'description' => __( 'Label of the standalone "Button only" trigger. Leave empty to use the localized default for each visitor.', 'arkid-catalogue-link' ),
 				'desc_tip'    => true,
 			),
 			'require_consent'          => array(

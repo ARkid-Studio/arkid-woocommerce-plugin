@@ -124,6 +124,23 @@ final class IframeFactoryTest extends TestCase {
 		$this->assertStringNotContainsString( '<img', $html );
 	}
 
+	/**
+	 * The "Button text" setting labels the standalone trigger only. The settings
+	 * description used to claim it labelled the last-image modal button too, which
+	 * is a thumbnail with a play icon and never reads the option.
+	 */
+	public function test_the_configured_button_text_does_not_reach_the_image_trigger(): void {
+		$factory = new IframeFactory( $this->options( button_text: 'Show in 3D' ) );
+
+		$html = $factory->build_image_trigger(
+			'https://catalogue.arkid.app/embed/abc',
+			'Felix',
+			'https://cdn.example/img.webp'
+		);
+
+		$this->assertStringNotContainsString( 'Show in 3D', $html );
+	}
+
 	public function test_text_trigger_includes_inline_brand_icon_svg(): void {
 		$factory = new IframeFactory( $this->options() );
 

@@ -167,6 +167,7 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 
 = Unreleased =
 * Fix: Removing a viewer from a product no longer discards the product's position override.
+* Fix: The "Button text" setting no longer claims to label the last-image modal button. It labels the standalone "Button only" trigger, as it always did.
 
 = 1.0.0 =
 * Initial release.

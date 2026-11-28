@@ -202,6 +202,71 @@ final class RefreshEmbedsTest extends TestCase {
 		$this->assertSame( PostMeta::STATUS_MISSING, PostMeta::status( $product_id ), 'Not knowing is not the same as found.' );
 	}
 
+	/**
+	 * Another request saves a different viewer while this one waits for ARkid,
+	 * straight into the database as a second PHP process would, so this
+	 * process's own meta cache still holds the old id.
+	 */
+	private function select_another_viewer_while_arkid_is_asked( int $product_id, string $embed_id ): void {
+		add_filter(
+			'pre_http_request',
+			static function ( $preempt ) use ( $product_id, $embed_id ) {
+				global $wpdb;
+				$wpdb->update(
+					$wpdb->postmeta,
+					array( 'meta_value' => $embed_id ),
+					array(
+						'post_id'  => $product_id,
+						'meta_key' => PostMeta::KEY_EMBED_ID,
+					)
+				);
+				$wpdb->update(
+					$wpdb->postmeta,
+					array( 'meta_value' => 'https://catalogue.arkid.app/e/' . $embed_id ),
+					array(
+						'post_id'  => $product_id,
+						'meta_key' => PostMeta::KEY_EMBED_URL,
+					)
+				);
+				return $preempt;
+			},
+			5
+		);
+	}
+
+	/**
+	 * The question to ARkid takes up to a few seconds. A 404 about the viewer
+	 * that WAS selected must not blank the one that is, nor flag it missing.
+	 */
+	public function test_a_404_about_a_viewer_no_longer_selected_is_not_written_under_the_new_one(): void {
+		$product_id = $this->make_product_with_embed( 'old-111', '', 'https://catalogue.arkid.app/e/old-111' );
+		$this->stub_http_status( '/api/ecom/embed/', 404 );
+		$this->select_another_viewer_while_arkid_is_asked( $product_id, 'new-222' );
+
+		$this->job()->refresh_product( $product_id );
+
+		wp_cache_delete( $product_id, 'post_meta' );
+		$this->assertSame( 'new-222', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( 'https://catalogue.arkid.app/e/new-222', PostMeta::embed_url( $product_id ), 'The new viewer keeps rendering.' );
+		$this->assertSame( '', PostMeta::status( $product_id ), 'The verdict on the old viewer says nothing about the new one.' );
+	}
+
+	/**
+	 * Same for a found viewer: writing it would put the old id back over the
+	 * merchant's new choice.
+	 */
+	public function test_an_answer_about_a_viewer_no_longer_selected_does_not_put_its_id_back(): void {
+		$product_id = $this->make_product_with_embed( 'old-111', '', 'https://catalogue.arkid.app/e/old-111' );
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'old-111', 'https://catalogue.arkid.app/e/old-111-fresh' ) );
+		$this->select_another_viewer_while_arkid_is_asked( $product_id, 'new-222' );
+
+		$this->job()->refresh_product( $product_id );
+
+		wp_cache_delete( $product_id, 'post_meta' );
+		$this->assertSame( 'new-222', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( 'https://catalogue.arkid.app/e/new-222', PostMeta::embed_url( $product_id ) );
+	}
+
 	public function test_a_rejected_api_key_does_not_wipe_snapshots(): void {
 		$product_id = $this->make_product_with_embed( 'abc-123', '', 'https://catalogue.arkid.app/e/keep-me' );
 		$this->stub_http_status( '/api/ecom/embed/', 401 );

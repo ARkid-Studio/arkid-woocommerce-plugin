@@ -118,6 +118,10 @@ class RefreshEmbeds {
 
 		$lookup = $this->lookup->find( $embed_id );
 
+		if ( ! $this->is_still_selected( $product_id, $embed_id ) ) {
+			return;
+		}
+
 		if ( $lookup->is_not_found() ) {
 			// Removed upstream: stop rendering it and say why, but keep the
 			// selection so the merchant can see what was chosen and so it heals
@@ -135,6 +139,21 @@ class RefreshEmbeds {
 		}
 
 		PostMeta::write( $product_id, $lookup->embed, PostMeta::position( $product_id ) );
+	}
+
+	/**
+	 * Whether `$embed_id` is still the product's viewer.
+	 *
+	 * Asking ARkid takes up to a few seconds. A merchant who saves a different
+	 * viewer in that time must not have the answer about the old one written
+	 * under the new: a 404 would blank it and flag it missing, and a found
+	 * viewer would put the old id back. The meta cache of this process is
+	 * dropped first, because the save happened in another process.
+	 */
+	private function is_still_selected( int $product_id, string $embed_id ): bool {
+		wp_cache_delete( $product_id, 'post_meta' );
+
+		return PostMeta::embed_id( $product_id ) === $embed_id;
 	}
 
 	/**

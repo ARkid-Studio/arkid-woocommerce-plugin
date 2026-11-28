@@ -72,6 +72,12 @@ a viewer and the product page shows none.
   Saving the same viewer while ARkid is down keeps it. A save that gets a 404
   keeps the choice, drops the snapshot, sets `missing` and queues a retry,
   because a viewer created a moment ago may not be visible to the API yet.
+- **An answer about a viewer that is no longer selected is dropped.** Asking
+  ARkid takes up to a few seconds, and the merchant may save a different viewer
+  in that time. The refresh job therefore re-reads the selection (bypassing its
+  own meta cache, because the save happened in another process) before it writes
+  anything, so neither a 404 nor a found viewer of the old choice lands under
+  the new one.
 - **A changed API key** queues a full resync. The viewers of the old account
   answer 404 for the new key (verified in ARkid's source: an id of another
   organisation is a 404, not a 403), so they become `Missing`; a rejected key

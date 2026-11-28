@@ -26,6 +26,12 @@ on the product display page.
   interactions), search, type and brand filters, sorting, paging with a
   Screen Options page size, a preview dialog, and Edit / Analytics links into
   ARkid.
+- **ARkid on the Products list**: a column with each product's viewer
+  (thumbnail, name, colours, a preview, and the state of the link in words) or
+  the viewer or catalogue product its name matches; views with counts (With
+  viewer, Without viewer, Match available, Needs attention) and dropdown filters
+  for the state and for one viewer. Names are compared on the server and never
+  sent to ARkid.
 - **No API calls on product pages.** Each product stores its own viewer link,
   so the storefront keeps working if ARkid is unreachable; a daily Action
   Scheduler job keeps those links current.
@@ -83,9 +89,10 @@ includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Plugin.php               bootstrap
   PostMeta.php             per-product meta: registration, sanitisers, snapshot writes, link status
   Api/                     HTTP client (read and write), DTOs, input rules, exceptions
-  Links/                   state of a product's link (none, linked, not synced, missing), live lookup, which products show which viewer
+  Links/                   state of a product's link (none, linked, not synced, missing), live lookup, which products show which viewer, the counts and the bounded scan behind the Products list
+  Matching/                the port of the Shopify matcher: names, accents, candidates, classification, viewer ids
   Settings/                WooCommerce integration tab + typed options
-  Admin/                   meta box, viewer list and its page, Products list filter, colour dots, preview dialog, notices, assets
+  Admin/                   meta box, viewer list and its page, Products list column, views and filters, colour dots, preview dialog, notices, assets
   Frontend/                renderer, iframe builder, modal, consent, gallery injectors
   Blocks/                  server-rendered embed block
   Cron/                    Action Scheduler refresh
@@ -101,7 +108,8 @@ tests/
   integration/             real WordPress + WooCommerce
   e2e/                     Playwright
   fixtures/api/            ARkid API responses: recorded (viewers) and modelled (products, environments, stats)
-bin/                       release zip, test provisioning, dev-stack wrapper
+  fixtures/matching/       what the Shopify matcher gave: the vectors the port must reproduce
+bin/                       release zip, test provisioning, dev-stack wrapper, the generator of the accent table
 docs/                      architecture notes
 readme.txt                 the WordPress.org plugin readme
 ```

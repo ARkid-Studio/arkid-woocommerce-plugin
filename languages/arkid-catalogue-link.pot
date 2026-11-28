@@ -9,15 +9,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-28T10:38:01+00:00\n"
+"POT-Creation-Date: 2026-11-28T11:47:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: arkid-catalogue-link\n"
 
 #. Plugin Name of the plugin
 #: arkid-catalogue-link.php
-#: includes/Admin/MetaBox.php:50
+#: includes/Admin/MetaBox.php:49
 #: includes/Admin/Notices.php:42
+#: includes/Admin/ProductListViews.php:349
 #: includes/Settings/IntegrationSettings.php:38
 #: build/blocks/embed/index.js:1
 msgid "ARkid Catalogue Link"
@@ -36,6 +37,8 @@ msgstr ""
 
 #. Author of the plugin
 #: arkid-catalogue-link.php
+#: includes/Admin/ProductListColumns.php:62
+#: includes/Admin/ProductListColumns.php:67
 msgid "ARkid"
 msgstr ""
 
@@ -56,7 +59,7 @@ msgid "ARkid Catalogue Link requires %s to be installed and active."
 msgstr ""
 
 #: includes/Admin/Assets.php:106
-#: includes/Admin/MetaBox.php:91
+#: includes/Admin/MetaBox.php:90
 msgid "Search viewers…"
 msgstr ""
 
@@ -110,70 +113,70 @@ msgstr ""
 msgid "%s: hidden"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:85
+#: includes/Admin/MetaBox.php:84
 #: build/blocks/embed/index.js:1
 msgid "Viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:97
+#: includes/Admin/MetaBox.php:96
 msgid "— No viewer —"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:110
+#: includes/Admin/MetaBox.php:109
 #: includes/Admin/ViewersListTable.php:98
 #: includes/Admin/ViewersListTable.php:654
 msgid "Preview"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:118
+#: includes/Admin/MetaBox.php:117
 msgid "Remove viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:137
+#: includes/Admin/MetaBox.php:136
 msgid "Position override"
 msgstr ""
 
 #. translators: %s: site default position label
-#: includes/Admin/MetaBox.php:151
+#: includes/Admin/MetaBox.php:150
 #, php-format
 msgid "Site default: %s"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:211
+#: includes/Admin/MetaBox.php:205
 msgid "This viewer no longer exists in your ARkid account. Pick another viewer or remove it."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:214
+#: includes/Admin/MetaBox.php:208
 msgid "This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:217
+#: includes/Admin/MetaBox.php:211
 msgid "ARkid could not be reached, or it did not accept the API key, so this viewer could not be checked just now. The product page keeps showing the last synced viewer."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:233
+#: includes/Admin/MetaBox.php:227
 msgid "Use site default"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:234
+#: includes/Admin/MetaBox.php:228
 msgid "First image (gallery)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:235
+#: includes/Admin/MetaBox.php:229
 msgid "Last image (gallery, modal)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:236
+#: includes/Admin/MetaBox.php:230
 #: includes/Settings/IntegrationSettings.php:65
 msgid "Above product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:237
+#: includes/Admin/MetaBox.php:231
 #: includes/Settings/IntegrationSettings.php:66
 msgid "Below product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:238
+#: includes/Admin/MetaBox.php:232
 msgid "Button only"
 msgstr ""
 
@@ -208,19 +211,124 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: includes/Admin/ProductListFilter.php:87
+#: includes/Admin/ProductListColumns.php:152
+msgid "Linked to a viewer your ARkid account does not list."
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:171
+msgid "No viewer"
+msgstr ""
+
+#. translators: %s: the name of a viewer
+#: includes/Admin/ProductListColumns.php:178
+#, php-format
+msgid "Suggested viewer: %s"
+msgstr ""
+
+#. translators: %s: the name of a product of the ARkid catalogue
+#: includes/Admin/ProductListColumns.php:180
+#, php-format
+msgid "Suggested from the ARkid catalogue: %s"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:188
+msgid "Open the product to choose a viewer"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:205
+#: includes/Admin/ProductListViews.php:163
+msgid "Match available"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:208
+msgid "Unknown viewer"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:211
+msgid "Linked"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:212
+msgid "Not synced yet"
+msgstr ""
+
+#: includes/Admin/ProductListColumns.php:213
+msgid "Viewer missing"
+msgstr ""
+
+#. translators: %s: product name
+#: includes/Admin/ProductListColumns.php:241
+#: includes/Admin/ViewersListTable.php:698
+#, php-format
+msgid "Preview %s"
+msgstr ""
+
+#: includes/Admin/ProductListFilter.php:94
 msgid "Showing only the products that show one ARkid viewer."
 msgstr ""
 
-#: includes/Admin/ProductListFilter.php:89
+#: includes/Admin/ProductListFilter.php:96
 msgid "Show all products"
 msgstr ""
 
-#: includes/Admin/Setup.php:55
+#: includes/Admin/ProductListViews.php:161
+msgid "With viewer"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:162
+msgid "Without viewer"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:164
+msgid "Needs attention"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:184
+#: includes/Admin/ProductListViews.php:227
+msgid "Filter by ARkid viewer"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:186
+msgid "All products"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:229
+msgid "Any viewer"
+msgstr ""
+
+#. translators: 1: the name of a viewer, 2: how many products show it
+#: includes/Admin/ProductListViews.php:239
+#, php-format
+msgid "%1$s (%2$s product)"
+msgid_plural "%1$s (%2$s products)"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: a filter of the Products list, for example "With viewer"
+#: includes/Admin/ProductListViews.php:262
+#, php-format
+msgid "ARkid: %s"
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:353
+msgid "The ARkid column shows what is stored for each product, and the \"Match available\" view and the suggestions are left out."
+msgstr ""
+
+#: includes/Admin/ProductListViews.php:354
+msgid "The \"Match available\" view is left out, and suggestions only use your viewers."
+msgstr ""
+
+#. translators: %s: a number of products
+#: includes/Admin/ProductListViews.php:366
+#, php-format
+msgid "Only the first %s products without a viewer, in the order of their IDs, were compared with ARkid, so more products may have a match."
+msgstr ""
+
+#: includes/Admin/Setup.php:66
 msgid "Settings"
 msgstr ""
 
-#: includes/Admin/Setup.php:60
+#: includes/Admin/Setup.php:71
 msgid "Viewers"
 msgstr ""
 
@@ -331,21 +439,15 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#. translators: %s: product name
 #: includes/Admin/ViewersListTable.php:705
-#, php-format
-msgid "Preview %s"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:712
 msgid "No viewers found. Add a viewer in the ARkid Catalogue or check your API key."
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:716
+#: includes/Admin/ViewersListTable.php:709
 msgid "No viewers match these filters."
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:720
+#: includes/Admin/ViewersListTable.php:713
 msgid "Clear the filters"
 msgstr ""
 
@@ -360,11 +462,13 @@ msgid "Viewers per page"
 msgstr ""
 
 #: includes/Admin/ViewersPage.php:136
+#: includes/Links/AccountData.php:183
 msgid "The API key was rejected. Update it in the integration settings."
 msgstr ""
 
 #. translators: %s: error message
 #: includes/Admin/ViewersPage.php:140
+#: includes/Links/AccountData.php:188
 #, php-format
 msgid "Could not reach the ARkid API: %s"
 msgstr ""
@@ -412,6 +516,10 @@ msgstr ""
 #: includes/Frontend/IframeFactory.php:213
 #, php-format
 msgid "Open the 3D viewer for %s in a new window"
+msgstr ""
+
+#: includes/Links/AccountData.php:193
+msgid "ARkid could not be asked for its viewers."
 msgstr ""
 
 #: includes/Rest/Controller.php:75

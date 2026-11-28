@@ -28,8 +28,10 @@ post meta snapshot  ────────────────────
 
 - **Product pages never call the API.** Each product stores a snapshot of its
   viewer's URL and thumbnail, so the storefront keeps working when ARkid is
-  unreachable. Admin screens (the picker, the viewer list) always read live —
-  there is no cache to go stale. (See [The viewers screen](#the-viewers-screen).)
+  unreachable. Admin screens (the picker, the viewer list, the Products list)
+  always read live — there is no cache to go stale. (See
+  [The viewers screen](#the-viewers-screen) and
+  [The Products list](#the-products-list).)
 - **The block does the same.** `arkid-catalogue-link/embed` persists `embedUrl`
   in its attributes, so front-end rendering never needs the API either. The
   editor matches a block to its viewer by `embedId` alone, never by comparing
@@ -54,7 +56,9 @@ no request:
 | `Missing` | id, status `missing` | ARkid answered **404** for it: deleted, or it belongs to another account's key. It will not sync until the merchant acts |
 
 `NotSynced` and `Missing` are what "needs attention" counts: the merchant chose
-a viewer and the product page shows none.
+a viewer and the product page shows none. The Products list adds, when it has
+read the account's viewers, a link to a viewer the account does not list
+([The Products list](#the-products-list)).
 
 - **`_arkid_embed_status` is written only by a live 404**, by the refresh job
   or by a save, through `Links\EmbedLookup`, which is the single place that
@@ -111,9 +115,8 @@ call is made once per request.
   intersected, not replaced. The id has to look like a viewer id
   (`PostMeta::sanitize_embed_id()`); anything else is ignored. A notice with
   a "Show all products" link says the list is narrowed. The filter reads only
-  the shop's own database. The count tiles, columns and dropdown filter of the
-  Products list are the product list step's: they can build on the same
-  query variable.
+  the shop's own database. The column, views and dropdowns of the Products list
+  build on the same query variable: see [The Products list](#the-products-list).
 - **Interactions** are joined from `stats.embeds` by viewer id
   (`StatsDto::interactions_by_embed()`). ARkid's `EcomStats` lists every live
   standalone viewer that had at least one impression in the period, with its
@@ -169,10 +172,113 @@ call is made once per request.
   so the two cannot disagree; a viewer that fails it gets no button.
   `showModal()` supplies the focus trap and Escape; the script returns focus to
   the button and empties the frame on close. The viewers list, the product
-  meta box and, later, the product list use the same dialog.
+  meta box and the Products list use the same dialog, and
+  `Admin\PreviewButton` makes the same data attributes for all three.
 - **Links, thumbnails and previews from API data must be https**
   (`Support\Url::https()`): `esc_url()` alone also lets `http:` and `ftp:`
   through.
+
+## The Products list
+
+Products → All Products is WooCommerce's own list table. The plugin adds to it,
+for people who can `manage_woocommerce` (it asks ARkid with the shop's key, as
+the viewers screen does): a column, four views and two dropdowns.
+
+- **The "ARkid" column** (`Admin\ProductListColumns`, before the date) shows, per
+  product: the viewer's thumbnail, `#row brand product` (which opens the preview
+  dialog), its colours as dots, and a badge with the state of the link in words
+  (Linked, Not synced yet, Viewer missing, Unknown viewer). A product without a
+  viewer shows, when a viewer of the account or a catalogue product matches its
+  name, a "Match available" badge and a dashed "Suggested viewer: ..." chip that
+  links to the product's edit screen, where the viewer is chosen; otherwise a
+  dash. Nothing is ever linked because a name matches.
+- **The views** (`Admin\ProductListViews`, after the status views) are With
+  viewer, Without viewer, Match available and Needs attention, each with its count
+  (`?arkid=with|without|match|attention`), and **two dropdowns** beside the
+  other filters: the same four, and the viewers that products show, each with its
+  number of products (`?arkid_embed=<id>`, which
+  [the viewers screen](#the-viewers-screen) links to). They combine with each
+  other and with core's filters.
+- **What each one is.** *With viewer*: the `_arkid_embed_id` meta is not empty,
+  whatever the state of the link. *Without viewer*: it is absent or empty. Those two and the
+  count of *Needs attention* are one SQL query each (`Links\ProductStates`),
+  whatever the size of the shop (the count of "needs attention" is grouped by
+  viewer and state, so it reads a row per viewer, not per product);
+  "with" and "without" filter with a `meta_query`,
+  "needs attention" and "match" with `post__in`.
+  *Needs attention* is a link whose product page shows nothing: no snapshot stored
+  (`LinkState::NotSynced`) or marked missing by a live 404 (`Missing`); and, when
+  the account's viewers were read, a link to a viewer the account does not list.
+  That is told by the list ARkid answered a moment ago, not by a cache of one, so
+  a viewer created a minute ago is not "missing"; a viewer the list has is not
+  missing either, whatever a refresh once left behind, as on the product edit
+  screen. The count and the filter read the same columns with two fixed queries
+  and apply one rule in PHP (`ProductStates::needs_attention()`), so they cannot
+  disagree.
+  *Match available*: a product without a viewer whose title (and brand) matches a
+  viewer of the account or a product of ARkid's catalogue.
+- **Requests.** Opening the list asks ARkid once for the viewers (`GET embed`) and
+  once for the catalogue's products (`GET product`), through `Links\AccountData`,
+  which every part of the screen shares, so an identical request is never made
+  twice in a request. Nothing is kept between requests: there is no cache of
+  ARkid's answers (the screen blocks for 5 s and 10 s at most, like the viewers
+  screen). A product page never asks. Names of the shop's products are compared
+  here and are never sent to ARkid. Without an API key nothing is asked and the
+  list is core's, plus the counts that need no account.
+- **When ARkid cannot answer, the list renders as it always did.** A notice
+  says why (a rejected key, or the error), and what is left out: the column shows
+  what is stored for each product (the thumbnail, the id, the state the last
+  refresh found), the "Match available" view and the suggestions are left out, and
+  "Needs attention" counts only the links already known to be broken. If the
+  viewers were read and the catalogue was not, the viewers still suggest. A
+  failed request is not repeated in the request, and the catalogue is not asked
+  once the viewers could not be read. A bookmarked `?arkid=match` lists nothing
+  then, and says why, rather than pretend that all products match.
+- **The scan behind "Match available"** is bounded the way Shopify's is: the first
+  2,000 products without a viewer, by id (`Links\ProductScan::LIMIT`), so the same
+  products are read on every request. The count has a "+" when there are more, and
+  the filtered list says how many were compared. Products are the same ones the
+  refresh job walks: not in the trash, not an auto-draft. Titles are decoded
+  (WordPress stores `&` as `&amp;`), and the brand is the first by name of
+  WooCommerce's `product_brand` taxonomy, which is what Shopify calls the vendor.
+  A private product is matched by its own title, not "Private: ...".
+  **Suggestions in the column are worked out for the products on the page only**,
+  with the same matcher, so they do not depend on the scan.
+- **The matcher is an exact port of the Shopify plugin's** (`Matching\`; see
+  [CONTRIBUTING](../CONTRIBUTING.md#the-name-matcher) for how that is held). Words
+  are the name without accents and case, split at everything that is not a
+  letter or number; a word is the same as itself or as a prefix of it of four or
+  more characters; each word pairs once; the score is the mean of the overlap and
+  the Dice coefficient; 0.7 matches; by title, or brand and title, against the
+  viewer's product, or brand and product. Accents are removed as Unicode's NFD
+  does and **no more**: "ß", "ø", "æ", "ł" and "đ" stay, so "Straße" and "Strasse"
+  are different words in both plugins. `remove_accents()` and `iconv` fold them
+  and would give other scores, so neither is used. With `ext-intl` that is
+  `Normalizer`; without it (many WordPress hosts) a table of every canonical
+  decomposition, generated from ICU, gives the same result, and Hangul is split
+  by arithmetic, so scores do not depend on the host. Without `mbstring` the
+  lower-casing is ASCII only (`Support\Text::lower()`), the one thing that can
+  differ.
+- **Why it is fast enough without a cache.** Scoring every product against
+  every candidate is thousands of times thousands of names.
+  `CandidateIndex` looks up the candidates that share a word with a product
+  (also by prefix), and skips those that cannot reach 0.7 even if every shared
+  word pairs. It gives the answer of scoring them all, held by tests against the
+  plain loop. Measured here (PHP 8.3, 2,000 products without a viewer, 250
+  viewers and 3,000 catalogue products, names made to overlap heavily): reading
+  the scan 6 ms, matching 90 ms; without the pruning 1.7 s. A shop where every
+  name of the products and of the catalogue shares one word is the worst case,
+  about 2.5 s for 2,000 products. That did not justify caching derived results,
+  which would need invalidating on every product save, delete, untrash, import and
+  link; if a real shop shows it does, cache only product ids by what they matched
+  and never ARkid's answers.
+- **Known limits.** "Match available" compares the first 2,000 products without a
+  viewer; the "+" says so. The two dropdowns are hidden by WordPress core on a
+  screen 782px wide or narrower (as are its own filters), and so is the column,
+  until a row is expanded; the views stay. The hooks are those of core's classic
+  list table (`manage_edit-product_columns`, `views_edit-product`,
+  `restrict_manage_posts`, `pre_get_posts`); if WooCommerce ever replaces that list
+  they stop applying.
 
 ## Embedding and the host allow-list
 

@@ -57,10 +57,28 @@ searches names differently without it (ICU collation with it, a folded natural
 order without). CI therefore names the extension instead of trusting the runner
 image: the unit job runs on every PHP version with `intl` and once more on PHP
 8.3 with it switched off, and a step fails the leg if the extension is not in
-the state its name claims. The two ICU-only unit tests skip themselves on a PHP
-without `intl`, so `composer test` there reports two skipped tests. To run the
-fallback locally, point `PHP_INI_SCAN_DIR` at a copy of your `conf.d` directory
-without the `intl` ini file.
+the state its name claims. The unit tests that need ICU (the collation tests, and
+the ones that compare the matcher's fallback with `Normalizer`) skip themselves
+on a PHP without `intl`, so `composer test` there reports them as skipped. To run
+the fallback locally, point `PHP_INI_SCAN_DIR` at a copy of your `conf.d`
+directory without the `intl` ini file.
+
+### The name matcher
+
+`Matching\NameMatcher` is an exact port of the Shopify plugin's matcher, so a
+product gets the same suggestion in both. Its specification is data, not prose:
+`tests/fixtures/matching/shopify-vectors.json` is what the Shopify code gave
+(name similarities, best and ranked matches, viewer id decoding, links) and
+`extra-vectors.json` is what a transcription of its `match.ts` gave for random
+names in many scripts. A change to `includes/Matching/` has to keep every value,
+on both ways of removing accents (`Decomposition`: `Normalizer`, and the table
+that stands in for it without `ext-intl`). Never regenerate a vector from the PHP.
+
+`includes/Matching/nfd-table.php` is generated: run
+`php bin/generate-nfd-table.php > includes/Matching/nfd-table.php` with
+`ext-intl` when ARkid wants a newer Unicode. Unicode never changes a canonical
+decomposition, so an older table stays right and only misses newer characters; a
+unit test checks it against `Normalizer` on every character of Unicode 15.
 
 ### Integration tests
 

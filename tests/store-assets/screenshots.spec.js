@@ -143,8 +143,9 @@ test.describe('admin', () => {
 	test('screenshot 5: the ARkid Viewers list', async ({ page }) => {
 		await page.goto(VIEWERS_URL);
 		await page.addStyleTag({ content: CLEAN_ADMIN_CSS });
+		// One page of the list holds 20 viewers unless the user chose otherwise.
 		await expect(page.locator('.wp-list-table tbody tr')).toHaveCount(
-			config.loadViewers().length
+			Math.min(config.loadViewers().length, 20)
 		);
 		// A handful of rows does not fill a screen; crop to the table instead of
 		// publishing a picture that is mostly empty grey. Tall enough for every

@@ -26,6 +26,14 @@
  * and by the key: `bad-key` is answered 403 with ARkid's "Missing or invalid API
  * key.", which is how the real API rejects a key (it does not send a 401).
  *
+ * Two options shape the viewers screen's answers, and a spec sets them with
+ * `wp option update`:
+ *
+ *   arkid_e2e_viewers  how many viewers GET /embed lists (default 1; the first is `e2e-viewer`)
+ *   arkid_e2e_stats    `down` answers GET /stats with 503
+ *
+ * GET /stats lists traffic for `e2e-viewer` only, so every other viewer is quiet.
+ *
  * @package Arkid\CatalogueLink
  */
 
@@ -75,13 +83,18 @@ add_filter(
 				'product_id'           => '761023ba-4d2e-11f1-fc62-e0c83dd5547a',
 				'product_name'         => 'E2E Viewer',
 				'brand_name'           => 'ARkid',
-				'image'                => home_url( '/wp-content/uploads/e2e-thumb.png' ),
+				// ARkid serves images over https, and the plugin only shows those.
+				'image'                => 'https://cloud.arkid.app/covers/e2e-thumb.png',
 				// Points back at this site so the iframe genuinely loads and its
 				// sandbox/allow attributes are exercised, with no outbound traffic.
 				'embed_url'            => 'https://catalogue.arkid.app/e/e2e-viewer',
 				'embedder_url'         => '',
 				'created'              => '2026-01-01',
 				'modified'             => '2026-01-01',
+				'author_name'          => 'E2E Author',
+				'views'                => 10,
+				'edit_url'             => 'https://catalogue.arkid.app/configure/edit/e2e-viewer',
+				'analytics_url'        => 'https://catalogue.arkid.app/analytics/e2e-viewer',
 				'internal_note'        => '',
 				'type'                 => 'model',
 				'colors'               => array(
@@ -126,7 +139,22 @@ add_filter(
 			}
 
 			if ( 'GET' === $method && '' === $id ) {
-				return $reply( 200, array( 'data' => array( $embed( 'e2e-viewer' ) ) ) );
+				$count = max( 1, (int) get_option( 'arkid_e2e_viewers', 1 ) );
+				$rows  = array();
+				for ( $i = 1; $i <= $count; $i++ ) {
+					$row = $embed( 1 === $i ? 'e2e-viewer' : 'e2e-viewer-' . $i );
+					if ( $i > 1 ) {
+						$row['row_number']   = $i;
+						$row['product_name'] = 'E2E Viewer ' . $i;
+						$row['brand_name']   = 0 === $i % 2 ? 'Acme' : 'ARkid';
+						$row['type']         = 0 === $i % 2 ? 'exp' : 'pdp';
+						$row['views']        = $i * 10;
+						$row['modified']     = gmdate( 'Y-m-d H:i:s', time() - $i * HOUR_IN_SECONDS );
+						$row['edit_url']     = 'https://catalogue.arkid.app/configure/edit/e2e-viewer-' . $i;
+					}
+					$rows[] = $row;
+				}
+				return $reply( 200, array( 'data' => $rows ) );
 			}
 			if ( 'GET' === $method ) {
 				return $reply( 200, $embed( $id ) );
@@ -211,6 +239,9 @@ add_filter(
 		}
 
 		// stats.
+		if ( 'down' === get_option( 'arkid_e2e_stats' ) ) {
+			return $reply( 503, array( 'errors' => array( 'server' => 'Unavailable.' ) ) );
+		}
 		$days = 7;
 		return $reply(
 			200,

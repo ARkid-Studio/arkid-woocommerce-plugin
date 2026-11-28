@@ -8,9 +8,10 @@
  * Unlike tests/e2e/mu-plugins/arkid-e2e-api-stub.php this serves SEVERAL
  * viewers, and with their real names, covers and embed URLs: the e2e stub
  * exists to keep a test suite offline, this one exists to make a picture
- * look like a real catalogue. The payload is arkid-assets-api-stub.json, written
- * next to this file by tests/store-assets/global-setup.js from
- * tests/fixtures/api/embed-list.json.
+ * look like a real catalogue. It answers the statistics call of the viewers
+ * screen too, from the viewers' own view counts. The payload is
+ * arkid-assets-api-stub.json, written next to this file by
+ * tests/store-assets/global-setup.js from tests/fixtures/api/embed-list.json.
  *
  * It has to live in WordPress rather than in Playwright: the calls it
  * intercepts are server-side `wp_remote_get()` requests, which page.route()
@@ -25,8 +26,10 @@ declare( strict_types = 1 );
 add_filter(
 	'pre_http_request',
 	static function ( $preempt, $args, $url ) {
-		$prefix = 'https://catalogue.arkid.app/api/ecom/embed';
-		if ( ! str_starts_with( (string) $url, $prefix ) ) {
+		$prefix       = 'https://catalogue.arkid.app/api/ecom/embed';
+		$stats_prefix = 'https://catalogue.arkid.app/api/ecom/stats';
+		$is_stats     = str_starts_with( (string) $url, $stats_prefix );
+		if ( ! $is_stats && ! str_starts_with( (string) $url, $prefix ) ) {
 			return $preempt;
 		}
 
@@ -45,6 +48,52 @@ add_filter(
 				'response' => array(
 					'code'    => 405,
 					'message' => 'Method Not Allowed',
+				),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		}
+
+		// The viewers screen asks for the traffic of the last 30 days. Answer it from
+		// the viewers themselves, as ARkid's own demo answer does: the busier the
+		// viewer, the more interactions, so the screenshot reads like a live account.
+		if ( $is_stats ) {
+			$traffic = array();
+			foreach ( $embeds as $embed ) {
+				$views = is_array( $embed ) ? (int) ( $embed['views'] ?? 0 ) : 0;
+				if ( $views > 0 ) {
+					$traffic[] = array(
+						'embed_id'     => (string) $embed['embed_id'],
+						'impressions'  => $views,
+						'interactions' => intdiv( $views * 2, 5 ),
+					);
+				}
+			}
+			$series = array(
+				'total'         => 0,
+				'before'        => 0,
+				'series'        => array(),
+				'before_series' => array(),
+			);
+
+			return array(
+				'headers'  => array(),
+				'body'     => (string) wp_json_encode(
+					array(
+						'days'                    => 30,
+						'dates'                   => array(),
+						'impressions'             => $series,
+						'interactions'            => $series,
+						'ar'                      => $series,
+						'avg_interaction_seconds' => 0,
+						'embeds'                  => $traffic,
+						'unused_brands'           => array(),
+						'latest_products'         => array(),
+					)
+				),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'OK',
 				),
 				'cookies'  => array(),
 				'filename' => null,

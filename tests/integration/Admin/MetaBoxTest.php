@@ -106,14 +106,72 @@ final class MetaBoxTest extends TestCase {
 		);
 	}
 
-	public function test_clearing_the_picker_removes_every_key(): void {
-		$product_id = $this->make_product_with_embed( 'abc-123', 'below_product' );
+	public function test_clearing_the_picker_removes_the_link(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123' );
 
 		$this->post_a_save( $product_id, '' );
 
 		$this->assertSame( '', PostMeta::embed_id( $product_id ) );
 		$this->assertSame( '', PostMeta::embed_url( $product_id ) );
 		$this->assertSame( '', PostMeta::embed_image( $product_id ) );
+	}
+
+	/**
+	 * Unlinking used to delete the position override together with the link, so
+	 * a merchant who removed a viewer and picked another one silently lost a
+	 * deliberate "Above product" or "Button only" choice.
+	 */
+	public function test_unlinking_keeps_the_position_override(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', 'above_product' );
+
+		// The meta box posts the select as it was shown, so the override comes along.
+		$this->post_a_save( $product_id, '', 'above_product' );
+
+		$this->assertSame( '', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_url( $product_id ) );
+		$this->assertSame( '', PostMeta::embed_image( $product_id ) );
+		$this->assertSame(
+			'above_product',
+			PostMeta::position( $product_id ),
+			'The position override is the merchant\'s own setting, not part of the link.'
+		);
+	}
+
+	public function test_relinking_after_an_unlink_still_has_the_position_override(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', 'button_only' );
+		$this->stub_http( '/api/ecom/embed/', $this->embed_payload( 'new-999', 'https://catalogue.arkid.app/e/new-999' ) );
+
+		$this->post_a_save( $product_id, '', 'button_only' );
+		$this->post_a_save( $product_id, 'new-999', PostMeta::position( $product_id ) );
+
+		$this->assertSame( 'new-999', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( 'button_only', PostMeta::position( $product_id ) );
+	}
+
+	public function test_unlinking_with_the_site_default_selected_removes_the_override(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', 'above_product' );
+
+		// "Use site default" is an explicit choice too: the select posts an empty value.
+		$this->post_a_save( $product_id, '', '' );
+
+		$this->assertSame( '', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( '', PostMeta::position( $product_id ) );
+	}
+
+	public function test_unlinking_stores_a_position_changed_in_the_same_save(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', 'above_product' );
+
+		$this->post_a_save( $product_id, '', 'below_product' );
+
+		$this->assertSame( '', PostMeta::embed_id( $product_id ) );
+		$this->assertSame( 'below_product', PostMeta::position( $product_id ) );
+	}
+
+	public function test_unlinking_ignores_an_unknown_position(): void {
+		$product_id = $this->make_product_with_embed( 'abc-123', 'above_product' );
+
+		$this->post_a_save( $product_id, '', 'sideways' );
+
 		$this->assertSame( '', PostMeta::position( $product_id ) );
 	}
 

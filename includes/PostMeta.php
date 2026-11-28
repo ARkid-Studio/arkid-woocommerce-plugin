@@ -102,14 +102,19 @@ final class PostMeta {
 	}
 
 	/**
-	 * Persist all four meta keys for a product. Pass null `$embed` to clear.
+	 * Persist the link and the position override for a product.
+	 *
+	 * Pass null `$embed` to clear the link (id, URL and image). The position
+	 * override is the merchant's own setting, not part of the link, so it is
+	 * written either way: an empty `$position` means "use the site default" and
+	 * removes it, any other value is kept. Unlinking therefore keeps a deliberate
+	 * "Above product" or "Button only" choice for the next viewer.
 	 */
 	public static function write( int $product_id, ?EmbedDto $embed, string $position ): void {
-		$position = self::sanitize_position( $position );
+		self::write_position( $product_id, $position );
 
 		if ( null === $embed ) {
 			delete_post_meta( $product_id, self::KEY_EMBED_ID );
-			delete_post_meta( $product_id, self::KEY_POSITION );
 			delete_post_meta( $product_id, self::KEY_EMBED_URL );
 			delete_post_meta( $product_id, self::KEY_EMBED_IMAGE );
 			return;
@@ -118,11 +123,20 @@ final class PostMeta {
 		update_post_meta( $product_id, self::KEY_EMBED_ID, $embed->embed_id );
 		update_post_meta( $product_id, self::KEY_EMBED_URL, $embed->embed_url );
 		update_post_meta( $product_id, self::KEY_EMBED_IMAGE, $embed->image );
+	}
+
+	/**
+	 * Store the per-product position override. An empty or unknown value removes it.
+	 */
+	public static function write_position( int $product_id, string $position ): void {
+		$position = self::sanitize_position( $position );
+
 		if ( '' === $position ) {
 			delete_post_meta( $product_id, self::KEY_POSITION );
-		} else {
-			update_post_meta( $product_id, self::KEY_POSITION, $position );
+			return;
 		}
+
+		update_post_meta( $product_id, self::KEY_POSITION, $position );
 	}
 
 	public static function embed_id( int $product_id ): string {

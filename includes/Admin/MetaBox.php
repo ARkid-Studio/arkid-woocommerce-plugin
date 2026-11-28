@@ -176,7 +176,9 @@ class MetaBox {
 			: '';
 
 		if ( '' === $embed_id ) {
-			PostMeta::write( $post_id, null, '' );
+			// Unlink, but keep whatever the position select says. The override is
+			// the merchant's own choice and should survive a re-link.
+			PostMeta::write( $post_id, null, $position );
 			return;
 		}
 
@@ -209,11 +211,7 @@ class MetaBox {
 			delete_post_meta( $post_id, PostMeta::KEY_EMBED_IMAGE );
 		}
 
-		if ( '' === $position ) {
-			delete_post_meta( $post_id, PostMeta::KEY_POSITION );
-		} else {
-			update_post_meta( $post_id, PostMeta::KEY_POSITION, $position );
-		}
+		PostMeta::write_position( $post_id, $position );
 
 		if ( function_exists( 'as_enqueue_async_action' ) ) {
 			as_enqueue_async_action(

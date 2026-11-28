@@ -165,5 +165,8 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 
 == Changelog ==
 
+= Unreleased =
+* Fix: Removing a viewer from a product no longer discards the product's position override.
+
 = 1.0.0 =
 * Initial release.

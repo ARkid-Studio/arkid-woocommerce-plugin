@@ -112,10 +112,41 @@ class ProductStates {
 	public function attention_count( ?array $account_ids ): int {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- A count over the plugin's own meta keys, for a list screen; `attention_sql()` returns a prepared statement.
-		$count = $wpdb->get_var( $this->attention_sql( 'COUNT( DISTINCT p.ID )', '', $account_ids ) );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One grouped count over the plugin's own meta keys, for a list screen: a row per viewer and state, not per product.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT LOWER( e.meta_value ) AS embed_id,
+				        ( u.meta_value IS NOT NULL AND u.meta_value <> '' ) AS synced,
+				        ( s.meta_value = %s ) AS missing,
+				        COUNT( DISTINCT p.ID ) AS products
+				   FROM {$wpdb->posts} p
+				   INNER JOIN {$wpdb->postmeta} e ON e.post_id = p.ID AND e.meta_key = %s AND e.meta_value <> ''
+				   LEFT JOIN {$wpdb->postmeta} u ON u.post_id = p.ID AND u.meta_key = %s
+				   LEFT JOIN {$wpdb->postmeta} s ON s.post_id = p.ID AND s.meta_key = %s
+				  WHERE p.post_type = %s
+				    AND p.post_status NOT IN ( 'trash', 'auto-draft' )
+				  GROUP BY LOWER( e.meta_value ), synced, missing",
+				PostMeta::STATUS_MISSING,
+				PostMeta::KEY_EMBED_ID,
+				PostMeta::KEY_EMBED_URL,
+				PostMeta::KEY_STATUS,
+				PostMeta::POST_TYPE
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return is_numeric( $count ) ? (int) $count : 0;
+		$known = null === $account_ids ? null : self::known( $account_ids );
+		$count = 0;
+		foreach ( is_array( $rows ) ? $rows : array() as $row ) {
+			if ( ! $row instanceof \stdClass || ! is_string( $row->embed_id ?? null ) || ! is_numeric( $row->products ?? null ) ) {
+				continue;
+			}
+			if ( self::needs_attention( $row->embed_id, '1' === (string) $row->synced, '1' === (string) $row->missing, $known ) ) {
+				$count += (int) $row->products;
+			}
+		}
+
+		return $count;
 	}
 
 	/**
@@ -128,66 +159,73 @@ class ProductStates {
 	public function attention_ids( ?array $account_ids ): array {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- The plugin's own meta keys, for a list screen; `attention_sql()` returns a prepared statement.
-		$rows = $wpdb->get_col( $this->attention_sql( 'DISTINCT p.ID', 'ORDER BY p.ID ASC', $account_ids ) );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One read of the plugin's own meta keys for the products that have a viewer, for a filter of a list screen; the state is decided below, where the account's viewers are known.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT p.ID AS id,
+				        LOWER( e.meta_value ) AS embed_id,
+				        ( u.meta_value IS NOT NULL AND u.meta_value <> '' ) AS synced,
+				        ( s.meta_value = %s ) AS missing
+				   FROM {$wpdb->posts} p
+				   INNER JOIN {$wpdb->postmeta} e ON e.post_id = p.ID AND e.meta_key = %s AND e.meta_value <> ''
+				   LEFT JOIN {$wpdb->postmeta} u ON u.post_id = p.ID AND u.meta_key = %s
+				   LEFT JOIN {$wpdb->postmeta} s ON s.post_id = p.ID AND s.meta_key = %s
+				  WHERE p.post_type = %s
+				    AND p.post_status NOT IN ( 'trash', 'auto-draft' )
+				  ORDER BY p.ID ASC",
+				PostMeta::STATUS_MISSING,
+				PostMeta::KEY_EMBED_ID,
+				PostMeta::KEY_EMBED_URL,
+				PostMeta::KEY_STATUS,
+				PostMeta::POST_TYPE
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
+		$known = null === $account_ids ? null : self::known( $account_ids );
 		$found = array();
-		foreach ( is_array( $rows ) ? $rows : array() as $id ) {
-			if ( is_numeric( $id ) ) {
-				$found[] = (int) $id;
+		foreach ( is_array( $rows ) ? $rows : array() as $row ) {
+			if ( ! $row instanceof \stdClass || ! is_numeric( $row->id ?? null ) || ! is_string( $row->embed_id ?? null ) ) {
+				continue;
+			}
+			if ( self::needs_attention( $row->embed_id, '1' === (string) $row->synced, '1' === (string) $row->missing, $known ) ) {
+				$found[ (int) $row->id ] = (int) $row->id;
 			}
 		}
 
-		return $found;
+		return array_values( $found );
 	}
 
 	/**
-	 * The prepared statement that selects the products that need attention, so that
-	 * the count and the list cannot disagree.
+	 * The viewers of the account, as a set of lower-case ids.
 	 *
-	 * @param string                  $select      What to select; fixed text of this class.
-	 * @param string                  $order       The ORDER BY clause, or ''; fixed text of this class.
-	 * @param array<int, string>|null $account_ids The ids of the viewers the account lists, null when that is not known.
+	 * @param array<int, string> $account_ids
+	 *
+	 * @return array<int|string, true>
 	 */
-	private function attention_sql( string $select, string $order, ?array $account_ids ): string {
-		global $wpdb;
+	private static function known( array $account_ids ): array {
+		return array_fill_keys( array_map( 'strtolower', $account_ids ), true );
+	}
 
-		$unknown = '';
-		$values  = array();
-		if ( null !== $account_ids ) {
-			$ids = array_values( array_unique( array_map( 'strtolower', $account_ids ) ) );
-			if ( array() === $ids ) {
-				// An account without a viewer lists none of the links' viewers.
-				$unknown = ' OR 1 = 1';
-			} else {
-				$unknown = ' OR LOWER( e.meta_value ) NOT IN ( ' . implode( ', ', array_fill( 0, count( $ids ), '%s' ) ) . ' )';
-				$values  = $ids;
-			}
+	/**
+	 * Whether the link of a product needs a look.
+	 *
+	 * With the account's viewers, the product page shows nothing when the account
+	 * does not list the viewer or no snapshot is stored (a viewer in the list that
+	 * a refresh once found missing is not missing now, and a deleted viewer's
+	 * snapshot is gone, so the status adds nothing). Without them it is told by
+	 * the snapshot and by the stored status.
+	 *
+	 * @param string                     $embed_id The viewer, in lower case.
+	 * @param bool                       $synced   Whether a snapshot is stored.
+	 * @param bool                       $missing  Whether the stored status says the viewer is gone.
+	 * @param array<int|string, true>|null $known  The viewers of the account, null when that is not known.
+	 */
+	private static function needs_attention( string $embed_id, bool $synced, bool $missing, ?array $known ): bool {
+		if ( null === $known ) {
+			return $missing || ! $synced;
 		}
 
-		// With the account's list, the product page showing nothing is told by the
-		// snapshot alone (a viewer in the list that a refresh once found missing is
-		// not missing now); without it, by the stored status as well.
-		$stored = null === $account_ids
-			? "s.meta_value = 'missing' OR u.meta_id IS NULL OR u.meta_value = ''"
-			: "u.meta_id IS NULL OR u.meta_value = ''";
-
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- The meta keys are fixed; the only variable parts are the SELECT and ORDER BY text of this class, the `OR` built from constants, and one placeholder per viewer id of the account.
-		return $wpdb->prepare(
-			"SELECT {$select}
-			   FROM {$wpdb->posts} p
-			   INNER JOIN {$wpdb->postmeta} e ON e.post_id = p.ID AND e.meta_key = %s AND e.meta_value <> ''
-			   LEFT JOIN {$wpdb->postmeta} u ON u.post_id = p.ID AND u.meta_key = %s
-			   LEFT JOIN {$wpdb->postmeta} s ON s.post_id = p.ID AND s.meta_key = %s
-			  WHERE p.post_type = %s
-			    AND p.post_status NOT IN ( 'trash', 'auto-draft' )
-			    AND ( {$stored}{$unknown} )
-			  {$order}",
-			array_merge(
-				array( PostMeta::KEY_EMBED_ID, PostMeta::KEY_EMBED_URL, PostMeta::KEY_STATUS, PostMeta::POST_TYPE ),
-				$values
-			)
-		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+		return ! isset( $known[ $embed_id ] ) || ! $synced;
 	}
 }

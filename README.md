@@ -20,8 +20,12 @@ on the product display page.
   block-based `woocommerce/product-gallery`, on classic and block themes alike.
 - **A general-purpose block** (`arkid-catalogue-link/embed`) for embedding any
   viewer on any page or post.
-- **Viewer list** at WooCommerce → ARkid Viewers, with type badges and
-  Edit / Analytics links into ARkid.
+- **Viewer list** at WooCommerce → ARkid Viewers, a `WP_List_Table`: the
+  products that show each viewer, its colours, interactions of the last 30
+  days and last update; views (All, Live on a product, Not linked, No
+  interactions), search, type and brand filters, sorting, paging with a
+  Screen Options page size, a preview dialog, and Edit / Analytics links into
+  ARkid.
 - **No API calls on product pages.** Each product stores its own viewer link,
   so the storefront keeps working if ARkid is unreachable; a daily Action
   Scheduler job keeps those links current.
@@ -79,15 +83,17 @@ includes/                  PHP, PSR-4 → Arkid\CatalogueLink\
   Plugin.php               bootstrap
   PostMeta.php             per-product meta: registration, sanitisers, snapshot writes, link status
   Api/                     HTTP client (read and write), DTOs, input rules, exceptions
-  Links/                   state of a product's link (none, linked, not synced, missing), live lookup
+  Links/                   state of a product's link (none, linked, not synced, missing), live lookup, which products show which viewer
   Settings/                WooCommerce integration tab + typed options
-  Admin/                   meta box, viewer list, notices, assets
+  Admin/                   meta box, viewer list and its page, colour dots, preview dialog, notices, assets
   Frontend/                renderer, iframe builder, modal, consent, gallery injectors
   Blocks/                  server-rendered embed block
   Cron/                    Action Scheduler refresh
   Migrations/              schema-version upgrades
   Rest/                    /arkid-catalogue-link/v1/embeds proxy
-  Support/                 multibyte-safe text helpers: viewer search, name ordering
+  Support/                 multibyte-safe text helpers (viewer search, name ordering), API timestamps, https check
+src/admin/                 colour dots and the preview dialog of wp-admin
+src/shared/                the viewer address check, used by the storefront and wp-admin
 src/                       JS / SCSS sources (built with @wordpress/scripts into build/)
 languages/                 .pot and .po sources
 tests/

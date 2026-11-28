@@ -30,7 +30,7 @@ ARkid Catalogue Link puts interactive 3D and augmented-reality (AR) viewers from
 * **Five positions**: first image, last image (opens in a modal), above the product, below the product, or a standalone button (labelled "See in 3D & AR" unless you change it). Set a site default and override it per product.
 * **Both product galleries**: the classic FlexSlider gallery and WooCommerce's new block-based product gallery, on classic and block themes alike.
 * **A block** for embedding any viewer on any page or post.
-* **A viewer list** under WooCommerce → ARkid Viewers, with links to edit each viewer or see its analytics in ARkid.
+* **A viewer list** under WooCommerce → ARkid Viewers: which of your products show each viewer, its colours (the ones it hides are struck through), the interactions it had in the last 30 days, and who changed it last. Filter it (live on a product, not linked, no interactions), search it, sort it, page through it, and preview a viewer without leaving wp-admin. Each viewer links to edit it or see its analytics in ARkid.
 * **Product pages make no API calls.** Each product stores its own viewer link, so your shop keeps working even if ARkid is unreachable. A daily background job keeps those links in step with your catalogue.
 * **Your API key is never sent to your visitors.** It is stored on your server and shown only to store managers on the settings screen, and viewers are browsed in wp-admin through the plugin's own REST endpoints, restricted to store managers.
 * **Optional WP Consent API support**: with "Require visitor consent" on, the viewer is left out of the page for visitors who have not granted marketing consent. Consent is checked when the page is built, so see the FAQ if your site uses page caching.
@@ -51,13 +51,13 @@ This plugin connects to ARkid Catalogue, a service operated by ARkid Technologie
 
 **1. The ARkid Catalogue API, from your server (catalogue.arkid.app)**
 
-Used to fetch the viewers in your ARkid account. A request is made when you open a product that already has a viewer, open or search the viewer picker, open WooCommerce → ARkid Viewers, open a post or page that contains the ARkid block in the editor, save a product that has a viewer, or save a changed API key (the plugin then tests the key and re-syncs your products), and once a day in the background for each product that has a viewer.
+Used to fetch the viewers in your ARkid account, and, on WooCommerce → ARkid Viewers, your viewing statistics for the last 30 days (how often each viewer was interacted with). A request is made when you open a product that already has a viewer, open or search the viewer picker, open WooCommerce → ARkid Viewers (which asks for the viewers and for the statistics), open a post or page that contains the ARkid block in the editor, save a product that has a viewer, or save a changed API key (the plugin then tests the key and re-syncs your products), and once a day in the background for each product that has a viewer.
 
-Sent: your API key (as the password of an HTTP Basic login whose user name is `woocommerce`), the ID of the viewer being requested, `source=woocommerce`, and a User-Agent naming the plugin and its version. As with any request, your server's IP address is visible to ARkid. No customer data, order data or product data is sent, and neither is your site's address.
+Sent: your API key (as the password of an HTTP Basic login whose user name is `woocommerce`), the ID of the viewer being requested, `source=woocommerce`, for the statistics the number of days (`days=30`), and a User-Agent naming the plugin and its version. As with any request, your server's IP address is visible to ARkid. No customer data, order data or product data is sent, and neither is your site's address.
 
 **2. The ARkid viewer, from your visitors' browsers (catalogue.arkid.app)**
 
-The viewer is an iframe loaded from catalogue.arkid.app on your product pages, in the modal, and in the block (in the block editor it is loaded inside wp-admin, so editors' browsers contact ARkid too). When it loads, the visitor's browser contacts ARkid directly, and the viewer downloads its 3D model files and textures from cloud.arkid.app. According to [ARkid's viewer privacy notice](https://arkid.app/viewer-privacy/), ARkid receives at least the visitor's IP address, browser and operating system, display resolution, the viewer requested, the website it was requested from, and the time of the request. The viewer also reports usage events to ARkid (for example that it loaded or was viewed, how long loading took, whether and for how long AR was used, and errors), together with the browser language and whether the device has touch or AR support. ARkid uses this data to deliver the viewer and to give you aggregate view statistics. ARkid states that the viewer sets no cookies and stores no identifiers on the visitor's device. The viewer shows a small "3D by ARkid" credit that links to https://arkid.app/.
+The viewer is an iframe loaded from catalogue.arkid.app on your product pages, in the modal, and in the block. It is also loaded inside wp-admin: in the block editor, and when you click "Preview" on WooCommerce → ARkid Viewers or on the product edit screen (only when you click: nothing loads until then). In those cases editors' browsers contact ARkid too. When it loads, the visitor's browser contacts ARkid directly, and the viewer downloads its 3D model files and textures from cloud.arkid.app. According to [ARkid's viewer privacy notice](https://arkid.app/viewer-privacy/), ARkid receives at least the visitor's IP address, browser and operating system, display resolution, the viewer requested, the website it was requested from, and the time of the request. The viewer also reports usage events to ARkid (for example that it loaded or was viewed, how long loading took, whether and for how long AR was used, and errors), together with the browser language and whether the device has touch or AR support. ARkid uses this data to deliver the viewer and to give you aggregate view statistics. ARkid states that the viewer sets no cookies and stores no identifiers on the visitor's device. The viewer shows a small "3D by ARkid" credit that links to https://arkid.app/.
 
 Under ARkid's viewer privacy notice, you as the site operator are the controller for this usage measurement and ARkid acts as your processor under a data processing agreement (Art. 28 GDPR). ARkid keeps raw request logs for at most 14 months, for billing verification and security.
 
@@ -67,7 +67,7 @@ If you need a visitor's consent before this happens, turn on "Require visitor co
 
 **3. Preview images (cloud.arkid.app)**
 
-Each viewer has a preview image served from ARkid's content delivery network at cloud.arkid.app, which also serves the viewer's 3D model files (see 2 above). The preview image is shown in wp-admin (the picker and the viewer list) and on product pages where a viewer sits in the gallery. Requesting it discloses the requester's IP address, browser and the address of your site to ARkid, as any image request does.
+Each viewer has a preview image served from ARkid's content delivery network at cloud.arkid.app, which also serves the viewer's 3D model files (see 2 above). The preview image is shown in wp-admin (the picker, the viewer list and the product edit screen) and on product pages where a viewer sits in the gallery. Requesting it discloses the requester's IP address, browser and the address of your site to ARkid, as any image request does.
 
 * Terms of use: [arkid.app/terms](https://arkid.app/terms/). This covers ARkid's website; your use of ARkid Catalogue itself is governed by the agreement between you and ARkid Technologies GmbH.
 * Privacy policy: [arkid.app/privacy](https://arkid.app/privacy/)
@@ -103,6 +103,10 @@ The plugin is free. ARkid Catalogue has a free plan (currently up to 10,000 view
 = Where do I find my API key? =
 
 Sign in to ARkid Catalogue and open your developer settings at [catalogue.arkid.app/settings/developer](https://catalogue.arkid.app/settings/developer). If you cannot find it there, write to support@arkid.app.
+
+= What do the filters of the viewer list mean? =
+
+Under WooCommerce → ARkid Viewers, "Live on a product" lists the viewers that are selected on at least one of your products (drafts and private products count, and are marked, but not products in the trash), and "Not linked" the ones that are not selected anywhere. "No interactions, 30 days" lists the viewers that nobody interacted with (turned, zoomed or opened in AR) in the last 30 days, which includes viewers nobody has opened at all. The counts come from ARkid's statistics; if ARkid cannot be reached for them, the list says so and leaves that filter and the "Interactions" column out rather than showing zeros. "Total views" counts all views since the viewer was created.
 
 = Why doesn't my viewer show up on the product page? =
 
@@ -165,7 +169,7 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 2. The 3D viewer below the product on the storefront, with colour options and an AR button.
 3. The same viewer opened in a modal from the product gallery.
 4. Integration settings: API key, default viewer position, button text and consent gating.
-5. The ARkid Viewers list, with Edit and Analytics links into ARkid.
+5. The ARkid Viewers list: where each viewer is shown, its colours and interactions, with a preview and links into ARkid.
 
 == Changelog ==
 
@@ -176,6 +180,11 @@ For the plugin, use the support forum on WordPress.org. For questions about your
 * Fix: The viewers list sorts by product and brand without regard to case or accents, and numbers in names by value, instead of putting every capital letter before every lower-case one.
 * Fix: The viewer picker search no longer misses non-ASCII names (for example German, Danish, Polish or Japanese brands) and matches every word of the query across brand, product and note, so "felix learning" finds "Felix - Learning Tower".
 * Fix: A viewer that was deleted in ARkid is no longer reported on the product edit screen as "not synced yet" with the promise that it will appear once the connection succeeds. The screen now says that the viewer no longer exists in your ARkid account, and tells that apart from ARkid being unreachable.
+* New: The viewers list shows which products each viewer is shown on (the first three, then "+N more"), the colours of each viewer, the interactions of the last 30 days, the total views, and when and by whom each viewer was last changed.
+* New: The viewers list has views for "Live on a product", "Not linked" and "No interactions, 30 days" with their counts, a search box, type and brand filters, and pages. "Viewers per page" and the columns to show are in Screen Options. On a phone the table collapses to the product column.
+* New: A viewer can be previewed in a dialog from the viewers list and from the product edit screen. The viewer loads only when you click Preview.
+* New: The colours of a viewer are shown as dots in the viewers list, under the selected viewer on the product edit screen and in the picker's results. A colour the viewer hides is struck through.
+* Tweak: The links, thumbnails and previews of the viewers list only use https addresses from ARkid.
 * Tweak: The connection to ARkid can now also create and change viewers, and read the catalogue's products, the available environments and your viewing statistics. Nothing in this version sends any of that yet; it is the groundwork for managing viewers from WordPress.
 
 = 1.0.0 =

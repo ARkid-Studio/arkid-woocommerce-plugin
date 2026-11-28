@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-28T08:39:31+00:00\n"
+"POT-Creation-Date: 2026-11-28T09:51:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: arkid-catalogue-link\n"
 
 #. Plugin Name of the plugin
 #: arkid-catalogue-link.php
-#: includes/Admin/MetaBox.php:44
+#: includes/Admin/MetaBox.php:50
 #: includes/Admin/Notices.php:42
 #: includes/Settings/IntegrationSettings.php:38
 #: build/blocks/embed/index.js:1
@@ -55,91 +55,125 @@ msgstr ""
 msgid "ARkid Catalogue Link requires %s to be installed and active."
 msgstr ""
 
-#: includes/Admin/Assets.php:73
-#: includes/Admin/MetaBox.php:83
+#: includes/Admin/Assets.php:106
+#: includes/Admin/MetaBox.php:91
 msgid "Search viewers…"
 msgstr ""
 
-#: includes/Admin/Assets.php:74
+#: includes/Admin/Assets.php:107
 #: includes/Settings/IntegrationSettings.php:145
 msgid "Reveal"
 msgstr ""
 
-#: includes/Admin/Assets.php:75
+#: includes/Admin/Assets.php:108
 msgid "Hide"
 msgstr ""
 
-#: includes/Admin/Assets.php:76
+#: includes/Admin/Assets.php:109
 msgid "No viewers found."
 msgstr ""
 
-#: includes/Admin/Assets.php:77
+#: includes/Admin/Assets.php:110
 msgid "Searching…"
 msgstr ""
 
-#: includes/Admin/Assets.php:78
+#: includes/Admin/Assets.php:111
 #: build/blocks/embed/index.js:1
 msgid "Could not load viewers."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:77
+#. translators: %s: product name
+#: includes/Admin/Assets.php:113
+#: includes/Frontend/ClassicGalleryInjector.php:92
+#: includes/Frontend/ClassicGalleryInjector.php:109
+#: includes/Frontend/IframeFactory.php:107
+#, php-format
+msgid "%s 3D viewer"
+msgstr ""
+
+#: includes/Admin/Assets.php:114
+#: includes/Frontend/Assets.php:76
+msgid "3D viewer"
+msgstr ""
+
+#. translators: %s: colour name
+#: includes/Admin/Assets.php:116
+#: includes/Admin/ColorDots.php:64
+#, php-format
+msgid "%s: shown"
+msgstr ""
+
+#. translators: %s: colour name
+#: includes/Admin/Assets.php:118
+#: includes/Admin/ColorDots.php:66
+#, php-format
+msgid "%s: hidden"
+msgstr ""
+
+#: includes/Admin/MetaBox.php:85
 #: build/blocks/embed/index.js:1
 msgid "Viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:89
+#: includes/Admin/MetaBox.php:97
 msgid "— No viewer —"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:102
+#: includes/Admin/MetaBox.php:110
+#: includes/Admin/ViewersListTable.php:98
+#: includes/Admin/ViewersListTable.php:635
+msgid "Preview"
+msgstr ""
+
+#: includes/Admin/MetaBox.php:118
 msgid "Remove viewer"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:116
+#: includes/Admin/MetaBox.php:137
 msgid "Position override"
 msgstr ""
 
 #. translators: %s: site default position label
-#: includes/Admin/MetaBox.php:130
+#: includes/Admin/MetaBox.php:151
 #, php-format
 msgid "Site default: %s"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:167
+#: includes/Admin/MetaBox.php:211
 msgid "This viewer no longer exists in your ARkid account. Pick another viewer or remove it."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:170
+#: includes/Admin/MetaBox.php:214
 msgid "This viewer has not been synced from ARkid yet, so it is not shown on the product page. It will appear once the connection succeeds."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:173
+#: includes/Admin/MetaBox.php:217
 msgid "ARkid could not be reached, or it did not accept the API key, so this viewer could not be checked just now. The product page keeps showing the last synced viewer."
 msgstr ""
 
-#: includes/Admin/MetaBox.php:189
+#: includes/Admin/MetaBox.php:233
 msgid "Use site default"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:190
+#: includes/Admin/MetaBox.php:234
 msgid "First image (gallery)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:191
+#: includes/Admin/MetaBox.php:235
 msgid "Last image (gallery, modal)"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:192
+#: includes/Admin/MetaBox.php:236
 #: includes/Settings/IntegrationSettings.php:65
 msgid "Above product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:193
+#: includes/Admin/MetaBox.php:237
 #: includes/Settings/IntegrationSettings.php:66
 msgid "Below product"
 msgstr ""
 
-#: includes/Admin/MetaBox.php:194
+#: includes/Admin/MetaBox.php:238
 msgid "Button only"
 msgstr ""
 
@@ -153,86 +187,200 @@ msgstr ""
 msgid "Enter your API key"
 msgstr ""
 
-#: includes/Admin/Setup.php:52
-msgid "Settings"
+#: includes/Admin/PreviewDialog.php:33
+msgid "Close preview"
 msgstr ""
 
-#: includes/Admin/Setup.php:57
-msgid "Viewers"
+#: includes/Admin/PreviewDialog.php:37
+msgid "Loading the viewer…"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:47
-msgid "Preview"
+#: includes/Admin/PreviewDialog.php:41
+msgid "Edit in ARkid"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:48
-msgid "#"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:49
-msgid "Product"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:50
-msgid "Brand"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:51
-msgid "Type"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:52
-msgid "Internal note"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:53
-msgid "Created"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:54
-msgid "Actions"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:170
-msgid "Edit"
-msgstr ""
-
-#: includes/Admin/ViewersListTable.php:177
+#: includes/Admin/PreviewDialog.php:42
+#: includes/Admin/ViewersListTable.php:651
 msgid "Analytics"
 msgstr ""
 
-#: includes/Admin/ViewersListTable.php:184
+#: includes/Admin/PreviewDialog.php:43
+msgid "Close"
+msgstr ""
+
+#: includes/Admin/Setup.php:53
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/Setup.php:58
+msgid "Viewers"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:99
+msgid "#"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:100
+msgid "Product"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:101
+msgid "Brand"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:102
+msgid "Type"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:103
+msgid "Internal note"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:104
+msgid "Shown on"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:105
+msgid "Colours"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:106
+msgid "Interactions (30 days)"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:107
+msgid "Total views"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:108
+msgid "Last updated"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:109
+msgid "Created"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:110
+msgid "Actions"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:362
+msgid "All"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:363
+msgid "Live on a product"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:364
+#: includes/Admin/ViewersListTable.php:515
+msgid "Not linked"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:365
+msgid "No interactions, 30 days"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:407
+msgid "Filter by type"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:408
+msgid "All types"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:413
+msgid "Filter by brand"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:414
+msgid "All brands"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:417
+msgid "Filter"
+msgstr ""
+
+#. translators: %s: number of further products
+#: includes/Admin/ViewersListTable.php:528
+#, php-format
+msgid "+%s more"
+msgid_plural "+%s more"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/ViewersListTable.php:542
+msgid "(no title)"
+msgstr ""
+
+#. translators: %s: how long ago, for example "3 hours"
+#: includes/Admin/ViewersListTable.php:612
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:643
+msgid "Edit"
+msgstr ""
+
+#. translators: %s: product name
+#: includes/Admin/ViewersListTable.php:686
+#, php-format
+msgid "Preview %s"
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:693
 msgid "No viewers found. Add a viewer in the ARkid Catalogue or check your API key."
 msgstr ""
 
-#: includes/Admin/ViewersPage.php:36
-#: includes/Admin/ViewersPage.php:37
-#: includes/Admin/ViewersPage.php:72
+#: includes/Admin/ViewersListTable.php:697
+msgid "No viewers match these filters."
+msgstr ""
+
+#: includes/Admin/ViewersListTable.php:701
+msgid "Clear the filters"
+msgstr ""
+
+#: includes/Admin/ViewersPage.php:56
+#: includes/Admin/ViewersPage.php:57
+#: includes/Admin/ViewersPage.php:153
 msgid "ARkid Viewers"
 msgstr ""
 
-#: includes/Admin/ViewersPage.php:60
+#: includes/Admin/ViewersPage.php:81
+msgid "Viewers per page"
+msgstr ""
+
+#: includes/Admin/ViewersPage.php:136
 msgid "The API key was rejected. Update it in the integration settings."
 msgstr ""
 
 #. translators: %s: error message
-#: includes/Admin/ViewersPage.php:64
+#: includes/Admin/ViewersPage.php:140
 #, php-format
 msgid "Could not reach the ARkid API: %s"
 msgstr ""
 
-#: includes/Admin/ViewersPage.php:75
+#: includes/Admin/ViewersPage.php:156
 msgid "Refresh"
 msgstr ""
 
 #. translators: %s: settings page link
-#: includes/Admin/ViewersPage.php:85
+#: includes/Admin/ViewersPage.php:166
 #, php-format
 msgid "No API key configured. %s to load your viewers."
 msgstr ""
 
-#: includes/Admin/ViewersPage.php:86
+#: includes/Admin/ViewersPage.php:167
 msgid "Open settings"
+msgstr ""
+
+#: includes/Admin/ViewersPage.php:180
+msgid "The interactions of the last 30 days could not be loaded from ARkid, so the interactions column and the \"No interactions\" view are left out. Refresh to try again."
+msgstr ""
+
+#: includes/Admin/ViewersPage.php:213
+msgid "Search viewers"
 msgstr ""
 
 #: includes/Frontend/Assets.php:73
@@ -244,18 +392,6 @@ msgstr ""
 #: includes/Frontend/Assets.php:75
 #, php-format
 msgid "%s — 3D viewer"
-msgstr ""
-
-#: includes/Frontend/Assets.php:76
-msgid "3D viewer"
-msgstr ""
-
-#. translators: %s: product name
-#: includes/Frontend/ClassicGalleryInjector.php:92
-#: includes/Frontend/ClassicGalleryInjector.php:109
-#: includes/Frontend/IframeFactory.php:107
-#, php-format
-msgid "%s 3D viewer"
 msgstr ""
 
 #. translators: %s: product name

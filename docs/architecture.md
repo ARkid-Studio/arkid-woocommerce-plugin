@@ -29,7 +29,7 @@ post meta snapshot  ────────────────────
 - **Product pages never call the API.** Each product stores a snapshot of its
   viewer's URL and thumbnail, so the storefront keeps working when ARkid is
   unreachable. Admin screens (the picker, the viewer list) always read live —
-  there is no cache to go stale.
+  there is no cache to go stale. (See [The viewers screen](#the-viewers-screen).)
 - **The block does the same.** `arkid-catalogue-link/embed` persists `embedUrl`
   in its attributes, so front-end rendering never needs the API either. The
   editor matches a block to its viewer by `embedId` alone, never by comparing
@@ -84,6 +84,75 @@ a viewer and the product page shows none.
   leaves everything as it is.
 - No migration: a link that was already deleted upstream before this status
   existed reads as `NotSynced` until the next daily refresh finds the 404.
+
+## The viewers screen
+
+WooCommerce → ARkid Viewers (`Admin\ViewersPage`, `Admin\ViewersListTable`) is
+a `WP_List_Table`. A request asks ARkid for the list of viewers (`GET embed`)
+and, if there are any, once for the traffic of the last 30 days
+(`GET stats?days=30`), and reads the rest from the shop's own database. The
+page blocks while it waits (5 s and 10 s at most); there is no cache. Each
+call is made once per request.
+
+- **Where each viewer is shown** comes from one query over the
+  `_arkid_embed_id` meta (`Links\ProductLinks`), with the same predicate as the
+  refresh job: products that are not in the trash or an auto-draft. A draft or
+  private product is listed, with its status; the viewer is selected on it, but
+  it does not show to visitors yet. "Live on a product" means selected on at
+  least one such product. A viewer id is compared in lower case everywhere, the
+  list's, the stored link's and the statistics'.
+- **"+N more"** links to `edit.php?post_type=product&arkid_embed=<id>`
+  (`ProductLinks::QUERY_VAR`). The Products list's own filter for that
+  variable is the product list step's to provide; the link is built here.
+- **Interactions** are joined from `stats.embeds` by viewer id
+  (`StatsDto::interactions_by_embed()`). ARkid's `EcomStats` lists every live
+  standalone viewer that had at least one impression in the period, with its
+  interactions, in no way cut off at a number of rows. A viewer that is not
+  listed was not viewed, and so had no interactions: it shows `0` and is in
+  "No interactions, 30 days", as is one that was viewed and not interacted
+  with. The statistics cover every viewer the list has (both leave out deleted
+  viewers and those of a collection), so a viewer missing from them is not one
+  they do not know. The window is fixed at 30 days.
+- **If the statistics call fails** (an outage, a rejected key, an answer that
+  cannot be read), the screen still renders. The interactions column, its sort
+  and the "No interactions" view are left out, and a notice says why: a count
+  of zero would claim that ARkid had been asked and answered "none". A
+  bookmarked `?show=quiet` shows all viewers in that case.
+- **"Total views"** is `embed.views`, which ARkid's source describes as the
+  lifetime count (`StatsGeneral`: "Summed lifetime `embed`.`views`").
+- **Times.** The API writes `created` and `modified` without a zone
+  (`2025-07-16 02:51:43`). ARkid's database session runs in UTC
+  (`ARKID_DB_TIME_ZONE`, which its migration notes expect to equal PHP's
+  `date.timezone`, `UTC`), so `Support\ApiTime` reads a time without a zone as
+  UTC and shows it in the site's time zone, as "3 hours ago" with the exact
+  time as the tooltip. Treat that as an assumption to confirm with ARkid: if the
+  zone were different, the relative times would be off by that difference.
+- **Screen Options.** WordPress handles the Screen Options form in
+  `wp-admin/admin.php`, before the admin menu is built and before any `load-*`
+  hook. The `set_screen_option_arkid_viewers_per_page` filter is therefore
+  registered when the page registers (at plugin load), not from the screen's
+  load hook, where it would be too late and the value would never save. A test
+  submits the form through WordPress's own `set_screen_options()`. The page
+  size defaults to 20; the "Created" column starts hidden
+  (`default_hidden_columns`) and can be shown there.
+- **The form.** The search box and the type and brand filters submit one GET
+  form that carries `page` (and the selected view), so the screen survives a
+  search. The views (the links above the table) reset the other filters, as
+  those of a post list do.
+- **The preview** is one native `<dialog>` per screen
+  (`Admin\PreviewDialog`, `src/admin/preview-dialog.js`), empty until a button
+  with `data-embed-url` is clicked: the viewer is WebGL and wp-admin must not
+  start one per row. The address goes through `IframeFactory::viewer_url()` on
+  the server (https, an allowed host, `source=woocommerce`) and through the
+  same check in the browser (`src/shared/viewer-url.js`, given
+  `IframeFactory::allowed_hosts()` as `arkidCatalogueLinkAdmin.allowedHosts`),
+  so the two cannot disagree; a viewer that fails it gets no button.
+  `showModal()` supplies the focus trap and Escape; the script returns focus to
+  the button and empties the frame on close. The viewers list, the product
+  meta box and, later, the product list use the same dialog.
+- **Links, thumbnails and previews from API data must be https**
+  (`Support\Url::https()`): `esc_url()` alone also lets `http:` and `ftp:`
+  through.
 
 ## Embedding and the host allow-list
 

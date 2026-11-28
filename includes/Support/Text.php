@@ -51,11 +51,20 @@ final class Text {
 	 * them: "ø" to "o", "æ" to "ae", "ł" to "l". The one exception is "ß", which
 	 * WordPress turns into a single "s" unless the site is German; it becomes
 	 * "ss" here so that "strasse" finds "Straße" on every site.
+	 *
+	 * Text typed as a base letter plus a combining accent ("u" and U+0308, as
+	 * macOS and many spreadsheet exports write it) is composed by WordPress only
+	 * when ext-intl is available. The combining accents are therefore removed here
+	 * as well, so the result does not depend on the host.
 	 */
 	public static function fold( string $value ): string {
 		if ( function_exists( 'remove_accents' ) ) {
 			$value = remove_accents( str_replace( array( 'ß', 'ẞ' ), 'ss', $value ), self::FOLD_LOCALE );
 		}
+
+		// U+0300 to U+036F: the combining diacritical marks of the Latin, Greek and Cyrillic scripts.
+		// Kana voicing marks (U+3099, U+309A) sit elsewhere and are left alone.
+		$value = preg_replace( '/[\x{0300}-\x{036F}]+/u', '', $value ) ?? $value;
 
 		return self::lower( $value );
 	}

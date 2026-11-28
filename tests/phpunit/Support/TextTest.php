@@ -78,6 +78,23 @@ final class TextTest extends TestCase {
 	}
 
 	/**
+	 * WordPress composes "u" + U+0308 into "ü" only when ext-intl is loaded, and its
+	 * accent table knows the composed letter only. The stub above is no better, so
+	 * this is the host without intl.
+	 */
+	public function test_fold_removes_combining_accents_on_any_host(): void {
+		$this->assertSame( 'muller', Text::fold( "Mu\u{0308}ller" ) );
+		$this->assertSame( 'cafe', Text::fold( "Cafe\u{0301}" ) );
+		$this->assertSame( Text::fold( 'Müller' ), Text::fold( "Mu\u{0308}ller" ) );
+	}
+
+	public function test_fold_keeps_kana_voicing_marks(): void {
+		// U+3099 is a combining mark, but it is part of the letter: が is not か.
+		$this->assertSame( "か\u{3099}", Text::fold( "か\u{3099}" ) );
+		$this->assertNotSame( Text::fold( 'か' ), Text::fold( 'が' ) );
+	}
+
+	/**
 	 * @dataProvider word_cases
 	 *
 	 * @param array<int, string> $expected
@@ -113,13 +130,31 @@ final class TextTest extends TestCase {
 
 	/**
 	 * `strcmp()` ordered "Zebra" before "apple" and "Äpfel" after "Zebra".
+	 *
+	 * Holds with and without ext-intl: no two names here differ only by case or accent.
 	 */
 	public function test_compare_sorts_case_insensitively_and_by_letter(): void {
-		$names = array( 'Zebra', 'apple', 'Äpfel', 'Banana', 'apfel' );
+		$names = array( 'Zebra', 'apple', 'Äpfel', 'Banana' );
 
 		usort( $names, array( Text::class, 'compare' ) );
 
-		$this->assertSame( array( 'apfel', 'Äpfel', 'apple', 'Banana', 'Zebra' ), $names );
+		$this->assertSame( array( 'Äpfel', 'apple', 'Banana', 'Zebra' ), $names );
+	}
+
+	/**
+	 * ICU breaks ties between "apfel" and "Äpfel" (unaccented first); the fallback
+	 * treats them as equal and the caller's row-number tie-break decides.
+	 */
+	public function test_compare_breaks_accent_ties_with_icu(): void {
+		if ( ! class_exists( '\Collator' ) ) {
+			$this->markTestSkipped( 'ext-intl is not available.' );
+		}
+
+		$names = array( 'Äpfel', 'apple', 'apfel' );
+
+		usort( $names, array( Text::class, 'compare' ) );
+
+		$this->assertSame( array( 'apfel', 'Äpfel', 'apple' ), $names );
 	}
 
 	public function test_compare_orders_numbers_naturally(): void {

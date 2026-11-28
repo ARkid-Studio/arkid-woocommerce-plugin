@@ -152,7 +152,13 @@ call is made once per request.
 - **The form.** The search box and the type and brand filters submit one GET
   form that carries `page` (and the selected view), so the screen survives a
   search. The views (the links above the table) reset the other filters, as
-  those of a post list do.
+  those of a post list do. On a screen 782px wide or narrower, which includes
+  phones, WordPress core hides the actions in the top table navigation
+  (`.tablenav.top .actions`, `wp-admin/css/list-tables.css`), and so the type
+  and brand dropdowns, as it does the category filter of the Posts list and the
+  filters of the WooCommerce Products list. The views and the search box stay,
+  and the search covers brand, product and note. The plugin keeps to that
+  rather than showing the dropdowns in a way the rest of wp-admin does not.
 - **The preview** is one native `<dialog>` per screen
   (`Admin\PreviewDialog`, `src/admin/preview-dialog.js`), empty until a button
   with `data-embed-url` is clicked: the viewer is WebGL and wp-admin must not

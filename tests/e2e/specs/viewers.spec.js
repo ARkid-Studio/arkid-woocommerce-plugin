@@ -506,6 +506,10 @@ test.describe('ARkid Viewers screen', () => {
 		await expect(row.locator('.column-product_name')).toBeVisible();
 		await expect(row.locator('.column-brand_name')).toBeHidden();
 
+		// What core keeps on a phone still narrows the list: the views and the search.
+		await expect(page.locator('.subsubsub')).toBeVisible();
+		await expect(page.locator('#arkid-viewers-search-input')).toBeVisible();
+
 		await row.locator('.toggle-row').click();
 		await expect(row.locator('.column-brand_name')).toBeVisible();
 		await expect(row.locator('.column-brand_name')).toHaveAttribute(
